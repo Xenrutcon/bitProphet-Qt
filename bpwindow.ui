@@ -16,7 +16,104 @@
   <property name="toolTipDuration">
    <number>-1</number>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>6</x>
+      <y>59</y>
+      <width>641</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>5</number>
+    </property>
+    <widget class="QWidget" name="mStatusTab">
+     <attribute name="title">
+      <string>Status</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All manner of debuggable details!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </attribute>
+     <widget class="QTextEdit" name="mStatusOutput">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>641</width>
+        <height>441</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="acceptRichText">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="mCoinbaseTab">
+     <attribute name="title">
+      <string>Coinbase</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Coinbase Accounts</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="mGdaxTab">
+     <attribute name="title">
+      <string>GDAX</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>The Coinbase Exchange</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="mTransactionsTab">
+     <attribute name="title">
+      <string>Transactions</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Transactions and Transaction History</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="mChartsTab">
+     <attribute name="title">
+      <string>Charts</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Graphs, Charts and Tables, etc</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="mNeuralTab">
+     <attribute name="title">
+      <string>Neural</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>649</x>
+      <y>9</y>
+      <width>241</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Statistics and whatnot...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="title">
+     <string>Overview</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -27,15 +124,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
