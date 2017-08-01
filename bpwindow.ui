@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -89,6 +89,17 @@
      <attribute name="title">
       <string>Neural</string>
      </attribute>
+     <attribute name="toolTip">
+      <string>bitProphet's Neural Network</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="mDatabaseTab">
+     <attribute name="title">
+      <string>Database</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Browse All Stored Data</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -123,7 +134,43 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuSetup">
+    <property name="title">
+     <string>Setup</string>
+    </property>
+    <addaction name="actionAccount"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionTips"/>
+    <addaction name="actionHow_To_Use_bitProphet"/>
+    <addaction name="actionDonate"/>
+   </widget>
+   <addaction name="menuSetup"/>
+   <addaction name="menuHelp"/>
   </widget>
+  <action name="actionAccount">
+   <property name="text">
+    <string>Account</string>
+   </property>
+  </action>
+  <action name="actionTips">
+   <property name="text">
+    <string>Tips</string>
+   </property>
+  </action>
+  <action name="actionHow_To_Use_bitProphet">
+   <property name="text">
+    <string>How To Use bitProphet</string>
+   </property>
+  </action>
+  <action name="actionDonate">
+   <property name="text">
+    <string>Donate</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

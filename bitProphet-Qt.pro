@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        bpwindow.cpp
+        bpwindow.cpp \
+    bitprophet.cpp
 
 HEADERS += \
-        bpwindow.h
+        bpwindow.h \
+    bitprophet.h
 
 FORMS += \
         bpwindow.ui

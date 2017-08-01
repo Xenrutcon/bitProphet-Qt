@@ -2,21 +2,24 @@
 #define BPWINDOW_H
 
 #include <QMainWindow>
+#include <QTextEdit>
+#include "bitprophet.h"
 
 namespace Ui {
-class bpWindow;
+    class bpWindow;
 }
 
-class bpWindow : public QMainWindow
-{
-    Q_OBJECT
+class bitProphet;
 
+class bpWindow : public QMainWindow {
+    Q_OBJECT
 public:
     explicit bpWindow(QWidget *parent = 0);
     ~bpWindow();
-
+    QTextEdit *getStatusOutput();
 private:
     Ui::bpWindow *ui;
+    bitProphet *mProphet;
 };
 
 #endif // BPWINDOW_H
