@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         bpwindow.cpp \
-    bitprophet.cpp
+    bitprophet.cpp \
+    bpdatabase.cpp \
+    coinbaseaccount.cpp
 
 HEADERS += \
         bpwindow.h \
-    bitprophet.h
+    bitprophet.h \
+    bpdatabase.h \
+    coinbaseaccount.h
 
 FORMS += \
         bpwindow.ui

@@ -26,6 +26,9 @@ QTextEdit * bpWindow::getStatusOutput() {
     return ui->mStatusOutput;
 }
 
+QTextEdit * bpWindow::getDebugLog() {
+    return ui->mDebugLog;
+}
 
 ///////////
 //Slots

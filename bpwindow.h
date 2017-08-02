@@ -17,6 +17,7 @@ public:
     explicit bpWindow(QWidget *parent = 0);
     ~bpWindow();
     QTextEdit *getStatusOutput();
+    QTextEdit *getDebugLog();
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;
