@@ -28,13 +28,19 @@ SOURCES += \
         bpwindow.cpp \
     bitprophet.cpp \
     bpdatabase.cpp \
-    coinbaseaccount.cpp
+    coinbaseaccount.cpp \
+    coinbaseaccountsetupwindow.cpp \
+    coinbasesetupaddwindow.cpp
 
 HEADERS += \
         bpwindow.h \
     bitprophet.h \
     bpdatabase.h \
-    coinbaseaccount.h
+    coinbaseaccount.h \
+    coinbaseaccountsetupwindow.h \
+    coinbasesetupaddwindow.h
 
 FORMS += \
-        bpwindow.ui
+        bpwindow.ui \
+    coinbaseaccountsetupwindow.ui \
+    coinbasesetupaddwindow.ui

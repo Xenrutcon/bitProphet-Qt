@@ -96,6 +96,10 @@ bool bpDatabase::fileExists() {
     }
 }
 
+bool bpDatabase::insertAccount(int aId, QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange) {
+
+}
+
 /////////
 // Slots
 /////////

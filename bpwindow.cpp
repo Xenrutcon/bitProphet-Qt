@@ -1,12 +1,15 @@
 #include "bpwindow.h"
 #include "ui_bpwindow.h"
 
-bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow) {
+bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow), mCbSetupWin(NULL) {
     ui->setupUi(this);
     //bpWindow creates the actual bitProphet
     //bitProphet controls everything
     //bpWindow handles display tasks for bitProphet
     mProphet = new bitProphet(this);
+
+    //Bind Menus
+    connect(ui->actionAccount,&QAction::triggered,this, &bpWindow::accountSetupClicked);
 }
 
 ///////////
@@ -15,7 +18,7 @@ bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow) 
 bpWindow::~bpWindow()
 {
     //These will always exist.
-    delete mProphet; //delete before ui
+    delete mProphet; //delete before ui    
     delete ui;
 }
 
@@ -30,6 +33,24 @@ QTextEdit * bpWindow::getDebugLog() {
     return ui->mDebugLog;
 }
 
+coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
+    return mCbSetupWin;
+}
+
+void bpWindow::killAccSetupWindow() {
+    delete mCbSetupWin;
+    mCbSetupWin = NULL;
+}
+
 ///////////
 //Slots
 ///////////
+void bpWindow::accountSetupClicked() {
+    if ( mCbSetupWin != NULL ) {
+        delete mCbSetupWin;
+        mCbSetupWin = new coinbaseAccountSetupWindow(this);
+    } else {
+        mCbSetupWin = new coinbaseAccountSetupWindow(this);
+    }
+    mCbSetupWin->show();
+}
