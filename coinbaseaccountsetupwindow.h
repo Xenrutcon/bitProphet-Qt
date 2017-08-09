@@ -19,6 +19,7 @@ class coinbaseAccountSetupWindow : public QDialog
 public:
     explicit coinbaseAccountSetupWindow(QWidget *parent = 0);
     ~coinbaseAccountSetupWindow();    
+    void killSetupAddWindow();
 private:
     Ui::coinbaseAccountSetupWindow *ui;
     coinbaseSetupAddWindow *mAddAccountWin;

@@ -6,6 +6,7 @@ coinbaseAccountSetupWindow::coinbaseAccountSetupWindow(QWidget *parent) :
     ui->setupUi(this);    
     mParent = reinterpret_cast<bpWindow*>(parent);
     setWindowFlag(Qt::WindowCloseButtonHint,false);
+    setWindowFlag(Qt::WindowContextHelpButtonHint,false);
     mParent->hide();
     //Bind Buttons
     connect(ui->mAddButton,SIGNAL(clicked(bool)),this,SLOT(addAccountClicked()));
@@ -17,6 +18,10 @@ coinbaseAccountSetupWindow::~coinbaseAccountSetupWindow() {
     delete ui;
 }
 
+void coinbaseAccountSetupWindow::killSetupAddWindow() {
+    delete mAddAccountWin;
+    mAddAccountWin = NULL;
+}
 
 /////////
 // Slots
@@ -33,3 +38,5 @@ void coinbaseAccountSetupWindow::doneClicked() {
     mParent->show();
     mParent->killAccSetupWindow();
 }
+
+

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Coinbase Accounts</string>
   </property>
   <widget class="QListWidget" name="listWidget">
    <property name="geometry">
@@ -60,19 +60,6 @@
    </property>
    <property name="text">
     <string>Remove</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="mEditButton">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>70</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Edit</string>
    </property>
   </widget>
  </widget>

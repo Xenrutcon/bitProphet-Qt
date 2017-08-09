@@ -1,13 +1,12 @@
 #include "bpdatabase.h"
 
-bpDatabase::bpDatabase(QObject *parent) : QObject(parent) {
-    mParent = reinterpret_cast<bitProphet*>(parent);
+bpDatabase::bpDatabase(QObject *parent) : QObject(parent) {    
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-    say("[bpDatabase] Startup...",1);
+    //say("[bpDatabase] Startup...",1);
 }
 
 bpDatabase::~bpDatabase() {
-    say("[bpDatabase] Dying...",1);
+    //say("[bpDatabase] Dying...",1);
 }
 
 
@@ -21,9 +20,9 @@ void bpDatabase::createDatabase() {
        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
        Db.setDatabaseName("bitProphet.dat");
        if (!Db.open()) {
-          say("Error: connecting to database failed!",1);
+          say("Error: connecting to database failed!");
        } else {
-          say("Database: connection ok.",1);
+          say("Database: connection ok.");
        }
        Db.close();
    } //Db is gone now.
@@ -37,9 +36,9 @@ bool bpDatabase::hasAccountsTable() {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
         if (!Db.open()) {
-           say("Error: connecting to database failed!",1);
+           say("Error: connecting to database failed!");
         } else {
-           say("Database: connection ok.",1);
+           say("Database: connection ok.");
             QSqlQuery query;
             query.prepare("select COUNT(*) from sqlite_master where type='table' and name='accounts'");
             if (query.exec()) {
@@ -47,7 +46,7 @@ bool bpDatabase::hasAccountsTable() {
                   int count = query.record().indexOf("COUNT(*)");
                   QString result = query.value(count).toString();
                   if ( result.toInt() ) {
-                      return true;
+                      retVal = true;
                   }
                }
             }
@@ -65,15 +64,15 @@ bool bpDatabase::createAccountsTable() {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
         if (!Db.open()) {
-           say("Error: connecting to database failed!",1);
+           say("Error: connecting to database failed!");
         } else {
-           say("Database: connection ok.",1);
+           say("Database: connection ok.");
            QSqlQuery query;
            query.prepare("CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,exchange varchar(64),apiKey varchar(512),apiSecret varchar(512),defaultAccount bool default 0, name VARCHAR(64) );");
            if(query.exec()) {
               retVal = true;
            } else {
-              say("createAccountsTable() error:  " + query.lastError().text(),1);
+              say("createAccountsTable() error:  " + query.lastError().text());
            }
         }
         Db.close();
@@ -83,8 +82,8 @@ bool bpDatabase::createAccountsTable() {
     return retVal;
 }
 
-void bpDatabase::say(QString sayThis, bool debug) {
-    mParent->say( "(" +mPtrName+ ") " + sayThis, debug);
+void bpDatabase::say(QString sayThis) {
+    std::cout<<"("<<mPtrName.toStdString().c_str()<<") "<<sayThis.toStdString().c_str()<<std::endl;
 }
 
 bool bpDatabase::fileExists() {
@@ -96,8 +95,30 @@ bool bpDatabase::fileExists() {
     }
 }
 
-bool bpDatabase::insertAccount(int aId, QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange) {
-
+void bpDatabase::insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange) {
+    bool success = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: connection ok.");
+           QSqlQuery query;
+           query.prepare("INSERT INTO accounts (exchange, apiKey, apiSecret,defaultAccount,name) VALUES ('" +
+                         exchange + "','" + apiKey + "','" + apiSecret + "'," + QString().setNum(QVariant(defaultAccount).toInt()) +
+                         ",'" + name + "')");
+           if(query.exec()) {
+              success = true;
+              say("insertAccount() Success");
+           } else {
+              say("insertAccount() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
 /////////
