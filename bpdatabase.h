@@ -24,8 +24,11 @@ public:
     void createDatabase();
     bool createAccountsTable();
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
+    QList<QString> getAccountList();
+    void deleteAccount(QString id );
 private:
     void say(QString sayThis);
+
 signals:
 
 public slots:

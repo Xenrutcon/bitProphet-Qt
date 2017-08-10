@@ -40,6 +40,7 @@ void coinbaseSetupAddWindow::saveClicked() {
         mDb->insertAccount(ui->mAccountNameEntry->text(),ui->mApiKeyEntry->text(),ui->mApiSecretEntry->text(),check);
         //die when done
         mParent->show();
+        mParent->loadAccountList();
         mParent->killSetupAddWindow();
     } else {
         //BAD INPUTZ!@
