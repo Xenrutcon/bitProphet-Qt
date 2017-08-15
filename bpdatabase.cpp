@@ -68,7 +68,7 @@ QList<QString> bpDatabase::getAccountList() {
         } else {
            //say("Database: connection ok.");
             QSqlQuery query;
-            query.prepare("select * from accounts");
+            query.prepare("select * from accounts WHERE exchange='coinbase'");
             if (query.exec()) {
                while (query.next()) {
                   int idVal = query.record().indexOf("id");
@@ -85,6 +85,32 @@ QList<QString> bpDatabase::getAccountList() {
     QSqlDatabase::removeDatabase("bitProphet.dat");
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
     return accList;
+}
+
+QString bpDatabase::getDefaultAccountId() {
+    QString idResult = 0;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from accounts WHERE defaultAccount=1 and exchange='coinbase'");
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  idResult = query.value(idVal).toString();
+                  say("id: " + idResult);
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return idResult;
 }
 
 bool bpDatabase::createAccountsTable() {
@@ -109,6 +135,14 @@ bool bpDatabase::createAccountsTable() {
     QSqlDatabase::removeDatabase("bitProphet.dat");
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
     return retVal;
+}
+
+void bpDatabase::loadAccountByName(coinbaseAccount *target, QString accountName) {
+
+}
+
+void bpDatabase::loadAccountById(coinbaseAccount *target, QString id) {
+    target->mId = id;
 }
 
 void bpDatabase::say(QString sayThis) {

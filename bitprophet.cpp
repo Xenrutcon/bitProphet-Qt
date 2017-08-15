@@ -1,10 +1,9 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mCbAccount(NULL) {
+bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-    // Startup
-    setProphetState("IDLE");
+    // Startup    
     say("(\\.....\\..........,/)");
     say(".\\(....|\\.........)/");
     say(".//\\...| \\......./\\\\");
@@ -37,14 +36,16 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mCbAccount
             say("Click Setup Menu next to enter Api Info.");
         } else { say("Error, Check debug log!"); }
     }
-
+    // Create cbApiHandler
+    mApiHandler = new cbApiHandler(this);
     // Finish startup process
+    setProphetState("IDLE");
     // Start bitProphet based on saved settings (or defaults)
 }
 
 bitProphet::~bitProphet() {
     if (mDb != NULL ) { delete mDb; }
-    if (mCbAccount != NULL ) { delete mCbAccount; }
+    if (mApiHandler != NULL ) { delete mApiHandler; }
     say("bitProphet fading...");    
 }
 
@@ -54,6 +55,10 @@ bitProphet::~bitProphet() {
 void bitProphet::setProphetState(QString newState)  {
     mState = newState;
     say("[-] I am "+ mState +" [-]");
+}
+
+bpDatabase *bitProphet::getDb() {
+    return mDb;
 }
 
 void bitProphet::say(QString sayThis, bool debug) {        

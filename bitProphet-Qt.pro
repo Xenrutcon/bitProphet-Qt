@@ -30,7 +30,8 @@ SOURCES += \
     bpdatabase.cpp \
     coinbaseaccount.cpp \
     coinbaseaccountsetupwindow.cpp \
-    coinbasesetupaddwindow.cpp
+    coinbasesetupaddwindow.cpp \
+    cbapihandler.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     bpdatabase.h \
     coinbaseaccount.h \
     coinbaseaccountsetupwindow.h \
-    coinbasesetupaddwindow.h
+    coinbasesetupaddwindow.h \
+    cbapihandler.h
 
 FORMS += \
         bpwindow.ui \

@@ -53,7 +53,7 @@ void coinbaseAccountSetupWindow::deleteAccountClicked() {
     QString delId = ui->mAccountList->currentItem()->text();
     std::cout<<delId.toStdString().c_str()<<std::endl;
     std::string dId(delId.toStdString());
-    delId = dId.substr(0,dId.find(' - ',0)).c_str();
+    delId = dId.substr(0,dId.find(" - ",0)).c_str();
     std::cout<<"#### "<<dId<<std::endl;
     if ( mDb->hasAccountsTable() ) {
         mDb->deleteAccount(delId);

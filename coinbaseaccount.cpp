@@ -1,23 +1,23 @@
 #include "coinbaseaccount.h"
 
 coinbaseAccount::coinbaseAccount(QObject *parent) {
-    mParent = reinterpret_cast<bitProphet*>(parent);
+    mParent = reinterpret_cast<cbApiHandler*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-    say("[coinbaseAccount] Initialize...",1);
+    say("coinbaseAccount Created...");
 
 //    mWalletList.clear();
 //    mPayMethods.clear();
 }
 
 coinbaseAccount::~coinbaseAccount() {
-    say("[coinbaseAccount] Dying...",1);
+    say( "coinbaseAccount Fading...");
 }
 
 ////////////
 // Methods
 ////////////
-void coinbaseAccount::say(QString sayThis, bool debug) {
-    mParent->say( "(" +mPtrName+ ") " + sayThis,debug);
+void coinbaseAccount::say(QString sayThis) {
+    mParent->say( "[" +mPtrName+ "] " + sayThis);
 }
 
 //int coinbaseAccount::addWallet() {
