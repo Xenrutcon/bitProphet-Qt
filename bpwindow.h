@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTextEdit>
+#include <QComboBox>
 #include "bitprophet.h"
 #include "coinbaseaccountsetupwindow.h"
 
@@ -12,6 +13,7 @@ namespace Ui {
 
 class bitProphet;
 class coinbaseAccountSetupWindow;
+class QComboBox;
 
 class bpWindow : public QMainWindow {
     Q_OBJECT
@@ -21,6 +23,7 @@ public:
     QTextEdit *getStatusOutput();
     QTextEdit *getDebugLog();
     coinbaseAccountSetupWindow *getAccSetupWindow();
+    QComboBox* getAccountsCombo();
     void killAccSetupWindow();
 private:
     Ui::bpWindow *ui;

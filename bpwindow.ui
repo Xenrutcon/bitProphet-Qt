@@ -70,7 +70,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="mCbAccountComboBox">
       <property name="geometry">
        <rect>
         <x>60</x>

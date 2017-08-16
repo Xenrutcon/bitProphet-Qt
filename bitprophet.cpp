@@ -1,6 +1,6 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL) {
+bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL), mAutoRefreshAccount(true), mAutoRefreshAccountInterval(15000) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    
@@ -69,6 +69,11 @@ void bitProphet::say(QString sayThis, bool debug) {
         mParent->getDebugLog()->append(QString(mPtrName + ">  " + sayThis));
     }
     std::cout<<QString(mPtrName + ">  " + sayThis).toLocal8Bit().toStdString()<<std::endl;
+}
+
+void bitProphet::addAccountToCoinbaseComboBox(QString accountName) {
+    say("[addAccountToComboBox] - " + accountName ,1);
+    mParent->getAccountsCombo()->addItem(accountName);
 }
 
 /////////

@@ -21,14 +21,20 @@
 #include "bpwindow.h"
 #include "bitprophet.h"
 #include "coinbaseaccount.h"
+#include "cbapirequest.h"
+#include "cbapiresponse.h"
+
 //#include "coinbasewallet.h"
 //#include "cbwallettable.h"
 
 class bpWindow;
 class bitProphet;
 class coinbaseAccount;
+class cbApiResponse;
 //class coinbaseApiRequest;
 //class cbWalletTable;
+
+
 
 class cbApiHandler : public QObject {
     Q_OBJECT
@@ -41,19 +47,22 @@ public:
     QString getCoinbaseApiKey();
     QString getCoinbaseApiSecret();
     void say( QString sayThis );
+    void processResponse( cbApiResponse *resp );
 private:
     QString mPtrName;
     QString mCbApiKey;
     QString mCbApiSecret;
     coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)
+    void listAccounts();
     //QList<coinbaseApiRequest*> mCurrentRequestList;
     //cbWalletTable *mWalletTableWidget;
 public slots:
+      void listAccountSlot();
 //    void withdrawFiatButtonSlot();
 //    void loadWalletAccount( coinbaseApiResponse *resp );
 //    void loadPayMethods( coinbaseApiResponse *resp );
 //    void processResponse( coinbaseApiResponse *resp );
-//    void listWalletAccountSlot();
+//      void listWalletAccountSlot();
 //    void depositFiatButtonSlot();
 //    void apiRequestComplete();
 signals:

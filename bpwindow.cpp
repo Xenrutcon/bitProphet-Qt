@@ -37,6 +37,10 @@ coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
     return mCbSetupWin;
 }
 
+QComboBox* bpWindow::getAccountsCombo() {
+    return ui->mCbAccountComboBox;
+}
+
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;
     mCbSetupWin = NULL;

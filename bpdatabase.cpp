@@ -87,6 +87,8 @@ QList<QString> bpDatabase::getAccountList() {
     return accList;
 }
 
+
+
 QString bpDatabase::getDefaultAccountId() {
     QString idResult = 0;
     {
@@ -143,6 +145,39 @@ void bpDatabase::loadAccountByName(coinbaseAccount *target, QString accountName)
 
 void bpDatabase::loadAccountById(coinbaseAccount *target, QString id) {
     target->mId = id;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from accounts WHERE id=" + id);
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int nameVal = query.record().indexOf("name");
+                  target->mName = query.value(nameVal).toString();
+                  int keyVal = query.record().indexOf("apiKey");
+                  target->mApiKey = query.value(keyVal).toString();
+                  int secVal = query.record().indexOf("apiSecret");
+                  target->mApiSecret = query.value(secVal).toString();
+                  int defVal = query.record().indexOf("defaultAccount");
+                  target->mDefaultAccount = query.value(defVal).toBool();
+                  int excVal = query.record().indexOf("exchange");
+                  target->mExchange = query.value(excVal).toString();
+                  say("id: " + target->mId);
+                  say("name: " + target->mName);
+                  say("Default?: " + QString().setNum(target->mDefaultAccount));
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
 void bpDatabase::say(QString sayThis) {

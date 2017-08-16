@@ -23,6 +23,7 @@ public:
     bpDatabase *getDb();
     void setProphetState(QString newState);
     void say(QString sayThis, bool debug=0);
+    void addAccountToCoinbaseComboBox(QString accountName);
 private:
     bpWindow *mParent;
     bpDatabase *mDb;
