@@ -2,7 +2,7 @@
 
 cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mResponse(NULL),mDone(0), mNetAccMan(NULL) {
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-        mParent->say("CBApiRequest Created!");
+        //mParent->say("CBApiRequest Created!");
         QDateTime current(QDateTime::currentDateTime());
         uint timestamp = current.toTime_t();
         QString ts = QVariant(timestamp).toString();
@@ -10,7 +10,7 @@ cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mResponse(NU
 }
 
 cbApiRequest::~cbApiRequest() { 
-    mParent->say("CBApiRequest Fading...");
+    //mParent->say("CBApiRequest Fading...");
 }
 
 ///////////
@@ -102,8 +102,6 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         mParent->say ("unparsed --- " + unparsed);
         mNetAccMan->deleteLater();
     }
-    mParent->mParentProphet->mParent->getStatusOutput()->clear();
-    mParent->mParentProphet->mParent->getDebugLog()->clear();
 }
 
 cbApiHandler *cbApiRequest::getMyHandler() {

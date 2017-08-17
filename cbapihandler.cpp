@@ -56,20 +56,16 @@ QString cbApiHandler::getCoinbaseApiKey() {
 
 void cbApiHandler::processResponse( cbApiResponse *resp ) {
     QString type = resp->getType();
+    say("Processing Response Type: " + type);
     if (type == "listAccounts" ) {
-        say("Response Type: " + type);
         listAccountProcessResponse(resp);
     } else if (type == "listPaymentMethods" ) {
-        //say("Response Type: " + type);
 //        loadPayMethods(resp);
     } else if (type == "btcSpotPrice" ) {
-        //say("Response Type: " + type);
 //        mParentProphet->setBTCSpotPrice(resp);
     } else if (type == "ethSpotPrice" ) {
-        //say("Response Type: " + type);
 //        mParentProphet->setETHSpotPrice(resp);
     } else if (type == "ltcSpotPrice" ) {
-        //say("Response Type: " + type);
 //        mParentProphet->setLTCSpotPrice(resp);
     } else {
         say("Unknown Response Type: " + type);
@@ -85,10 +81,22 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
 // RESPONSE PROCESSORS
 ///////////////////////
 void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
-      //QJsonObject obj = *(resp->getResponseContent());
-//    QJsonObject data  = obj["data"].toObject();
-//    QJsonObject paging  = obj["pagination"].toObject();
-//    say ( "Found Data: " + data[0].toObject()["id"].toString() + " Entries Found.");
+      QJsonObject obj = *(resp->getResponseContent());
+      QJsonArray data  = obj["data"].toArray();
+      QJsonObject paging  = obj["pagination"].toObject();
+      say ( "Found Data: " + QString().setNum(data.count()) + " Entries Found.");
+      for (int d=0;d<data.count();d++) {
+          // each element here is a wallet each of which has:
+          // id , name, primary(bool), type, currency,
+          // balance(obj), native_balance(obj), created_at, updated_at, resource, resource_path, ready(bool)
+          QJsonObject el = data.at(d).toObject();
+          say("ID: " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ) );
+          say("Name: " + el["name"].toString() );
+          say("Type: " + el["type"].toString() );
+          say("Currency: " + el["currency"].toString() );
+          say("------------------------------------------");
+      }
+      say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
 }
 
 ///////////

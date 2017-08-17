@@ -41,6 +41,10 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
     // Finish startup process
     setProphetState("IDLE");
     // Start bitProphet based on saved settings (or defaults)
+
+    //Prevent QTextEdits from exhausting memory with logged output ( from say() )
+    mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
+    mParent->getDebugLog()->document()->setMaximumBlockCount(200);
 }
 
 bitProphet::~bitProphet() {
@@ -61,7 +65,7 @@ bpDatabase *bitProphet::getDb() {
     return mDb;
 }
 
-void bitProphet::say(QString sayThis, bool debug) {        
+void bitProphet::say(QString sayThis, bool debug) {            
     if ( debug ) {
         mParent->getDebugLog()->append(QString(mPtrName + ">  " + sayThis));
     } else {

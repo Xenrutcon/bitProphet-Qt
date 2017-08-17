@@ -3,12 +3,12 @@
 cbApiResponse::cbApiResponse(cbApiRequest *parent,QJsonObject *obj) : QObject(parent) {
     mParent = parent;
     mResponseContent = obj;
-    mParent->getMyHandler()->say("cbApiResponse Created...\n");
+    //mParent->getMyHandler()->say("cbApiResponse Created...\n");
 }
 
 
 cbApiResponse::~cbApiResponse() {
-    mParent->getMyHandler()->say("cbApiResponse Fading...\n");
+    //mParent->getMyHandler()->say("cbApiResponse Fading...\n");
 }
 
 
