@@ -58,7 +58,7 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     QString type = resp->getType();
     if (type == "listAccounts" ) {
         say("Response Type: " + type);
-        //listAccountProcessResponse(resp);
+        listAccountProcessResponse(resp);
     } else if (type == "listPaymentMethods" ) {
         //say("Response Type: " + type);
 //        loadPayMethods(resp);
@@ -74,18 +74,27 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     } else {
         say("Unknown Response Type: " + type);
     }
-    say(" Purging: " + resp->getParent()->mPtrName );
-    delete  resp->getParent();
-    say("Response and Request Purged...");
+    if ( mParentProphet->mAutoRefreshAccount ) {
+        int timer= mParentProphet->mAutoRefreshAccountInterval;
+        QTimer::singleShot(5000, mParentProphet, SLOT(listAccountSlot()));
+    }
+    resp->getParent()->deleteLater();
+}
+
+///////////////////////
+// RESPONSE PROCESSORS
+///////////////////////
+void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
+      //QJsonObject obj = *(resp->getResponseContent());
+//    QJsonObject data  = obj["data"].toObject();
+//    QJsonObject paging  = obj["pagination"].toObject();
+//    say ( "Found Data: " + data[0].toObject()["id"].toString() + " Entries Found.");
 }
 
 ///////////
 // Slots
 ///////////
 
-void cbApiHandler::listAccountSlot() {
-    this->listAccounts();
-}
 
 void cbApiHandler::listAccounts() {
     ////////////////////////////////////////////////////////////////

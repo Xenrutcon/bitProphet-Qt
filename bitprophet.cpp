@@ -79,3 +79,6 @@ void bitProphet::addAccountToCoinbaseComboBox(QString accountName) {
 /////////
 // Slots
 /////////
+void bitProphet::listAccountSlot() {
+    mApiHandler->listAccounts();
+}

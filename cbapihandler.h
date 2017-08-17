@@ -17,6 +17,7 @@
 #include <QJsonObject>
 #include <QComboBox>
 #include <QPushButton>
+#include <QTimer>
 
 #include "bpwindow.h"
 #include "bitprophet.h"
@@ -48,16 +49,16 @@ public:
     QString getCoinbaseApiSecret();
     void say( QString sayThis );
     void processResponse( cbApiResponse *resp );
+    void listAccountProcessResponse( cbApiResponse *resp );
+    void listAccounts();
 private:
     QString mPtrName;
     QString mCbApiKey;
     QString mCbApiSecret;
-    coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)
-    void listAccounts();
+    coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)    
     //QList<coinbaseApiRequest*> mCurrentRequestList;
     //cbWalletTable *mWalletTableWidget;
 public slots:
-      void listAccountSlot();
 //    void withdrawFiatButtonSlot();
 //    void loadWalletAccount( coinbaseApiResponse *resp );
 //    void loadPayMethods( coinbaseApiResponse *resp );

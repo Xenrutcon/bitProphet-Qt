@@ -9,9 +9,7 @@ cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mResponse(NU
         mTimestamp = ts;
 }
 
-cbApiRequest::~cbApiRequest() {
-    if (mNetAccMan != NULL ) { delete mNetAccMan; }
-    if (mResponse != NULL ) { delete mResponse; }
+cbApiRequest::~cbApiRequest() { 
     mParent->say("CBApiRequest Fading...");
 }
 
@@ -79,6 +77,7 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         mParent->say("Finished Request Type: " + mType);
         QJsonParseError error;
         QByteArray unparsed = reply->readAll();
+        reply->deleteLater();
         if ( mType != "listPaymentMethods" && mType != "listAccounts" && mType != "btcSpotPrice" &&
              mType != "ethSpotPrice" && mType != "ltcSpotPrice") {
             //If its not a known type, print unparsed because we are probably creating it.
@@ -89,16 +88,22 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         //oopz, they work better... when they exist.....shutup
         mResponse = new cbApiResponse(this,&jsonObj);
         mResponse->setType(mType);
-        mResponse->printResponse();
+        //mResponse->printResponse();
         mParent->mParentProphet->setProphetState("IDLE");
         mParent->processResponse(mResponse); //reply and response are deleted HERE
+        mNetAccMan->deleteLater();
+        mResponse->deleteLater();
     } else {
         mParent->say("Bad Response, Aborted Request!");
         mParent->say("Response Status: " + QString().setNum(statusCode));
         mParent->say("Response Type: " + mType);
         QByteArray unparsed = reply->readAll();
+        reply->deleteLater();
         mParent->say ("unparsed --- " + unparsed);
+        mNetAccMan->deleteLater();
     }
+    mParent->mParentProphet->mParent->getStatusOutput()->clear();
+    mParent->mParentProphet->mParent->getDebugLog()->clear();
 }
 
 cbApiHandler *cbApiRequest::getMyHandler() {

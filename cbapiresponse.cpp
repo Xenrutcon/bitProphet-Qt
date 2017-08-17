@@ -90,8 +90,8 @@ void cbApiResponse::printJSONArr(QJsonArray arr, QString key, int depth) {
     }
 }
 
-QString cbApiResponse::setType(QString newType) {
-    return mType;
+void cbApiResponse::setType(QString newType) {
+    mType = newType;
 }
 
 QString cbApiResponse::getType() {
@@ -102,7 +102,9 @@ cbApiRequest *cbApiResponse::getParent() {
     return mParent;
 }
 
-
+QJsonObject *cbApiResponse::getResponseContent() {
+    return mResponseContent;
+}
 
 
 

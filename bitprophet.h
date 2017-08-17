@@ -24,10 +24,6 @@ public:
     void setProphetState(QString newState);
     void say(QString sayThis, bool debug=0);
     void addAccountToCoinbaseComboBox(QString accountName);
-private:
-    bpWindow *mParent;
-    bpDatabase *mDb;
-    cbApiHandler *mApiHandler;
     //Account Refresh
     bool mAutoRefreshAccount;
     int mAutoRefreshAccountInterval; //all intervals in milliseconds
@@ -37,12 +33,15 @@ private:
     //Simple Trading (non-neural net, simple dumb logix)
     bool mAutoSimpleTrade;
     // TODO add autoSimpleTrading (have done it before :P, its slower but works )
+    bpWindow *mParent;
+private:
 
-
+    bpDatabase *mDb;
+    cbApiHandler *mApiHandler;    
 signals:
 
 public slots:
-
+void listAccountSlot();
 
 };
 
