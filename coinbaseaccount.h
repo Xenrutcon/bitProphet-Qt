@@ -29,12 +29,13 @@ public:
     coinbaseWallet* getWallet(int index);
     void clearWallets();
     int getWalletCount();
+    void say(QString sayThis);
 //    int addPaymentMethod();
 
 //    int getPaymentMethodCount();
 //    coinbasePaymentMethod* getPaymentMethod(int index);
 private:
-    void say(QString sayThis);
+
     cbApiHandler *mParent;
     QList<coinbaseWallet*> mWalletList;
 //    QList<coinbasePaymentMethod*> mPayMethods;

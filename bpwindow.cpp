@@ -39,7 +39,10 @@ QTableWidget *bpWindow::getAccountTablePlacer() {
 
 QWidget *bpWindow::getAccountsTab() {
     return ui->mCoinbaseTab;
+}
 
+QLabel *bpWindow::getAccountsNativeBalanceTotalLabel() {
+    return ui->mTotalNativeValue;
 }
 
 coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {

@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QComboBox>
 #include <QTableWidget>
+#include <QLabel>
 #include "bitprophet.h"
 #include "coinbaseaccountsetupwindow.h"
 
@@ -26,8 +27,9 @@ public:
     coinbaseAccountSetupWindow *getAccSetupWindow();
     QComboBox* getAccountsCombo();
     void killAccSetupWindow();
-    QTableWidget *getAccountTablePlacer();
     QWidget *getAccountsTab();
+    QTableWidget *getAccountTablePlacer();
+    QLabel *getAccountsNativeBalanceTotalLabel();
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

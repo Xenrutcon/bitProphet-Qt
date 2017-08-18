@@ -2,14 +2,14 @@
 
 cbWalletTable::cbWalletTable(coinbaseAccount *acc, cbApiHandler *parent) : QObject(parent) {
     mTableWidget = new QTableWidget(4,12, parent->mParentProphet->mParent->getAccountsTab());
-    parent->say("Wallets: " + QString().setNum(acc->getWalletCount()) );
+    //parent->say("Wallets: " + QString().setNum(acc->getWalletCount()) );
     mParent = parent;
     QWidget *placer = parent->mParentProphet->mParent->getAccountTablePlacer();
     mTableWidget->setGeometry( placer->geometry() );
     placer->hide();
     placer = NULL; //dont delete it, just grab and hide, repeat
     mTableWidget->show();
-//    mParent->mParentWin->getWalletTotalNativeLabel()->setText( QString().setNum(0.00) );
+    mParent->mParentProphet->mParent->getAccountsNativeBalanceTotalLabel()->setText( QString().setNum(0.00) );
     for (int w=0;w<acc->getWalletCount();w++){
         addWallet(acc->getWallet(w),w);
     }
@@ -34,7 +34,7 @@ void cbWalletTable::addWallet(coinbaseWallet *w, int r) {
     newItem = new QTableWidgetItem(w->mAmountNative);
     mTableWidget->setItem(row, column+2, newItem);
     mTableWidget->setHorizontalHeaderItem(column+2,new QTableWidgetItem("Amount Native") );
-//    mParent->mParentWin->getWalletTotalNativeLabel()->setText( QString().setNum(mParent->mParentWin->getWalletTotalNativeLabel()->text().toDouble() + w->mAmountNative.toDouble()) );
+    mParent->mParentProphet->mParent->getAccountsNativeBalanceTotalLabel()->setText( QString().setNum(mParent->mParentProphet->mParent->getAccountsNativeBalanceTotalLabel()->text().toDouble() + w->mAmountNative.toDouble()) );
 
     newItem = new QTableWidgetItem(w->mCurrencyNative );
     mTableWidget->setItem(row, column+3, newItem);

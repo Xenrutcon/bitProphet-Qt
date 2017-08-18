@@ -12,6 +12,7 @@ class coinbaseWallet : public QObject {
     Q_OBJECT
 public:
     explicit coinbaseWallet(coinbaseAccount *parent);
+    ~coinbaseWallet();
     QString mAmount;
     QString mAmountNative;
     QString mCreated;

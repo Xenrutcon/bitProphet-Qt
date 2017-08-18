@@ -61,7 +61,7 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
         listAccountProcessResponse(resp);
         if ( mParentProphet->mAutoRefreshAccount ) {
             int timer= mParentProphet->mAutoRefreshAccountInterval;
-            QTimer::singleShot(5000, mParentProphet, SLOT(listAccountSlot()));
+            QTimer::singleShot(timer, mParentProphet, SLOT(listAccountSlot()));
         }
     } else if (type == "listPaymentMethods" ) {
 //        loadPayMethods(resp);
@@ -74,7 +74,7 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     } else {
         say("Unknown Response Type: " + type);
     }
-
+    say("Done Processing Response Type: " + type);
     resp->getParent()->deleteLater();
 }
 
@@ -100,7 +100,7 @@ void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
         QJsonObject obj = *(resp->getResponseContent());
         QJsonArray data  = obj["data"].toArray();
         QJsonObject paging  = obj["pagination"].toObject();
-        say ( "Found Data: " + QString().setNum(data.count()) + " Entries Found.");
+        //say ( "Found Data: " + QString().setNum(data.count()) + " Entries Found.");
         for (int d=0;d<data.count();d++) {
             // each element here is a wallet each of which has:
             // id , name, primary(bool), type, currency,
@@ -134,13 +134,14 @@ void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
             newWallet->mResource = el["resource"].toString();
             newWallet->mCreated = el["created_at"].toString();
             newWallet->mUpdated = el["updated_at"].toString();
-            say ("Added Wallet " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ));
+            //say ("Added Wallet " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ));
             if ( mWalletTableWidget != NULL ) {
                 mWalletTableWidget->deleteLater();
             }
             mWalletTableWidget = new cbWalletTable(mAccount,this);
         }
-        say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
+        //say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
+
 }
 
 ///////////
@@ -149,17 +150,12 @@ void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
 
 
 void cbApiHandler::listAccounts() {
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    //                                                            //
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
     // URL: https://api.coinbase.com/v2/accounts
     // method: GET
     // requestPath: /v2/accounts
     // body: EMPTY ie: ""
     say("Fetching Account (Wallet List)");
-
+    mParentProphet->setProphetState("FETCH");
 
     //Instead of manual, Creating a new coinbaseApiRequest
     cbApiRequest* req = new cbApiRequest(this);
@@ -168,9 +164,9 @@ void cbApiHandler::listAccounts() {
     req->setPath("/v2/accounts");  //the url path,etc..
     req->setBody("");             //no body needed (for this one)
     req->setType("listAccounts");//just for us, forgot why...
-    say("Sending Request...");
+    //say("Sending Request...");
     req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
-    say("Request Sent.");
+    //say("Request Sent.");
     //All request bodies should have content type application/json and be valid JSON.
     //CB-ACCESS-KEY The api key as a string
     //CB-ACCESS-SIGN The user generated message signature (see below)

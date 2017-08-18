@@ -98,12 +98,12 @@
        <rect>
         <x>10</x>
         <y>240</y>
-        <width>91</width>
+        <width>101</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Total Native Value</string>
+       <string>Total Native Value $</string>
       </property>
      </widget>
      <widget class="QLabel" name="mTotalNativeValue">
@@ -116,7 +116,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>$</string>
+       <string>0</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="mAutoRefreshBalanceCheckBox">
