@@ -1,6 +1,7 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL), mAutoRefreshAccount(true), mAutoRefreshAccountInterval(15000) {
+bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL), mAutoRefreshAccount(true), mAutoRefreshAccountInterval(15000),
+    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(5000) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    
@@ -58,7 +59,8 @@ bitProphet::~bitProphet() {
 ///////////
 void bitProphet::setProphetState(QString newState)  {
     mState = newState;
-    say("[-] I am "+ mState +" [-]");
+    //say("[-] I am "+ mState +" [-]");
+    //TODO: shut up, update label instead of say
 }
 
 bpDatabase *bitProphet::getDb() {
@@ -79,6 +81,31 @@ void bitProphet::addAccountToCoinbaseComboBox(QString accountName) {
     say("[addAccountToComboBox] - " + accountName ,1);
     mParent->getAccountsCombo()->addItem(accountName);
 }
+
+void bitProphet::setBtcSpotPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getBtcSpotPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    say( "BTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+}
+
+void bitProphet::setLtcSpotPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getLtcSpotPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    say( "LTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+}
+
+void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getEthSpotPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    say( "ETH Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+}
+
 
 /////////
 // Slots

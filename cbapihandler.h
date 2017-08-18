@@ -56,13 +56,14 @@ private:
     coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)    
     cbWalletTable *mWalletTableWidget;
 public slots:
+    void fetchSpotPrices();
+    void fetchBTCSpotPrice();
+    void fetchLTCSpotPrice();
+    void fetchETHSpotPrice();
 //    void withdrawFiatButtonSlot();
-//    void loadWalletAccount( coinbaseApiResponse *resp );
-//    void loadPayMethods( coinbaseApiResponse *resp );
-//    void processResponse( coinbaseApiResponse *resp );
-//      void listWalletAccountSlot();
 //    void depositFiatButtonSlot();
-//    void apiRequestComplete();
+//    void loadPayMethods( coinbaseApiResponse *resp );
+
 signals:
 
 public slots:

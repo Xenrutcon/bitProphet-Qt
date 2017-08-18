@@ -30,6 +30,9 @@ public:
     QWidget *getAccountsTab();
     QTableWidget *getAccountTablePlacer();
     QLabel *getAccountsNativeBalanceTotalLabel();
+    QLabel *getBtcSpotPriceLabel();
+    QLabel *getLtcSpotPriceLabel();
+    QLabel *getEthSpotPriceLabel();
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

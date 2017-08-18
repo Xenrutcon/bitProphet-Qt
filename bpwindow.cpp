@@ -45,6 +45,18 @@ QLabel *bpWindow::getAccountsNativeBalanceTotalLabel() {
     return ui->mTotalNativeValue;
 }
 
+QLabel *bpWindow::getBtcSpotPriceLabel() {
+    return ui->mBtcSpotPriceLabel;
+}
+
+QLabel *bpWindow::getLtcSpotPriceLabel() {
+    return ui->mLtcSpotPriceLabel;
+}
+
+QLabel *bpWindow::getEthSpotPriceLabel() {
+    return ui->mEthSpotPriceLabel;
+}
+
 coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
     return mCbSetupWin;
 }

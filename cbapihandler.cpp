@@ -21,9 +21,12 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
 
             say( "KeyLen: " + QString().setNum(mAccount->mApiKey.length()) );
             say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
-            //start AutoRefreshAccount (if)
-
+            //Start Spot Check
+            if ( mParentProphet->mAutoCheckSpotPrices ) {
+                QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
+            }
             //start Auto Simple Trading (if)
+
         } else {
             say("Default Account was not found.");
             say("Create one using the Setup Menu.");
@@ -56,7 +59,7 @@ QString cbApiHandler::getCoinbaseApiKey() {
 
 void cbApiHandler::processResponse( cbApiResponse *resp ) {
     QString type = resp->getType();
-    say("Processing Response Type: " + type);
+    // say("Processing Response Type: " + type);
     if (type == "listAccounts" ) {
         listAccountProcessResponse(resp);
         if ( mParentProphet->mAutoRefreshAccount ) {
@@ -64,17 +67,17 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
             QTimer::singleShot(timer, mParentProphet, SLOT(listAccountSlot()));
         }
     } else if (type == "listPaymentMethods" ) {
-//        loadPayMethods(resp);
+        //loadPayMethods(resp);
     } else if (type == "btcSpotPrice" ) {
-//        mParentProphet->setBTCSpotPrice(resp);
+          mParentProphet->setBtcSpotPrice(resp);
     } else if (type == "ethSpotPrice" ) {
-//        mParentProphet->setETHSpotPrice(resp);
+          mParentProphet->setEthSpotPrice(resp);
     } else if (type == "ltcSpotPrice" ) {
-//        mParentProphet->setLTCSpotPrice(resp);
+          mParentProphet->setLtcSpotPrice(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
-    say("Done Processing Response Type: " + type);
+    // say("Done Processing Response Type: " + type);
     resp->getParent()->deleteLater();
 }
 
@@ -167,11 +170,46 @@ void cbApiHandler::listAccounts() {
     //say("Sending Request...");
     req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
     //say("Request Sent.");
-    //All request bodies should have content type application/json and be valid JSON.
-    //CB-ACCESS-KEY The api key as a string
-    //CB-ACCESS-SIGN The user generated message signature (see below)
-    //CB-ACCESS-TIMESTAMP A timestamp for your request
-    //The body is the request body string or omitted if there is no request body (typically for GET requests).
-    //The method should be UPPER CASE.
 }
 
+void cbApiHandler::fetchBTCSpotPrice() {
+    // https://api.coinbase.com/v2/prices/BTC-USD/spot
+    cbApiRequest* req = new cbApiRequest(this);
+    req->setMethod("GET");
+    req->setPath("/v2/prices/BTC-USD/spot");
+    req->setBody("");
+    req->setType("btcSpotPrice");
+    req->sendRequest();
+    return;
+}
+
+void cbApiHandler::fetchETHSpotPrice() {
+    // https://api.coinbase.com/v2/prices/ETH-USD/spot
+    cbApiRequest* req = new cbApiRequest(this);
+    req->setMethod("GET");
+    req->setPath("/v2/prices/ETH-USD/spot");
+    req->setBody("");
+    req->setType("ethSpotPrice");
+    req->sendRequest();
+    return;
+}
+
+void cbApiHandler::fetchLTCSpotPrice() {
+    // https://api.coinbase.com/v2/prices/LTC-USD/spot
+    cbApiRequest* req = new cbApiRequest(this);
+    req->setMethod("GET");
+    req->setPath("/v2/prices/LTC-USD/spot");
+    req->setBody("");
+    req->setType("ltcSpotPrice");
+    req->sendRequest();
+    return;
+}
+
+void cbApiHandler::fetchSpotPrices() {
+    fetchBTCSpotPrice();
+    QTimer::singleShot(700,this,SLOT(fetchLTCSpotPrice()));
+    QTimer::singleShot(1000,this,SLOT(fetchETHSpotPrice()));
+    if ( mParentProphet->mAutoCheckSpotPrices ) {
+        QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
+    }
+}

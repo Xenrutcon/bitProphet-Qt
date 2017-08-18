@@ -12,7 +12,7 @@ class bpWindow;
 class bpDatabase;
 class coinbaseAccount;
 class cbApiHandler;
-
+class cbApiResponse;
 class bitProphet : public QObject {
     Q_OBJECT    
 public:
@@ -34,6 +34,9 @@ public:
     bool mAutoSimpleTrade;
     // TODO add autoSimpleTrading (have done it before :P, its slower but works )
     bpWindow *mParent;
+    void setBtcSpotPrice(cbApiResponse*);
+    void setLtcSpotPrice(cbApiResponse*);
+    void setEthSpotPrice(cbApiResponse*);
 private:
 
     bpDatabase *mDb;

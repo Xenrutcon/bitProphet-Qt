@@ -47,4 +47,6 @@ void cbWalletTable::addWallet(coinbaseWallet *w, int r) {
     newItem = new QTableWidgetItem(w->mUpdated);
     mTableWidget->setItem(row, column+5, newItem);
     mTableWidget->setHorizontalHeaderItem(column+5,new QTableWidgetItem("Updated") );
+    //nevermind that...dont want to check which one it is...
+    //dont need to either I saw it update...
 }
