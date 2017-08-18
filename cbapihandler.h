@@ -24,16 +24,13 @@
 #include "coinbaseaccount.h"
 #include "cbapirequest.h"
 #include "cbapiresponse.h"
-
-//#include "coinbasewallet.h"
-//#include "cbwallettable.h"
+#include "cbwallettable.h"
 
 class bpWindow;
 class bitProphet;
 class coinbaseAccount;
 class cbApiResponse;
-//class coinbaseApiRequest;
-//class cbWalletTable;
+class cbWalletTable;
 
 
 
@@ -49,6 +46,7 @@ public:
     QString getCoinbaseApiSecret();
     void say( QString sayThis );
     void processResponse( cbApiResponse *resp );
+    void processBadListAccountsResponse();
     void listAccountProcessResponse( cbApiResponse *resp );
     void listAccounts();
 private:
@@ -56,8 +54,7 @@ private:
     QString mCbApiKey;
     QString mCbApiSecret;
     coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)    
-    //QList<coinbaseApiRequest*> mCurrentRequestList;
-    //cbWalletTable *mWalletTableWidget;
+    cbWalletTable *mWalletTableWidget;
 public slots:
 //    void withdrawFiatButtonSlot();
 //    void loadWalletAccount( coinbaseApiResponse *resp );

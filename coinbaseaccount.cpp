@@ -1,11 +1,10 @@
 #include "coinbaseaccount.h"
 
-coinbaseAccount::coinbaseAccount(QObject *parent) {
-    mParent = reinterpret_cast<cbApiHandler*>(parent);
+coinbaseAccount::coinbaseAccount(cbApiHandler *parent) {
+    mParent = parent;
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     say("coinbaseAccount Created...");
-
-//    mWalletList.clear();
+    mWalletList.clear();
 //    mPayMethods.clear();
 }
 
@@ -20,11 +19,25 @@ void coinbaseAccount::say(QString sayThis) {
     mParent->say( "[" +mPtrName+ "] " + sayThis);
 }
 
-//int coinbaseAccount::addWallet() {
-//    coinbaseWallet *add = new coinbaseWallet(this);
-//    mWalletList.append(add);
-//    return mWalletList.count()-1; //returns the index of the newly added wallet for reference
-//}
+
+// Wallet List Methods
+int coinbaseAccount::addWallet() {
+    coinbaseWallet *add = new coinbaseWallet(this);
+    mWalletList.append(add);
+    return mWalletList.count()-1; //returns the index of the newly added wallet for reference
+}
+
+coinbaseWallet* coinbaseAccount::getWallet(int index) {
+    return mWalletList.at(index);
+}
+
+int coinbaseAccount::getWalletCount() {
+    return mWalletList.count();
+}
+
+void coinbaseAccount::clearWallets() {
+    mWalletList.clear();
+}
 
 //int coinbaseAccount::addPaymentMethod() {
 //    coinbasePaymentMethod *add = new coinbasePaymentMethod(this);
@@ -36,17 +49,7 @@ void coinbaseAccount::say(QString sayThis) {
 //    return mPayMethods.at(index);
 //}
 
-//coinbaseWallet* coinbaseAccount::getWallet(int index) {
-//    return mWalletList.at(index);
-//}
 
-//int coinbaseAccount::getWalletCount() {
-//    return mWalletList.count();
-//}
-
-//void coinbaseAccount::clearWallets() {
-//    mWalletList.clear();
-//}
 
 
 //int coinbaseAccount::getPaymentMethodCount() {

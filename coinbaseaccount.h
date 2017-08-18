@@ -4,19 +4,18 @@
 #include <QObject>
 #include <QString>
 #include "bitprophet.h"
-#include "cbapihandler.h"
-//#include "coinbasewallet.h"
+#include "coinbasewallet.h"
 //#include "coinbasepaymentmethod.h"
 
 class bitProphet;
 class cbApiHandler;
-//class coinbaseWallet;
+class coinbaseWallet;
 //class coinbasePaymentMethod;
 
 class coinbaseAccount : public QObject {
     Q_OBJECT
 public:
-    explicit coinbaseAccount(QObject *parent);
+    explicit coinbaseAccount(cbApiHandler *parent);
     ~coinbaseAccount();
     QString mPtrName;
     QString mId;
@@ -24,18 +23,20 @@ public:
     QString mExchange;
     QString mApiKey;
     QString mApiSecret;
-    bool mDefaultAccount;
-//    int addWallet();
+    bool mDefaultAccount;    
+    //Wallet List Methods
+    int addWallet();
+    coinbaseWallet* getWallet(int index);
+    void clearWallets();
+    int getWalletCount();
 //    int addPaymentMethod();
-//    coinbaseWallet* getWallet(int index);
-//    void clearWallets();
-//    int getWalletCount();
+
 //    int getPaymentMethodCount();
 //    coinbasePaymentMethod* getPaymentMethod(int index);
 private:
     void say(QString sayThis);
     cbApiHandler *mParent;
-//    QList<coinbaseWallet*> mWalletList;
+    QList<coinbaseWallet*> mWalletList;
 //    QList<coinbasePaymentMethod*> mPayMethods;
 signals:
 

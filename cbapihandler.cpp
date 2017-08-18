@@ -1,6 +1,6 @@
 #include "cbapihandler.h"
 
-cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL) {
+cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mWalletTableWidget(NULL) {
     mParentProphet = reinterpret_cast<bitProphet*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     say("Api Handler Created...");
@@ -59,6 +59,10 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     say("Processing Response Type: " + type);
     if (type == "listAccounts" ) {
         listAccountProcessResponse(resp);
+        if ( mParentProphet->mAutoRefreshAccount ) {
+            int timer= mParentProphet->mAutoRefreshAccountInterval;
+            QTimer::singleShot(5000, mParentProphet, SLOT(listAccountSlot()));
+        }
     } else if (type == "listPaymentMethods" ) {
 //        loadPayMethods(resp);
     } else if (type == "btcSpotPrice" ) {
@@ -70,33 +74,73 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     } else {
         say("Unknown Response Type: " + type);
     }
-    if ( mParentProphet->mAutoRefreshAccount ) {
-        int timer= mParentProphet->mAutoRefreshAccountInterval;
-        QTimer::singleShot(5000, mParentProphet, SLOT(listAccountSlot()));
-    }
+
     resp->getParent()->deleteLater();
+}
+
+
+void cbApiHandler::processBadListAccountsResponse() {
+    if ( mParentProphet->mAutoRefreshAccount ) {
+        say("Restarting Timer [autoRefreshAccount]");
+        int timer= mParentProphet->mAutoRefreshAccountInterval;
+        QTimer::singleShot(timer, mParentProphet, SLOT(listAccountSlot()));
+    }
 }
 
 ///////////////////////
 // RESPONSE PROCESSORS
 ///////////////////////
 void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
-      QJsonObject obj = *(resp->getResponseContent());
-      QJsonArray data  = obj["data"].toArray();
-      QJsonObject paging  = obj["pagination"].toObject();
-      say ( "Found Data: " + QString().setNum(data.count()) + " Entries Found.");
-      for (int d=0;d<data.count();d++) {
-          // each element here is a wallet each of which has:
-          // id , name, primary(bool), type, currency,
-          // balance(obj), native_balance(obj), created_at, updated_at, resource, resource_path, ready(bool)
-          QJsonObject el = data.at(d).toObject();
-          say("ID: " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ) );
-          say("Name: " + el["name"].toString() );
-          say("Type: " + el["type"].toString() );
-          say("Currency: " + el["currency"].toString() );
-          say("------------------------------------------");
-      }
-      say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
+        if ( mAccount->getWalletCount() > 0 ) {
+            for ( int a=0;a<mAccount->getWalletCount();a++) {
+                mAccount->getWallet(a)->deleteLater();
+            }
+            mAccount->clearWallets();
+        }
+        QJsonObject obj = *(resp->getResponseContent());
+        QJsonArray data  = obj["data"].toArray();
+        QJsonObject paging  = obj["pagination"].toObject();
+        say ( "Found Data: " + QString().setNum(data.count()) + " Entries Found.");
+        for (int d=0;d<data.count();d++) {
+            // each element here is a wallet each of which has:
+            // id , name, primary(bool), type, currency,
+            // balance(obj), native_balance(obj), created_at, updated_at, resource, resource_path, ready(bool)
+            QJsonObject el = data.at(d).toObject();
+            //          say("ID: " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ) );
+            //          say("Name: " + el["name"].toString() );
+            //          say("Type: " + el["type"].toString() );
+            //          say("Currency: " + el["currency"].toString() );
+            QJsonObject balEl = el["balance"].toObject();
+            //          say("Balance Amount: " + balEl["amount"].toString() );
+            //          say("Currency Type: " + balEl["currency"].toString() );
+            QJsonObject natBalEl = el["native_balance"].toObject();
+            //          say("Native Balance Amount: $" + natBalEl["amount"].toString() );
+            //          say("Native Currency Type: " + natBalEl["currency"].toString() );
+            //          say("Resource: " + el["resource"].toString() );
+            //          //say("Ready?: " + QString().setNum(el["ready"].toInt()) );  //API DOCS says this exists, it does not.
+            //          say("------------------------------------------");
+
+            // COFFEEEEEEEEE
+
+            int newWalletIndex = mAccount->addWallet();
+            coinbaseWallet *newWallet = mAccount->getWallet(newWalletIndex);
+            newWallet->mId = el["id"].toString();
+            newWallet->mName = el["name"].toString();
+            newWallet->mType = el["type"].toString();
+            newWallet->mCurrency = balEl["currency"].toString();
+            newWallet->mAmount = balEl["amount"].toString();
+            newWallet->mCurrencyNative = natBalEl["currency"].toString();
+            newWallet->mAmountNative = natBalEl["amount"].toString();
+            newWallet->mResource = el["resource"].toString();
+            newWallet->mCreated = el["created_at"].toString();
+            newWallet->mUpdated = el["updated_at"].toString();
+            say ("Added Wallet " + el["id"].toString().mid(0,el["id"].toString().indexOf('-') ));
+            if ( mWalletTableWidget != NULL ) {
+                mWalletTableWidget->deleteLater();
+            }
+            mWalletTableWidget = new cbWalletTable(mAccount,this);
+        }
+        say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
 }
 
 ///////////

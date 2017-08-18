@@ -33,7 +33,9 @@ SOURCES += \
     coinbasesetupaddwindow.cpp \
     cbapihandler.cpp \
     cbapirequest.cpp \
-    cbapiresponse.cpp
+    cbapiresponse.cpp \
+    coinbasewallet.cpp \
+    cbwallettable.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -44,7 +46,9 @@ HEADERS += \
     coinbasesetupaddwindow.h \
     cbapihandler.h \
     cbapirequest.h \
-    cbapiresponse.h
+    cbapiresponse.h \
+    coinbasewallet.h \
+    cbwallettable.h
 
 FORMS += \
         bpwindow.ui \

@@ -33,6 +33,15 @@ QTextEdit * bpWindow::getDebugLog() {
     return ui->mDebugLog;
 }
 
+QTableWidget *bpWindow::getAccountTablePlacer() {
+    return ui->cbAccountTablePlacer;
+}
+
+QWidget *bpWindow::getAccountsTab() {
+    return ui->mCoinbaseTab;
+
+}
+
 coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
     return mCbSetupWin;
 }

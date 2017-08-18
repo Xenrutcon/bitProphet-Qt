@@ -88,12 +88,12 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         //oopz, they work better... when they exist.....shutup
         mResponse = new cbApiResponse(this,&jsonObj);
         mResponse->setType(mType);
-        //mResponse->printResponse();
+//        mResponse->printResponse();
         mParent->mParentProphet->setProphetState("IDLE");
         mParent->processResponse(mResponse); //reply and response are deleted HERE
         mNetAccMan->deleteLater();
         mResponse->deleteLater();
-    } else {
+    } else {        
         mParent->say("Bad Response, Aborted Request!");
         mParent->say("Response Status: " + QString().setNum(statusCode));
         mParent->say("Response Type: " + mType);
@@ -101,6 +101,10 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         reply->deleteLater();
         mParent->say ("unparsed --- " + unparsed);
         mNetAccMan->deleteLater();
+        //If this was a special timered call, restart its timer
+        if ( mType == "listAccounts" ) {
+            mParent->processBadListAccountsResponse();
+        }
     }
 }
 
