@@ -26,16 +26,18 @@ void bpSplineChart::say(QString sayThis) {
 void bpSplineChart::addBtcSpotPriceHistoryData(bpDatabase *theDb) {
     say("Adding Btc Spot Price To History...");
     mSeries->clear();
-    theDb->getBtcSpotPriceHistoryLast(500,this);
     mChart->removeSeries(mSeries);
+    theDb->getBtcSpotPriceHistoryLast(500,this);
     mChart->addSeries(mSeries);
+    mChart->createDefaultAxes();
     mView->repaint();
 }
 
 void bpSplineChart::reloadBtcSpotPriceHistoryData(bpDatabase *theDb) {
     mSeries->clear();
-    theDb->getBtcSpotPriceHistoryLast(500,this);
     mChart->removeSeries(mSeries);
+    theDb->getBtcSpotPriceHistoryLast(500,this);
     mChart->addSeries(mSeries);
+    mChart->createDefaultAxes();
     mView->repaint();
 }

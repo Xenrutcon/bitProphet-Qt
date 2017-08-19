@@ -140,7 +140,7 @@ void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
                   QString tResult = query.value(tVal).toString();
                   say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
                   prices.append(pResult);
-                  chart->mSeries->append(y,pResult.toDouble());
+                  chart->mSeries->append(y,pResult.toFloat());
                   y++;
                }
             } else {

@@ -49,7 +49,7 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
 
     //Spawn Charts on Charts Tab
     mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
-    mSplineChartList.at(0)->addBtcSpotPriceHistoryData(mDb);
+    //mSplineChartList.at(0)->addBtcSpotPriceHistoryData(mDb);
     mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
     mSplineChartList.at(0)->mView->show();
 
