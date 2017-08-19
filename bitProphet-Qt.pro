@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql network
+QT       += core gui sql network charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,7 +35,8 @@ SOURCES += \
     cbapirequest.cpp \
     cbapiresponse.cpp \
     coinbasewallet.cpp \
-    cbwallettable.cpp
+    cbwallettable.cpp \
+    bpsplinechart.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     cbapirequest.h \
     cbapiresponse.h \
     coinbasewallet.h \
-    cbwallettable.h
+    cbwallettable.h \
+    bpsplinechart.h
 
 FORMS += \
         bpwindow.ui \

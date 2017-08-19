@@ -57,6 +57,14 @@ QLabel *bpWindow::getEthSpotPriceLabel() {
     return ui->mEthSpotPriceLabel;
 }
 
+QFrame *bpWindow::getCbBTCPricePlacer() {
+    return ui->mCbBTCPriceChartPlacer;
+}
+
+QWidget *bpWindow::getChartsTab() {
+    return ui->mChartsTab;
+}
+
 coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
     return mCbSetupWin;
 }

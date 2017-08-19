@@ -23,8 +23,11 @@ public:
     QString mPtrName;
     bool fileExists();
     bool hasAccountsTable();
+    bool hasTable(QString tableName);
     void createDatabase();
     bool createAccountsTable();
+    bool createCbSpotPriceHistoryTable();
+    void addToCbSpotPriceHistory( QString coin, QString price );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
     QList<QString> getAccountList();
     void deleteAccount(QString id );

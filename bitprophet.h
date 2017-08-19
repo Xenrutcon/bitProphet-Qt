@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <QObject>
+#include <QtCharts/QSplineSeries>
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
 #include "bpwindow.h"
 #include "bpdatabase.h"
 #include "coinbaseaccount.h"

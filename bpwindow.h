@@ -33,6 +33,8 @@ public:
     QLabel *getBtcSpotPriceLabel();
     QLabel *getLtcSpotPriceLabel();
     QLabel *getEthSpotPriceLabel();
+    QFrame *getCbBTCPricePlacer();
+    QWidget *getChartsTab();
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

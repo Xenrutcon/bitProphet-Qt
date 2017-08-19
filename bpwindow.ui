@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -136,6 +136,11 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="mCbSimpleAutoTradeTab">
+     <attribute name="title">
+      <string>SimpleAutoTrader</string>
+     </attribute>
+    </widget>
     <widget class="QWidget" name="mGdaxTab">
      <attribute name="title">
       <string>GDAX</string>
@@ -159,6 +164,22 @@
      <attribute name="toolTip">
       <string>Graphs, Charts and Tables, etc</string>
      </attribute>
+     <widget class="QFrame" name="mCbBTCPriceChartPlacer">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>621</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="mNeuralTab">
      <attribute name="title">

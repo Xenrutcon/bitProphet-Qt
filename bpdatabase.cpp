@@ -58,6 +58,34 @@ bool bpDatabase::hasAccountsTable() {
     return retVal;
 }
 
+bool bpDatabase::hasTable(QString tableName) {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select COUNT(*) from sqlite_master where type='table' and name='" + tableName + "'");
+            if (query.exec()) {
+               if (query.next()) {
+                  int count = query.record().indexOf("COUNT(*)");
+                  QString result = query.value(count).toString();
+                  if ( result.toInt() ) {
+                      retVal = true;
+                  }
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
 QList<QString> bpDatabase::getAccountList() {
     QList<QString> accList;
     {
@@ -126,6 +154,30 @@ bool bpDatabase::createAccountsTable() {
            say("Database: CREATE connection ok.");
            QSqlQuery query;
            query.prepare("CREATE TABLE accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,exchange varchar(64),apiKey varchar(512),apiSecret varchar(512),defaultAccount bool default 0, name VARCHAR(64) );");
+           if(query.exec()) {
+              retVal = true;
+           } else {
+              say("createAccountsTable() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+bool bpDatabase::createCbSpotPriceHistoryTable() {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: CREATE connection ok.");
+           QSqlQuery query;
+           query.prepare("CREATE TABLE cbSpotPriceHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),price varchar(256),ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL );");
            if(query.exec()) {
               retVal = true;
            } else {
@@ -209,6 +261,28 @@ void bpDatabase::insertAccount( QString name, QString apiKey, QString apiSecret,
               say("insertAccount() Success");
            } else {
               say("insertAccount() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           query.prepare("INSERT INTO cbSpotPriceHistory (coin, price) VALUES ('" + coin + "','" + price + "')");
+           if(query.exec()) {
+              say("addToCbSpotPriceHistory() Success");
+           } else {
+              say("addToCbSpotPriceHistory() Error:  " + query.lastError().text());
            }
         }
         Db.close();

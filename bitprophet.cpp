@@ -37,11 +37,23 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
             say("Click Setup Menu next to enter Api Info.");
         } else { say("Error, Check debug log!"); }
     }
-    // Create cbApiHandler
+    if ( mDb->hasTable("cbSpotPriceHistory") ) {
+        say("Found cbSpotPriceHistory Table.");
+    } else {
+        if ( mDb->createCbSpotPriceHistoryTable() ) {
+            say("Created cbSpotPriceHistory Table.");
+        } else {
+            say("ERROR creating cbSpotPriceHistory Table.");
+        }
+    }
+    // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
     mApiHandler = new cbApiHandler(this);
     // Finish startup process
     setProphetState("IDLE");
     // Start bitProphet based on saved settings (or defaults)
+
+    //Spawn Charts on Charts Tab
+
 
     //Prevent QTextEdits from exhausting memory with logged output ( from say() )
     mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
@@ -88,6 +100,9 @@ void bitProphet::setBtcSpotPrice(cbApiResponse *resp) {
     QJsonObject data  = r["data"].toObject();
     say( "BTC Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
+    //Write to DB History
+    mDb->addToCbSpotPriceHistory("BTC",data["amount"].toString());
+    // Check for accounts
 }
 
 void bitProphet::setLtcSpotPrice(cbApiResponse *resp) {
@@ -96,6 +111,7 @@ void bitProphet::setLtcSpotPrice(cbApiResponse *resp) {
     QJsonObject data  = r["data"].toObject();
     say( "LTC Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
+    mDb->addToCbSpotPriceHistory("LTC",data["amount"].toString());
 }
 
 void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
@@ -104,6 +120,7 @@ void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
     QJsonObject data  = r["data"].toObject();
     say( "ETH Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
+    mDb->addToCbSpotPriceHistory("ETH",data["amount"].toString());
 }
 
 
