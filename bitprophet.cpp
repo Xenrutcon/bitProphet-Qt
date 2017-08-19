@@ -53,7 +53,25 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
     // Start bitProphet based on saved settings (or defaults)
 
     //Spawn Charts on Charts Tab
-
+    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
+    //Load Data;
+//    mSplineChartList.at(0)->mSeries->append(1,4000);
+//    mSplineChartList.at(0)->mSeries->append(2,4050);
+//    mSplineChartList.at(0)->mSeries->append(3,1000);
+//    mSplineChartList.at(0)->mSeries->append(4,1000);
+//    mSplineChartList.at(0)->mSeries->append(5,4050);
+//    mSplineChartList.at(0)->mSeries->append(6,4000);
+    //Configure Chart
+    mSplineChartList.at(0)->mChart->legend()->hide();
+    mSplineChartList.at(0)->mChart->addSeries(mSplineChartList.at(0)->mSeries);
+    mSplineChartList.at(0)->mChart->setTitle("Coinbase Price History");
+    mSplineChartList.at(0)->mChart->createDefaultAxes();
+    mSplineChartList.at(0)->mChart->axisY()->setRange(0,10000);
+    //Configure View
+    mSplineChartList.at(0)->mView->setRenderHint(QPainter::Antialiasing);
+    mSplineChartList.at(0)->mView->setChart(mSplineChartList.at(0)->mChart);
+    mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
+    mSplineChartList.at(0)->mView->show();
 
     //Prevent QTextEdits from exhausting memory with logged output ( from say() )
     mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
@@ -63,6 +81,11 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
 bitProphet::~bitProphet() {
     if (mDb != NULL ) { delete mDb; }
     if (mApiHandler != NULL ) { delete mApiHandler; }
+    //delete all charts
+    for(int c=0;c<mSplineChartList.length();c++) {
+        delete mSplineChartList.at(c);
+    }
+    mSplineChartList.clear();
     say("bitProphet fading...");    
 }
 

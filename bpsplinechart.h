@@ -4,21 +4,22 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QtCharts>
+
 using namespace QtCharts;
 class bpSplineChart : public QWidget
 {
     Q_OBJECT
 public:
-    explicit bpSplineChart(QTabWidget *parent);
+    explicit bpSplineChart(QWidget *parent);
     ~bpSplineChart();
     void say(QString sayThis);
-private:
-    QTabWidget *mParent;
     QSplineSeries *mSeries;
+//    QSplineSeries *mSeries2;
+//    QSplineSeries *mSeries3;
     QChart *mChart;
     QChartView *mView;
-
-
+private:
+    QWidget *mParent;
 signals:
 
 public slots:

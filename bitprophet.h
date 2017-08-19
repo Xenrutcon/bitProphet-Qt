@@ -10,12 +10,15 @@
 #include "bpdatabase.h"
 #include "coinbaseaccount.h"
 #include "cbapihandler.h"
+#include "bpsplinechart.h"
 
 class bpWindow;
 class bpDatabase;
 class coinbaseAccount;
 class cbApiHandler;
 class cbApiResponse;
+class bpSplineChart;
+
 class bitProphet : public QObject {
     Q_OBJECT    
 public:
@@ -41,7 +44,7 @@ public:
     void setLtcSpotPrice(cbApiResponse*);
     void setEthSpotPrice(cbApiResponse*);
 private:
-
+    QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
 signals:
