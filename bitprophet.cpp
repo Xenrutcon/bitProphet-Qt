@@ -55,15 +55,24 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
     //Spawn Charts on Charts Tab
     mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
     //Load Data;
-//    mSplineChartList.at(0)->mSeries->append(1,4000);
-//    mSplineChartList.at(0)->mSeries->append(2,4050);
-//    mSplineChartList.at(0)->mSeries->append(3,1000);
-//    mSplineChartList.at(0)->mSeries->append(4,1000);
-//    mSplineChartList.at(0)->mSeries->append(5,4050);
-//    mSplineChartList.at(0)->mSeries->append(6,4000);
-    //Configure Chart
+    mSplineChartList.at(0)->mSeries->append(1,4000);
+    mSplineChartList.at(0)->mSeries->append(2,4050);
+    mSplineChartList.at(0)->mSeries->append(3,1000);
+    mSplineChartList.at(0)->mSeries->append(4,750);
+    mSplineChartList.at(0)->mSeries->append(5,4050);
+    mSplineChartList.at(0)->mSeries->append(6,4000);
+
+    mSplineChartList.at(0)->mSeriesLtc->append(1,44);
+    mSplineChartList.at(0)->mSeriesLtc->append(2,54);
+
+    mSplineChartList.at(0)->mSeriesEth->append(1,150.34);
+    mSplineChartList.at(0)->mSeriesEth->append(2,299.44);
+    //Configure Chart    
     mSplineChartList.at(0)->mChart->legend()->hide();
     mSplineChartList.at(0)->mChart->addSeries(mSplineChartList.at(0)->mSeries);
+    mSplineChartList.at(0)->mChart->addSeries(mSplineChartList.at(0)->mSeriesLtc);
+    mSplineChartList.at(0)->mChart->addSeries(mSplineChartList.at(0)->mSeriesEth);
+
     mSplineChartList.at(0)->mChart->setTitle("Coinbase Price History");
     mSplineChartList.at(0)->mChart->createDefaultAxes();
     mSplineChartList.at(0)->mChart->axisY()->setRange(0,10000);

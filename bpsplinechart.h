@@ -14,8 +14,8 @@ public:
     ~bpSplineChart();
     void say(QString sayThis);
     QSplineSeries *mSeries;
-//    QSplineSeries *mSeries2;
-//    QSplineSeries *mSeries3;
+    QSplineSeries *mSeriesLtc;
+    QSplineSeries *mSeriesEth;
     QChart *mChart;
     QChartView *mView;
 private:
