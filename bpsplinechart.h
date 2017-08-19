@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QtCharts>
+#include "bpdatabase.h"
+
+
+class bpDatabase;
 
 using namespace QtCharts;
 class bpSplineChart : public QWidget
@@ -14,10 +18,10 @@ public:
     ~bpSplineChart();
     void say(QString sayThis);
     QSplineSeries *mSeries;
-    QSplineSeries *mSeriesLtc;
-    QSplineSeries *mSeriesEth;
     QChart *mChart;
     QChartView *mView;
+    void addBtcSpotPriceHistoryData(bpDatabase *theDb);
+    void reloadBtcSpotPriceHistoryData(bpDatabase *theDb);
 private:
     QWidget *mParent;
 signals:

@@ -36,7 +36,8 @@ SOURCES += \
     cbapiresponse.cpp \
     coinbasewallet.cpp \
     cbwallettable.cpp \
-    bpsplinechart.cpp
+    bpsplinechart.cpp \
+    spotprice.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -50,7 +51,8 @@ HEADERS += \
     cbapiresponse.h \
     coinbasewallet.h \
     cbwallettable.h \
-    bpsplinechart.h
+    bpsplinechart.h \
+    spotprice.h
 
 FORMS += \
         bpwindow.ui \

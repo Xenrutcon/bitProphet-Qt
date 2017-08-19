@@ -115,6 +115,43 @@ QList<QString> bpDatabase::getAccountList() {
     return accList;
 }
 
+void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart) {
+    QList<QString> prices;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='BTC' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+
+            if (query.exec()) {
+                int y=0;
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int cVal = query.record().indexOf("coin");
+                  QString cResult = query.value(cVal).toString();
+                  int pVal = query.record().indexOf("price");
+                  QString pResult = query.value(pVal).toString();
+                  int tVal = query.record().indexOf("ts");
+                  QString tResult = query.value(tVal).toString();
+                  say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
+                  prices.append(pResult);
+                  chart->mSeries->append(y,pResult.toDouble());
+                  y++;
+               }
+            } else {
+                say("No Coin Prices In History For BTC");
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
 
 
 QString bpDatabase::getDefaultAccountId() {

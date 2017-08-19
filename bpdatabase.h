@@ -7,13 +7,16 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
-
+#include "spotprice.h"
+#include "bpsplinechart.h"
 
 #include "bitprophet.h"
 #include "coinbaseaccount.h"
 
 class bitProphet;
 class coinbaseAccount;
+class spotPrice;
+class bpSplineChart;
 
 class bpDatabase : public QObject {
     Q_OBJECT
@@ -34,7 +37,7 @@ public:
     QString getDefaultAccountId();
     void loadAccountByName(coinbaseAccount *target, QString accountName);
     void loadAccountById(coinbaseAccount *target, QString id);
-
+    void getBtcSpotPriceHistoryLast(int howManyMax, bpSplineChart *chart);
 private:
     void say(QString sayThis);
 
