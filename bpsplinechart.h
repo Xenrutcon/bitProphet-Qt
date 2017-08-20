@@ -22,6 +22,8 @@ public:
     QChartView *mView;
     void addBtcSpotPriceHistoryData(bpDatabase *theDb);
     void reloadBtcSpotPriceHistoryData(bpDatabase *theDb);
+    void reloadLtcSpotPriceHistoryData(bpDatabase *theDb);
+    void reloadEthSpotPriceHistoryData(bpDatabase *theDb);
 private:
     QWidget *mParent;
 signals:

@@ -34,6 +34,8 @@ public:
     QLabel *getLtcSpotPriceLabel();
     QLabel *getEthSpotPriceLabel();
     QFrame *getCbBTCPricePlacer();
+    QFrame *getCbLTCPricePlacer();
+    QFrame *getCbETHPricePlacer();
     QWidget *getChartsTab();
 private:
     Ui::bpWindow *ui;

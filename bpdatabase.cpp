@@ -116,7 +116,6 @@ QList<QString> bpDatabase::getAccountList() {
 }
 
 void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart) {
-    QList<QString> prices;
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
@@ -138,8 +137,7 @@ void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
                   QString pResult = query.value(pVal).toString();
                   int tVal = query.record().indexOf("ts");
                   QString tResult = query.value(tVal).toString();
-                  say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
-                  prices.append(pResult);
+                  //say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
                   chart->mSeries->append(y,pResult.toFloat());
                   y++;
                }
@@ -152,6 +150,79 @@ void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
     QSqlDatabase::removeDatabase("bitProphet.dat");
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
+
+void bpDatabase::getLtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='LTC' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+
+            if (query.exec()) {
+                int y=0;
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int cVal = query.record().indexOf("coin");
+                  QString cResult = query.value(cVal).toString();
+                  int pVal = query.record().indexOf("price");
+                  QString pResult = query.value(pVal).toString();
+                  int tVal = query.record().indexOf("ts");
+                  QString tResult = query.value(tVal).toString();
+                  //say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
+                  chart->mSeries->append(y,pResult.toFloat());
+                  y++;
+               }
+            } else {
+                say("No Coin Prices In History For LTC");
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::getEthSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='ETH' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+
+            if (query.exec()) {
+                int y=0;
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int cVal = query.record().indexOf("coin");
+                  QString cResult = query.value(cVal).toString();
+                  int pVal = query.record().indexOf("price");
+                  QString pResult = query.value(pVal).toString();
+                  int tVal = query.record().indexOf("ts");
+                  QString tResult = query.value(tVal).toString();
+                  //say("id: " + idResult + " coin: " + cResult + " price: " + pResult + " time: " + tResult);
+                  chart->mSeries->append(y,pResult.toFloat());
+                  y++;
+               }
+            } else {
+                say("No Coin Prices In History For ETH");
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 
 
 QString bpDatabase::getDefaultAccountId() {

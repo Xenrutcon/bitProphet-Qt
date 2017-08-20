@@ -38,6 +38,8 @@ public:
     void loadAccountByName(coinbaseAccount *target, QString accountName);
     void loadAccountById(coinbaseAccount *target, QString id);
     void getBtcSpotPriceHistoryLast(int howManyMax, bpSplineChart *chart);
+    void getLtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);
+    void getEthSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);
 private:
     void say(QString sayThis);
 

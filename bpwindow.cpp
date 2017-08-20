@@ -61,6 +61,14 @@ QFrame *bpWindow::getCbBTCPricePlacer() {
     return ui->mCbBTCPriceChartPlacer;
 }
 
+QFrame *bpWindow::getCbLTCPricePlacer() {
+    return ui->mCbLTCPriceChartPlacer;
+}
+
+QFrame *bpWindow::getCbETHPricePlacer() {
+    return ui->mCbETHPriceChartPlacer;
+}
+
 QWidget *bpWindow::getChartsTab() {
     return ui->mChartsTab;
 }

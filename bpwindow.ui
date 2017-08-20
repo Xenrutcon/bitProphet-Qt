@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>897</width>
-    <height>564</height>
+    <width>920</width>
+    <height>708</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>6</x>
+      <x>0</x>
       <y>59</y>
-      <width>641</width>
-      <height>481</height>
+      <width>651</width>
+      <height>621</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -167,10 +167,42 @@
      <widget class="QFrame" name="mCbBTCPriceChartPlacer">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>621</width>
-        <height>181</height>
+        <x>0</x>
+        <y>0</y>
+        <width>651</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QFrame" name="mCbLTCPriceChartPlacer">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>200</y>
+        <width>651</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QFrame" name="mCbETHPriceChartPlacer">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>651</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -222,10 +254,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>649</x>
+      <x>660</x>
       <y>9</y>
       <width>241</width>
-      <height>531</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -325,7 +357,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>897</width>
+     <width>920</width>
      <height>21</height>
     </rect>
    </property>

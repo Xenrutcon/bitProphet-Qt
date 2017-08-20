@@ -41,3 +41,21 @@ void bpSplineChart::reloadBtcSpotPriceHistoryData(bpDatabase *theDb) {
     mChart->createDefaultAxes();
     mView->repaint();
 }
+
+void bpSplineChart::reloadLtcSpotPriceHistoryData(bpDatabase *theDb) {
+    mSeries->clear();
+    mChart->removeSeries(mSeries);
+    theDb->getLtcSpotPriceHistoryLast(500,this);
+    mChart->addSeries(mSeries);
+    mChart->createDefaultAxes();
+    mView->repaint();
+}
+
+void bpSplineChart::reloadEthSpotPriceHistoryData(bpDatabase *theDb) {
+    mSeries->clear();
+    mChart->removeSeries(mSeries);
+    theDb->getEthSpotPriceHistoryLast(500,this);
+    mChart->addSeries(mSeries);
+    mChart->createDefaultAxes();
+    mView->repaint();
+}
