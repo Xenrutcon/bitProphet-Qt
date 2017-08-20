@@ -124,7 +124,7 @@ void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
         } else {
            //say("Database: connection ok.");
             QSqlQuery query;
-            query.prepare("select * from cbSpotPriceHistory WHERE coin='BTC' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='BTC' AND id in (select id from cbSpotPriceHistory WHERE coin='BTC' ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
 
             if (query.exec()) {
                 int y=0;
@@ -160,7 +160,7 @@ void bpDatabase::getLtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
         } else {
            //say("Database: connection ok.");
             QSqlQuery query;
-            query.prepare("select * from cbSpotPriceHistory WHERE coin='LTC' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='LTC' AND id in (select id from cbSpotPriceHistory WHERE coin='LTC' ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
 
             if (query.exec()) {
                 int y=0;
@@ -196,7 +196,7 @@ void bpDatabase::getEthSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart)
         } else {
            //say("Database: connection ok.");
             QSqlQuery query;
-            query.prepare("select * from cbSpotPriceHistory WHERE coin='ETH' AND id in (select id from cbSpotPriceHistory ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='ETH' AND id in (select id from cbSpotPriceHistory WHERE coin='ETH' ORDER BY ts DESC LIMIT "+QString().setNum(howManyMax)+") ORDER BY ts ASC "); //spin it around
 
             if (query.exec()) {
                 int y=0;

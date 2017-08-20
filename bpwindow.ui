@@ -136,9 +136,9 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="mCbSimpleAutoTradeTab">
+    <widget class="QWidget" name="mCbAutoSpotTab">
      <attribute name="title">
-      <string>SimpleAutoTrader</string>
+      <string>AutoSpot</string>
      </attribute>
     </widget>
     <widget class="QWidget" name="mGdaxTab">
