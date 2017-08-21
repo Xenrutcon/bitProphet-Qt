@@ -81,6 +81,41 @@ QComboBox* bpWindow::getAccountsCombo() {
     return ui->mCbAccountComboBox;
 }
 
+QComboBox* bpWindow::getDepositFromPayMethodCombo() {
+    return ui->mDepFromComboBox;
+}
+
+QComboBox* bpWindow::getDepositToPayMethodCombo() {
+    return ui->mDepToComboBox;
+}
+
+QComboBox* bpWindow::getWithdrawFromPayMethodCombo() {
+    return ui->mWithdrawFromComboBox;
+}
+
+QComboBox* bpWindow::getWithdrawToPayMethodCombo() {
+    return ui->mWithdrawToComboBox;
+}
+
+QLineEdit* bpWindow::getDepositFromPayMethodAmount() {
+    return ui->mDepositFromAmount;
+}
+
+QLineEdit* bpWindow::getWithdrawToPayMethodAmount() {
+    return ui->mWithdrawToAmount;
+}
+
+QPushButton* bpWindow::getDepositFromPayMethodButton() {
+    return ui->mDepositFromPaymentMethodButton;
+}
+
+QPushButton* bpWindow::getWithdrawToPayMethodButton() {
+    return ui->mWithdrawToPaymentMethodButton;
+}
+
+
+
+
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;
     mCbSetupWin = NULL;

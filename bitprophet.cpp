@@ -37,6 +37,7 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
             say("Click Setup Menu next to enter Api Info.");
         } else { say("Error, Check debug log!"); }
     }
+    //Price history charts
     if ( mDb->hasTable("cbSpotPriceHistory") ) {
         say("Found cbSpotPriceHistory Table.");
     } else {
@@ -59,6 +60,7 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
     mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
     mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
     mSplineChartList.at(2)->mView->show();
+
 
     // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
     mApiHandler = new cbApiHandler(this);

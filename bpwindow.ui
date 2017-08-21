@@ -160,7 +160,7 @@
         <string>Deposit</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="mDepFromComboBox">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -170,7 +170,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="mDepositFromAmount">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -180,7 +180,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_2">
+      <widget class="QComboBox" name="mDepToComboBox">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -216,7 +216,7 @@
         <string>Withdraw</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_3">
+      <widget class="QComboBox" name="mWithdrawToComboBox">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -226,7 +226,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="comboBox_4">
+      <widget class="QComboBox" name="mWithdrawFromComboBox">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -236,7 +236,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit_2">
+      <widget class="QLineEdit" name="mWithdrawToAmount">
        <property name="geometry">
         <rect>
          <x>40</x>

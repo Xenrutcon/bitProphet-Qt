@@ -5,12 +5,12 @@
 #include <QString>
 #include "bitprophet.h"
 #include "coinbasewallet.h"
-//#include "coinbasepaymentmethod.h"
+#include "coinbasepaymentmethod.h"
 
 class bitProphet;
 class cbApiHandler;
 class coinbaseWallet;
-//class coinbasePaymentMethod;
+class coinbasePaymentMethod;
 
 class coinbaseAccount : public QObject {
     Q_OBJECT
@@ -30,15 +30,13 @@ public:
     void clearWallets();
     int getWalletCount();
     void say(QString sayThis);
-//    int addPaymentMethod();
-
-//    int getPaymentMethodCount();
-//    coinbasePaymentMethod* getPaymentMethod(int index);
+    int addPaymentMethod();
+    int getPaymentMethodCount();
+    coinbasePaymentMethod* getPaymentMethod(int index);
 private:
-
     cbApiHandler *mParent;
     QList<coinbaseWallet*> mWalletList;
-//    QList<coinbasePaymentMethod*> mPayMethods;
+    QList<coinbasePaymentMethod*> mPayMethods;
 signals:
 
 public slots:

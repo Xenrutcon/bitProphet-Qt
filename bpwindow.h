@@ -26,6 +26,14 @@ public:
     QTextEdit *getDebugLog();
     coinbaseAccountSetupWindow *getAccSetupWindow();
     QComboBox* getAccountsCombo();
+    QComboBox* getDepositFromPayMethodCombo();
+    QComboBox* getDepositToPayMethodCombo();
+    QComboBox* getWithdrawFromPayMethodCombo();
+    QComboBox* getWithdrawToPayMethodCombo();
+    QPushButton* getDepositFromPayMethodButton();
+    QPushButton* getWithdrawToPayMethodButton();
+    QLineEdit* getDepositFromPayMethodAmount();
+    QLineEdit* getWithdrawToPayMethodAmount();
     void killAccSetupWindow();
     QWidget *getAccountsTab();
     QTableWidget *getAccountTablePlacer();

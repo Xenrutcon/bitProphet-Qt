@@ -39,8 +39,7 @@ class cbApiHandler : public QObject {
 public:
     explicit cbApiHandler(QObject *parent = nullptr);
     ~cbApiHandler();
-    void listWalletAccounts();
-    void listPaymentMethods();
+    void listWalletAccounts();    
     bitProphet *mParentProphet;
     QString getCoinbaseApiKey();
     QString getCoinbaseApiSecret();
@@ -48,7 +47,9 @@ public:
     void processResponse( cbApiResponse *resp );
     void processBadListAccountsResponse();
     void listAccountProcessResponse( cbApiResponse *resp );
-    void listAccounts();
+    void listPayMethodProcessResponse( cbApiResponse *resp );
+    void listAccounts();    
+    void listPaymentMethods();
 private:
     QString mPtrName;
     QString mCbApiKey;
@@ -60,10 +61,8 @@ public slots:
     void fetchBTCSpotPrice();
     void fetchLTCSpotPrice();
     void fetchETHSpotPrice();
-//    void withdrawFiatButtonSlot();
-//    void depositFiatButtonSlot();
-//    void loadPayMethods( coinbaseApiResponse *resp );
-
+    void depositFromButtonSlot();
+    void withdrawToButtonSlot();
 signals:
 
 public slots:

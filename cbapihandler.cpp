@@ -18,7 +18,13 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             }
             //Check balance once
             listAccounts();
-
+            //Check for Payment Methods linked to account (Payment methods are used to fund cb and gdax accounts and to withdraw #winnings)
+            if ( mAccount->getPaymentMethodCount() < 1 ) {
+                say("No Payment Methods Found!");
+                say("Fetching Payment Methods from default account [" + defCbId +"]");
+                //hrmm...
+                listPaymentMethods(); //doh
+            }
             say( "KeyLen: " + QString().setNum(mAccount->mApiKey.length()) );
             say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
             //Start Spot Check
@@ -57,6 +63,31 @@ QString cbApiHandler::getCoinbaseApiKey() {
     return mAccount->mApiKey;
 }
 
+void cbApiHandler::listPaymentMethods() {
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    //                                                            //
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    // URL: https://api.coinbase.com/v2/payment-methods
+    // method: GET
+    // requestPath: /v2/payment-methods
+    // body: EMPTY ie: ""
+    mParentProphet->setProphetState("FETCH");
+    //Creating a new coinbaseApiRequest
+    cbApiRequest* req = new cbApiRequest(this);
+    req->setMethod("GET");        //list accounts is a GET
+    req->setPath("/v2/payment-methods");  //the url path,etc..
+    req->setBody("");             //no body needed (for this one)
+    req->setType("listPaymentMethods");//just for us, forgot why...
+    req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
+    return;
+}
+
+///////////////////////
+// RESPONSE PROCESSORS
+///////////////////////
+
 void cbApiHandler::processResponse( cbApiResponse *resp ) {
     QString type = resp->getType();
     // say("Processing Response Type: " + type);
@@ -67,7 +98,7 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
             QTimer::singleShot(timer, mParentProphet, SLOT(listAccountSlot()));
         }
     } else if (type == "listPaymentMethods" ) {
-        //loadPayMethods(resp);
+          listPayMethodProcessResponse(resp);
     } else if (type == "btcSpotPrice" ) {
           mParentProphet->setBtcSpotPrice(resp);
     } else if (type == "ethSpotPrice" ) {
@@ -81,7 +112,6 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     resp->getParent()->deleteLater();
 }
 
-
 void cbApiHandler::processBadListAccountsResponse() {
     if ( mParentProphet->mAutoRefreshAccount ) {
         say("Restarting Timer [autoRefreshAccount]");
@@ -90,9 +120,6 @@ void cbApiHandler::processBadListAccountsResponse() {
     }
 }
 
-///////////////////////
-// RESPONSE PROCESSORS
-///////////////////////
 void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
         if ( mAccount->getWalletCount() > 0 ) {
             for ( int a=0;a<mAccount->getWalletCount();a++) {
@@ -145,6 +172,103 @@ void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
         }
         //say ( "Found Paging: " + QString().setNum(paging.count()) + " Entries Found.");
 
+}
+
+void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
+    QJsonObject *r = resp->getResponseContent();
+
+
+    QStringList keys = r->keys();
+    int k;
+    for(k=0;k<keys.count();k++) {
+        //say("rKey " + QString().setNum(k) + ": " + QString(keys.at(k)) );
+        if(keys.at(k) == "data") {
+            say("Got Data...");
+            break;
+        }
+    }
+    QString key=keys.at(k);
+    QJsonArray data = r->value(key).toArray();
+    //say("Loading PMs From Response...");
+    for(k=0;k<data.count();k++) {
+        if ( data.at(k).isObject() ) {
+            //Each one of these is a Payment Method
+            int newPayMethod = mAccount->addPaymentMethod();
+            //say("Found PM #" +  QString().setNum(newPayMethod));
+            //populate pm
+            QJsonObject pmList = data.at(k).toObject();
+            keys = pmList.keys();
+            for (int pm=0;pm<keys.count();pm++){
+                if ( keys.at(pm) == "id" ) {
+                    mAccount->getPaymentMethod(newPayMethod)->mId = pmList.value(keys.at(pm)).toString();
+                    say("PM ID -> " + pmList.value(keys.at(pm)).toString().mid(0,pmList.value(keys.at(pm)).toString().indexOf('-')));
+                } else if ( keys.at(pm) == "currency" ) {
+                    mAccount->getPaymentMethod(newPayMethod)->mCurrency = pmList.value(keys.at(pm)).toString();
+                    //say("PM CURRENCY -> " + pmList.value(keys.at(pm)).toString());
+                } else if ( keys.at(pm) == "name" ) {
+                    mAccount->getPaymentMethod(newPayMethod)->mName = pmList.value(keys.at(pm)).toString();
+                    say("PM NAME -> " + pmList.value(keys.at(pm)).toString());
+                }  else if ( keys.at(pm) == "type" ) {
+                    mAccount->getPaymentMethod(newPayMethod)->mType = pmList.value(keys.at(pm)).toString();
+                    say("PM TYPE -> " + pmList.value(keys.at(pm)).toString());
+                } else if ( keys.at(pm) == "fiat_account" ) {
+                    QJsonObject fiat = pmList.value(keys.at(pm)).toObject();
+                    QStringList fKeys = fiat.keys();
+                    for (int fk=0;fk<fKeys.count();fk++) {
+                        if ( fKeys.at(fk) == "resource_path" ) {
+                            mAccount->getPaymentMethod(newPayMethod)->mFiatAccountResourcePath = fiat.value(fKeys.at(fk)).toString();
+                            //say("PM FIAT REPATH -> " + fiat.value(fKeys.at(fk)).toString());
+                        } else if ( fKeys.at(fk) == "id" ) {
+                            mAccount->getPaymentMethod(newPayMethod)->mFiatAccountId = fiat.value(fKeys.at(fk)).toString();
+                            //say("PM FIAT AccId -> " + fiat.value(fKeys.at(fk)).toString());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //resp->printResponse();
+    ///////////////////////////
+    /// Next, We need to load our payment methods into the accounts page deposit and withdraw combo boxes
+    /// Deposits -> From account can be ach_bank_account, more as I find them.
+    /// ----------> To Accounts can be fiat_account, mare added if needed (its your USD wallet)
+    ///
+    /// Withdrawals -> From account can be type fiat_account, more added when found (its your USD wallet(USD vault,etc))
+    /// ----------> To Accounts can be type ach_bank_account, more as I find them.
+    ///////////////////////////
+    QComboBox *depFrom = mParentProphet->mParent->getDepositFromPayMethodCombo();
+    QComboBox *depTo = mParentProphet->mParent->getDepositToPayMethodCombo();
+    QComboBox *withdrawFrom = mParentProphet->mParent->getWithdrawFromPayMethodCombo();
+    QComboBox *withdrawTo = mParentProphet->mParent->getWithdrawToPayMethodCombo();
+    int pmNum = mAccount->getPaymentMethodCount();
+    for (int a=0;a<pmNum;a++) {
+        QString nickName = mAccount->getPaymentMethod(a)->mCurrency + " " + mAccount->getPaymentMethod(a)->mName.right(6) + " [" + mAccount->getPaymentMethod(a)->mType + "] "
+                + "(" + mAccount->getPaymentMethod(a)->mId.mid(0,8) + ")";
+        if ( mAccount->getPaymentMethod(a)->mType == "ach_bank_account" ) {
+            //add to DepFrom and WithdrawTo list
+            depFrom->addItem(nickName);
+            depFrom->setItemData(depFrom->findText(nickName),mAccount->getPaymentMethod(a)->mId);
+            depFrom->setCurrentIndex(depFrom->findText(nickName));
+            withdrawTo->addItem(nickName);
+            withdrawTo->setItemData(withdrawTo->findText(nickName),mAccount->getPaymentMethod(a)->mId);
+            withdrawTo->setCurrentIndex(withdrawTo->findText(nickName));
+        } else if ( mAccount->getPaymentMethod(a)->mType == "fiat_account" ) {
+            //add to DepTo and WithdrawFrom list
+            depTo->addItem(nickName);
+            depTo->setItemData(depTo->findText(nickName),mAccount->getPaymentMethod(a)->mFiatAccountId);
+            depTo->setCurrentIndex(depTo->findText(nickName));
+            withdrawFrom->addItem(nickName);
+            withdrawFrom->setItemData(withdrawFrom->findText(nickName),mAccount->getPaymentMethod(a)->mFiatAccountId);
+            withdrawFrom->setCurrentIndex(withdrawFrom->findText(nickName));
+        }
+    }
+//    // Set signal onto button so it works....
+    QPushButton *depFromButton = mParentProphet->mParent->getDepositFromPayMethodButton();
+    QPushButton *withToButton = mParentProphet->mParent->getWithdrawToPayMethodButton();
+    connect(depFromButton, SIGNAL(clicked(bool)),this,SLOT(depositFromButtonSlot()));
+    connect(withToButton, SIGNAL(clicked(bool)),this,SLOT(withdrawToButtonSlot()));
+    depFromButton->setEnabled(1);
+    withToButton->setEnabled(1);
 }
 
 ///////////
@@ -212,4 +336,54 @@ void cbApiHandler::fetchSpotPrices() {
     if ( mParentProphet->mAutoCheckSpotPrices ) {
         QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
     }
+}
+
+void cbApiHandler::withdrawToButtonSlot() {
+     say("## WITHDRAW FIAT TO PAYMENT METHOD ##");
+     QComboBox *accSelect = mParentProphet->mParent->getWithdrawFromPayMethodCombo();
+     QComboBox *accTo = mParentProphet->mParent->getWithdrawToPayMethodCombo();
+     QString selected = accSelect->currentData().toString();
+     if ( selected.length() > 0 ) {
+         QString currency = accSelect->currentText().mid(0,accSelect->currentText().indexOf(" "));
+         QString pMethod = selected;
+         QString withAmount = mParentProphet->mParent->getWithdrawToPayMethodAmount()->text();
+         QString withTo = accTo->currentData().toString();
+         QString reqBody = "{ \"amount\": \"" + withAmount + "\", \"currency\": \"" + currency + "\", \"payment_method\": \"" + withTo + "\" }";
+         say("## rBody -> " + reqBody);
+         //Creating a new coinbaseApiRequest
+         cbApiRequest* req = new cbApiRequest(this);
+         req->setMethod("POST");
+         req->setPath("/v2/accounts/" + pMethod + "/withdrawals");
+         req->setBody(reqBody);
+         req->setType("WithdrawTo"); //just for us
+         req->sendRequest();
+     } else {
+         say("Payment Method Not Selected...");
+         say("Select a Payment Method!");
+     }
+}
+
+void cbApiHandler::depositFromButtonSlot() {
+     say("## DEPOSIT FIAT FROM PAYMENT METHOD ##");
+     QComboBox *accSelect = mParentProphet->mParent->getDepositFromPayMethodCombo();
+     QComboBox *accTo = mParentProphet->mParent->getDepositToPayMethodCombo();
+     QString selected = accSelect->currentData().toString();
+     if ( selected.length() > 0 ) {
+         QString currency = accSelect->currentText().mid(0,accSelect->currentText().indexOf(" "));
+         QString pMethod = selected;
+         QString depAmount = mParentProphet->mParent->getDepositFromPayMethodAmount()->text();
+         QString depTo = accTo->currentData().toString();
+         QString reqBody = "{ \"amount\": \"" + depAmount + "\", \"currency\": \"" + currency + "\", \"payment_method\": \"" + pMethod + "\" }";
+         say("## rBody -> " + reqBody);
+         //Creating a new coinbaseApiRequest
+         cbApiRequest* req = new cbApiRequest(this);
+         req->setMethod("POST");
+         req->setPath("/v2/accounts/" + depTo + "/deposits");
+         req->setBody(reqBody);
+         req->setType("DepositFrom"); //just for us
+         req->sendRequest();                 //sendRequest has the info/access it needs to do the rest.
+     } else {
+         say("Payment Method Not Selected...");
+         say("Select a Payment Method!");
+     }
 }
