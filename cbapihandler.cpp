@@ -283,7 +283,7 @@ void cbApiHandler::listAccounts() {
     // method: GET
     // requestPath: /v2/accounts
     // body: EMPTY ie: ""
-    say("Fetching Account (Wallet List)");
+    //say("Fetching Account (Wallet List)");
     mParentProphet->setProphetState("FETCH");
 
     //Instead of manual, Creating a new coinbaseApiRequest
