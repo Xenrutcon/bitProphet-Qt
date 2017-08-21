@@ -14,7 +14,7 @@ class bpSplineChart : public QWidget
 {
     Q_OBJECT
 public:
-    explicit bpSplineChart(QWidget *parent);
+    explicit bpSplineChart(QWidget *parent,QString title);
     ~bpSplineChart();
     void say(QString sayThis);
     QSplineSeries *mSeries;

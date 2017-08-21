@@ -1,6 +1,6 @@
 #include "bpsplinechart.h"
 #include <iostream>
-bpSplineChart::bpSplineChart(QWidget *parent) : QWidget(parent), mSeries(NULL),mChart(NULL),mView(NULL) {
+bpSplineChart::bpSplineChart(QWidget *parent,QString title) : QWidget(parent), mSeries(NULL),mChart(NULL),mView(NULL) {
     mSeries = new QSplineSeries(this);
     mView = new QChartView(parent);
     mChart = new QChart();
@@ -9,6 +9,7 @@ bpSplineChart::bpSplineChart(QWidget *parent) : QWidget(parent), mSeries(NULL),m
     mChart->createDefaultAxes();
     mView->setRenderHint(QPainter::Antialiasing);
     mView->setChart(mChart);
+    mChart->setTitle(title);
     say("Spline Chart Created!");
 }
 

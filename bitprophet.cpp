@@ -1,6 +1,6 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandler(NULL), mAutoRefreshAccount(true), mAutoRefreshAccountInterval(60000),
+bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mAutoRefreshAccount(true), mApiHandler(NULL),  mAutoRefreshAccountInterval(60000),
     mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(10000) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
@@ -49,15 +49,15 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mApiHandle
     }
 
     //Spawn Charts on Charts Tab
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
+    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"BTC Spot Price History"));
     mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
     mSplineChartList.at(0)->mView->show();
 
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
+    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"LTC Spot Price History"));
     mSplineChartList.at(1)->mView->setGeometry(mParent->getCbLTCPricePlacer()->geometry());
     mSplineChartList.at(1)->mView->show();
 
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab()));
+    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"ETH Spot Price History"));
     mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
     mSplineChartList.at(2)->mView->show();
 
@@ -118,7 +118,7 @@ void bitProphet::setBtcSpotPrice(cbApiResponse *resp) {
     QLabel *ptr = mParent->getBtcSpotPriceLabel();
     QJsonObject r = *(resp->getResponseContent());
     QJsonObject data  = r["data"].toObject();
-    say( "BTC Spot Price: " + data["amount"].toString() );
+    //say( "BTC Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
     //Write to DB History
     mDb->addToCbSpotPriceHistory("BTC",data["amount"].toString());
@@ -130,7 +130,7 @@ void bitProphet::setLtcSpotPrice(cbApiResponse *resp) {
     QLabel *ptr = mParent->getLtcSpotPriceLabel();
     QJsonObject r = *(resp->getResponseContent());
     QJsonObject data  = r["data"].toObject();
-    say( "LTC Spot Price: " + data["amount"].toString() );
+    //say( "LTC Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
     mDb->addToCbSpotPriceHistory("LTC",data["amount"].toString());
     mSplineChartList.at(1)->reloadLtcSpotPriceHistoryData(mDb);
@@ -140,7 +140,7 @@ void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
     QLabel *ptr = mParent->getEthSpotPriceLabel();
     QJsonObject r = *(resp->getResponseContent());
     QJsonObject data  = r["data"].toObject();
-    say( "ETH Spot Price: " + data["amount"].toString() );
+    //say( "ETH Spot Price: " + data["amount"].toString() );
     ptr->setText(data["amount"].toString());
     mDb->addToCbSpotPriceHistory("ETH",data["amount"].toString());
     mSplineChartList.at(2)->reloadEthSpotPriceHistoryData(mDb);
