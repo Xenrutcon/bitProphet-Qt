@@ -2,6 +2,8 @@
 bitProphet-Qt primary purpose is prediction of BitCoin Prices in the near future</br>
 <img src="https://github.com/Mrc0de/bitProphet-Qt_badAlpha/blob/master/bitProphet-Qt_Screen1.png"></br>
 
+
+This is the Fee breakdown for COINBASE (Spot Price/Market Price)  Buy/Sells, https://support.coinbase.com/customer/en/portal/articles/2109597
 </br> This is the fee breakdown for GDAX : https://docs.gdax.com/#fees
 </br> GDAX is 0.25% with refund based on liquidity giver/taker
 </br> Coinbase is a flat 1.49% if your funds are already in your USD Wallet (coinbase account) OR if you buy via ACH(bank).
