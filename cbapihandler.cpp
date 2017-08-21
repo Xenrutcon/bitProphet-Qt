@@ -25,8 +25,8 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
                 //hrmm...
                 listPaymentMethods(); //doh
             }
-            say( "KeyLen: " + QString().setNum(mAccount->mApiKey.length()) );
-            say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
+            //say( "KeyLen: " + QString().setNum(mAccount->mApiKey.length()) );
+           // say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
             //Start Spot Check
             if ( mParentProphet->mAutoCheckSpotPrices ) {
                 QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
@@ -183,7 +183,7 @@ void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
     for(k=0;k<keys.count();k++) {
         //say("rKey " + QString().setNum(k) + ": " + QString(keys.at(k)) );
         if(keys.at(k) == "data") {
-            say("Got Data...");
+            //say("Got It...");
             break;
         }
     }
@@ -201,16 +201,16 @@ void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
             for (int pm=0;pm<keys.count();pm++){
                 if ( keys.at(pm) == "id" ) {
                     mAccount->getPaymentMethod(newPayMethod)->mId = pmList.value(keys.at(pm)).toString();
-                    say("PM ID -> " + pmList.value(keys.at(pm)).toString().mid(0,pmList.value(keys.at(pm)).toString().indexOf('-')));
+                    //say("PM ID -> " + pmList.value(keys.at(pm)).toString().mid(0,pmList.value(keys.at(pm)).toString().indexOf('-')));
                 } else if ( keys.at(pm) == "currency" ) {
                     mAccount->getPaymentMethod(newPayMethod)->mCurrency = pmList.value(keys.at(pm)).toString();
                     //say("PM CURRENCY -> " + pmList.value(keys.at(pm)).toString());
                 } else if ( keys.at(pm) == "name" ) {
                     mAccount->getPaymentMethod(newPayMethod)->mName = pmList.value(keys.at(pm)).toString();
-                    say("PM NAME -> " + pmList.value(keys.at(pm)).toString());
+                    //say("PM NAME -> " + pmList.value(keys.at(pm)).toString());
                 }  else if ( keys.at(pm) == "type" ) {
                     mAccount->getPaymentMethod(newPayMethod)->mType = pmList.value(keys.at(pm)).toString();
-                    say("PM TYPE -> " + pmList.value(keys.at(pm)).toString());
+                    //say("PM TYPE -> " + pmList.value(keys.at(pm)).toString());
                 } else if ( keys.at(pm) == "fiat_account" ) {
                     QJsonObject fiat = pmList.value(keys.at(pm)).toObject();
                     QStringList fKeys = fiat.keys();
@@ -269,6 +269,8 @@ void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
     connect(withToButton, SIGNAL(clicked(bool)),this,SLOT(withdrawToButtonSlot()));
     depFromButton->setEnabled(1);
     withToButton->setEnabled(1);
+    say("Payment Methods Loaded...");
+    say("Manual Withdraw/Deposit/Buy/Sell is Enabled!");
 }
 
 ///////////

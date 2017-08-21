@@ -388,7 +388,7 @@ void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
            QSqlQuery query;
            query.prepare("INSERT INTO cbSpotPriceHistory (coin, price) VALUES ('" + coin + "','" + price + "')");
            if(query.exec()) {
-              say("addToCbSpotPriceHistory() Success");
+              //say("addToCbSpotPriceHistory() Success");
            } else {
               say("addToCbSpotPriceHistory() Error:  " + query.lastError().text());
            }
