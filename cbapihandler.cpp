@@ -387,3 +387,8 @@ void cbApiHandler::depositFromButtonSlot() {
          say("Select a Payment Method!");
      }
 }
+
+
+// NEXT IS AUTOTRADING.... I THINK...
+
+

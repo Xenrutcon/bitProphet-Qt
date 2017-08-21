@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -251,6 +251,9 @@
     <widget class="QWidget" name="mCbAutoSpotTab">
      <attribute name="title">
       <string>AutoSpot</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Simple Automated Spot Price Trading Interface&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </attribute>
     </widget>
     <widget class="QWidget" name="mGdaxTab">
