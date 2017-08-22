@@ -81,8 +81,8 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();
         if ( mType != "listPaymentMethods" && mType != "listAccounts" && mType != "btcSpotPrice" &&
-             mType != "ethSpotPrice" && mType != "ltcSpotPrice" && mType != "buySpotQuote" && mType != "buySpot" //&&
-             /*mType != "sellSpotQuote" && mType != "sellSpot"*/ ) {
+             mType != "ethSpotPrice" && mType != "ltcSpotPrice" && mType != "buySpotQuote" && mType != "buySpot" &&
+             mType != "sellSpotQuote" && mType != "sellSpot" ) {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }

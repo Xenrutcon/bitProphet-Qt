@@ -4,6 +4,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
     mParentProphet = reinterpret_cast<bitProphet*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     say("Api Handler Created...");
+    mParentProphet->mParent->getCoinbaseTabLog()->document()->setMaximumBlockCount(256);
     if ( mParentProphet->getDb()->getAccountList().length() > 0 ) {
         QString defCbId = mParentProphet->getDb()->getDefaultAccountId();
         if ( defCbId != "0" ) {
@@ -478,7 +479,7 @@ void cbApiHandler::buySpotClicked() {
         cbTabLog("# Amount is subTotal for " + totalBuyAmountAfterFee);
         cbTabLog("# Sending Currency: " + currencyPaidWith);
         cbTabLog("# Sending commit: TRUE");
-        cbTabLog("# Sending pm: " + selectedPayment);
+        //cbTabLog("# Sending pm: " + selectedPayment);
         //Creating a new coinbaseApiRequest
         cbApiRequest* req = new cbApiRequest(this);
         req->setMethod("POST");
@@ -613,7 +614,7 @@ void cbApiHandler::QuoteBuySpotClicked() {
         cbTabLog("# Sending Currency: " + currencyPaidWith);
         cbTabLog("# Sending commit: FALSE");
         cbTabLog("# Sending quote: TRUE");
-        cbTabLog("# Sending pm: " + selectedPayment);
+        //cbTabLog("# Sending pm: " + selectedPayment);
         //Creating a new coinbaseApiRequest
         cbApiRequest* req = new cbApiRequest(this);
         req->setMethod("POST");
