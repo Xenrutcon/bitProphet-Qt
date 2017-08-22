@@ -134,6 +134,7 @@ void cbApiHandler::processFetchTransactionsResponse(cbApiResponse *resp) {
         QJsonObject theObj = data.at(d).toObject();
         QJsonObject theAmount = theObj["amount"].toObject();
         QJsonObject theNative = theObj["native_amount"].toObject();
+        if ( theAmount["currency"].toString() == "USD" ) { continue; }
         aTxn.mType = theObj["type"].toString();
         aTxn.mAmountObj = theAmount;
         aTxn.mAmount = theAmount["amount"].toString();
