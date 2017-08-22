@@ -9,6 +9,7 @@ bitProphet-Qt primary purpose is prediction of BitCoin Prices in the near future
 <img src="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphet-NewStatus-Screen.png"></br>
 </br>
 <img src="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphet-Transactions-Screen.png"></br>
+<a href="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphet_ReleaseOne.zip">bitProphet_ReleaseOne.zip Ready-To-Run (Win64)</a></br>
 
 This is the Fee breakdown for COINBASE (Spot Price/Market Price)  Buy/Sells, https://support.coinbase.com/customer/en/portal/articles/2109597
 </br> This is the fee breakdown for GDAX : https://docs.gdax.com/#fees
