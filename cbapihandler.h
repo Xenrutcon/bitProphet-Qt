@@ -25,12 +25,14 @@
 #include "cbapirequest.h"
 #include "cbapiresponse.h"
 #include "cbwallettable.h"
+#include "cbtransactiontable.h"
 
 class bpWindow;
 class bitProphet;
 class coinbaseAccount;
 class cbApiResponse;
 class cbWalletTable;
+class cbTransactionTable;
 
 
 
@@ -61,6 +63,7 @@ private:
     QString mCbApiSecret;
     coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)    
     cbWalletTable *mWalletTableWidget;
+    cbTransactionTable *mTransactionTable;
 public slots:
     void fetchSpotPrices();
     void fetchBTCSpotPrice();
@@ -74,8 +77,10 @@ public slots:
     void disableSellSpotButton();
     void buySpotClicked();
     void sellSpotClicked();
+    void fetchTransactions();
     void processBuySpotResponse( cbApiResponse *resp );
-    void processSellSpotResponse( cbApiResponse *resp );
+    void processSellSpotResponse( cbApiResponse *resp );    
+    void processFetchTransactionsResponse(cbApiResponse *resp);
 signals:
 
 

@@ -99,6 +99,16 @@ QWidget *bpWindow::getChartsTab() {
     return ui->mChartsTab;
 }
 
+QWidget *bpWindow::getTransactionTab() {
+    return ui->mTransactionsTab;
+}
+
+QTableWidget *bpWindow::getTransactionTablePlacer() {
+    return ui->mCbTransactionTablePlacer;
+}
+
+
+
 coinbaseAccountSetupWindow *bpWindow::getAccSetupWindow() {
     return mCbSetupWin;
 }
@@ -171,6 +181,9 @@ QPushButton* bpWindow::getSellSpotForPaymentMethodButton() {
     return ui->mSellSpotForPaymentMethodButton;
 }
 
+QPushButton* bpWindow::getRefreshTransactionsButton() {
+    return ui->mRefreshTransactionsButton;
+}
 
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;

@@ -38,7 +38,9 @@ SOURCES += \
     cbwallettable.cpp \
     bpsplinechart.cpp \
     spotprice.cpp \
-    coinbasepaymentmethod.cpp
+    coinbasepaymentmethod.cpp \
+    cbtransaction.cpp \
+    cbtransactiontable.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -54,7 +56,9 @@ HEADERS += \
     cbwallettable.h \
     bpsplinechart.h \
     spotprice.h \
-    coinbasepaymentmethod.h
+    coinbasepaymentmethod.h \
+    cbtransaction.h \
+    cbtransactiontable.h
 
 FORMS += \
         bpwindow.ui \

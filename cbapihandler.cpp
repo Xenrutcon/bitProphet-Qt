@@ -1,6 +1,6 @@
 #include "cbapihandler.h"
 
-cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mWalletTableWidget(NULL) {
+cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mWalletTableWidget(NULL),mTransactionTable(NULL) {
     mParentProphet = reinterpret_cast<bitProphet*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     say("Api Handler Created...");
@@ -19,6 +19,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             }
             //Check balance once
             listAccounts();
+            mTransactionTable = new cbTransactionTable(this);
             //Check for Payment Methods linked to account (Payment methods are used to fund cb and gdax accounts and to withdraw #winnings)
             if ( mAccount->getPaymentMethodCount() < 1 ) {
                 say("No Payment Methods Found!");
@@ -42,6 +43,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
 }
 
 cbApiHandler::~cbApiHandler() {
+    if (mTransactionTable != NULL ) { delete mTransactionTable; }
     if (mAccount != NULL ) { delete mAccount; }
     say("Api Handler Fading...");
 }
@@ -114,11 +116,35 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
           processBuySpotResponse(resp);
     } else if (type == "sellSpot" ) {
           processSellSpotResponse(resp);
+    } else if (type == "fetchTransactions" ) {
+          processFetchTransactionsResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
     // say("Done Processing Response Type: " + type);
     resp->getParent()->deleteLater();
+}
+
+void cbApiHandler::processFetchTransactionsResponse(cbApiResponse *resp) {
+    QJsonObject obj = *(resp->getResponseContent());
+    QJsonArray data  = obj["data"].toArray();
+    for (int d=0;d<data.count();d++) {
+        //each object is a transaction here
+        cbTransaction aTxn(this);
+        QJsonObject theObj = data.at(d).toObject();
+        QJsonObject theAmount = theObj["amount"].toObject();
+        QJsonObject theNative = theObj["native_amount"].toObject();
+        aTxn.mType = theObj["type"].toString();
+        aTxn.mAmountObj = theAmount;
+        aTxn.mAmount = theAmount["amount"].toString();
+        aTxn.mNativeAmountObj = theNative;
+        aTxn.mAmountNative = theNative["amount"].toString();
+        aTxn.mId = theObj["id"].toString();
+        aTxn.mCreatedAt = theObj["created_at"].toString();
+        aTxn.mDescription = theObj["description"].toString();
+        mTransactionTable->addTransaction(&aTxn,d);
+    }
+    //todo check pagination for next_uri != "null"
 }
 
 void cbApiHandler::processBuySpotResponse( cbApiResponse *resp ) {
@@ -416,17 +442,19 @@ void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
     QPushButton *QuoteSellSpotButton = mParentProphet->mParent->getQuoteSellSpotForPaymentMethodButton();
     QPushButton *buySpotButton = mParentProphet->mParent->getBuySpotForPaymentMethodButton();
     QPushButton *sellSpotButton = mParentProphet->mParent->getSellSpotForPaymentMethodButton();
+    QPushButton *refreshTransactions = mParentProphet->mParent->getRefreshTransactionsButton();
     connect(depFromButton, SIGNAL(clicked(bool)),this,SLOT(depositFromButtonSlot()));
     connect(withToButton, SIGNAL(clicked(bool)),this,SLOT(withdrawToButtonSlot()));
     connect(QuoteBuySpotButton, SIGNAL(clicked(bool)),this,SLOT( QuoteBuySpotClicked()  ));
     connect(QuoteSellSpotButton, SIGNAL(clicked(bool)),this,SLOT( QuoteSellSpotClicked() ));
     connect(sellSpotButton, SIGNAL(clicked(bool)),this,SLOT( sellSpotClicked() ));
     connect(buySpotButton, SIGNAL(clicked(bool)),this,SLOT( buySpotClicked() ));
-
+    connect(refreshTransactions, SIGNAL(clicked(bool)),this,SLOT( fetchTransactions() ) );
     depFromButton->setEnabled(1);
     withToButton->setEnabled(1);
     QuoteBuySpotButton->setEnabled(1);
     QuoteSellSpotButton->setEnabled(1);
+    refreshTransactions->setEnabled(1);
     say("Payment Methods Loaded...");
     say("Manual Withdraw/Deposit/Buy/Sell is Enabled!");
 }
@@ -434,6 +462,25 @@ void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
 ///////////
 // Slots
 ///////////
+
+void cbApiHandler::fetchTransactions() {
+    if ( mTransactionTable != NULL ) { mTransactionTable->deleteLater(); }
+    mTransactionTable = new cbTransactionTable(this);
+    // Default, show all Transaction Types
+    mParentProphet->setProphetState("FETCH");
+    //Instead of manual, Creating a new coinbaseApiRequest
+    for (int f=0;f<mAccount->getWalletCount();f++) {
+        say("Fetching Transactions [" + mAccount->getWallet(f)->mName + "]");
+        cbApiRequest* req = new cbApiRequest(this);
+        //mCurrentRequestList.append(req);
+        req->setMethod("GET");        //list accounts is a GET
+        req->setPath("/v2/accounts/" + mAccount->getWallet(f)->mId + "/transactions" );  //the url path,etc..
+        req->setBody("");             //no body needed (for this one)
+        req->setType("fetchTransactions");//just for us, forgot why...
+        //say("Sending Request...");
+        req->sendRequest();
+    }
+}
 
 void cbApiHandler::disableBuySpotButton() {
     mParentProphet->mParent->getBuySpotForPaymentMethodButton()->setEnabled(0);

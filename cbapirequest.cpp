@@ -82,7 +82,7 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         reply->deleteLater();
         if ( mType != "listPaymentMethods" && mType != "listAccounts" && mType != "btcSpotPrice" &&
              mType != "ethSpotPrice" && mType != "ltcSpotPrice" && mType != "buySpotQuote" && mType != "buySpot" &&
-             mType != "sellSpotQuote" && mType != "sellSpot" ) {
+             mType != "sellSpotQuote" && mType != "sellSpot" && mType != "fetchTransactions") {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }

@@ -41,11 +41,14 @@ public:
     QPushButton* getQuoteSellSpotForPaymentMethodButton();
     QPushButton* getBuySpotForPaymentMethodButton();
     QPushButton* getSellSpotForPaymentMethodButton();
+    QPushButton* getRefreshTransactionsButton();
     QLineEdit* getDepositFromPayMethodAmount();
     QLineEdit* getWithdrawToPayMethodAmount();
     void killAccSetupWindow();
     QWidget *getAccountsTab();
+    QWidget *getTransactionTab();
     QTableWidget *getAccountTablePlacer();
+    QTableWidget *getTransactionTablePlacer();
     QLabel *getAccountsNativeBalanceTotalLabel();
     QLabel *getBtcSpotPriceLabel();
     QLabel *getLtcSpotPriceLabel();
