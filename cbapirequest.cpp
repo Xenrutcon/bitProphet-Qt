@@ -1,6 +1,6 @@
 #include "cbapirequest.h"
 
-cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mDone(0),mResponse(NULL), mNetAccMan(NULL) {
+cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mDone(0), mNetAccMan(NULL) ,mResponse(NULL){
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
         //mParent->say("CBApiRequest Created!");
         QDateTime current(QDateTime::currentDateTime());
@@ -39,8 +39,10 @@ void cbApiRequest::sendRequest() {
         mParent->say("URL: " + url + "\n-----\nSSL VERSION: " + QSslSocket::sslLibraryBuildVersionString() + "\nSSL Supported? -> "+QString().setNum(QSslSocket::supportsSsl())+"\n----\n");
     }
     httpsRequest.setUrl(QUrl(url));
+    //mParent->say("URL: " + url);
     QByteArray version("2016-03-03"); //stop hardcoding this... eventually...
     httpsRequest.setHeader(QNetworkRequest::ServerHeader,"application/json");
+    httpsRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     httpsRequest.setRawHeader(QByteArray("CB-ACCESS-KEY"),QByteArray(mParent->getCoinbaseApiKey().toStdString().c_str()));
     httpsRequest.setRawHeader(QByteArray("CB-ACCESS-SIGN"),QByteArray(mAccessKey.toStdString().c_str()));
     httpsRequest.setRawHeader(QByteArray("CB-ACCESS-TIMESTAMP"),QByteArray(mTimestamp.toStdString().c_str()));
@@ -79,7 +81,8 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();
         if ( mType != "listPaymentMethods" && mType != "listAccounts" && mType != "btcSpotPrice" &&
-             mType != "ethSpotPrice" && mType != "ltcSpotPrice") {
+             mType != "ethSpotPrice" && mType != "ltcSpotPrice" && mType != "buySpotQuote" && mType != "buySpot" //&&
+             /*mType != "sellSpotQuote" && mType != "sellSpot"*/ ) {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }

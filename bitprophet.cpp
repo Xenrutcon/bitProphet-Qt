@@ -1,7 +1,7 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent), mDb(NULL), mAutoRefreshAccount(true), mApiHandler(NULL),  mAutoRefreshAccountInterval(60000),
-    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(10000) {
+bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(60000),
+    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(10000),mDb(NULL), mApiHandler(NULL) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    

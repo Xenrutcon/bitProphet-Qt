@@ -33,6 +33,8 @@ QTextEdit * bpWindow::getDebugLog() {
     return ui->mDebugLog;
 }
 
+QTextEdit* bpWindow::getCoinbaseTabLog() { return ui->mCoinbaseTabLog; }
+
 QTableWidget *bpWindow::getAccountTablePlacer() {
     return ui->cbAccountTablePlacer;
 }
@@ -55,6 +57,30 @@ QLabel *bpWindow::getLtcSpotPriceLabel() {
 
 QLabel *bpWindow::getEthSpotPriceLabel() {
     return ui->mEthSpotPriceLabel;
+}
+
+QLabel *bpWindow::getBuySpotFeeLabel() {
+    return ui->mBuySpotFeeLabel;
+}
+
+QLabel *bpWindow::getBuySpotTotalLabel() {
+    return ui->mBuySpotTotalLabel;
+}
+
+QLabel *bpWindow::getSellSpotFeeLabel() {
+    return ui->mSellSpotFeeLabel;
+}
+
+QLabel *bpWindow::getSellSpotTotalLabel() {
+    return ui->mSellSpotTotalLabel;
+}
+
+QLineEdit *bpWindow::getBuySpotAmount() {
+    return ui->mBuySpotAmount;
+}
+
+QLineEdit *bpWindow::getSellSpotAmount() {
+    return ui->mSellSpotAmount;
 }
 
 QFrame *bpWindow::getCbBTCPricePlacer() {
@@ -97,6 +123,22 @@ QComboBox* bpWindow::getWithdrawToPayMethodCombo() {
     return ui->mWithdrawToComboBox;
 }
 
+QComboBox* bpWindow::getBuySpotWithPaymentMethodComboBox() {
+    return ui->mBuySpotWithPaymentMethodComboBox;
+}
+
+QComboBox* bpWindow::getSellSpotWithPaymentMethodComboBox() {
+    return ui->mSellSpotWithPaymentMethodComboBox;
+}
+
+QComboBox* bpWindow::getBuySpotTypeComboBox() {
+    return ui->mBuySpotTypeComboBox;
+}
+
+QComboBox* bpWindow::getSellSpotTypeComboBox() {
+    return ui->mSellSpotTypeComboBox;
+}
+
 QLineEdit* bpWindow::getDepositFromPayMethodAmount() {
     return ui->mDepositFromAmount;
 }
@@ -113,7 +155,21 @@ QPushButton* bpWindow::getWithdrawToPayMethodButton() {
     return ui->mWithdrawToPaymentMethodButton;
 }
 
+QPushButton* bpWindow::getQuoteBuySpotForPaymentMethodButton() {
+    return ui->mQuoteBuySpotForPaymentMethodButton;
+}
 
+QPushButton* bpWindow::getQuoteSellSpotForPaymentMethodButton() {
+    return ui->mQuoteSellSpotForPaymentMethodButton;
+}
+
+QPushButton* bpWindow::getBuySpotForPaymentMethodButton() {
+    return ui->mBuySpotForPaymentMethodButton;
+}
+
+QPushButton* bpWindow::getSellSpotForPaymentMethodButton() {
+    return ui->mSellSpotForPaymentMethodButton;
+}
 
 
 void bpWindow::killAccSetupWindow() {

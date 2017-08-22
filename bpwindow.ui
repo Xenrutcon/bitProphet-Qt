@@ -148,6 +148,9 @@
        <string>Deposit From Payment Method</string>
       </property>
       <widget class="QPushButton" name="mDepositFromPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>110</x>
@@ -217,6 +220,9 @@
        <string>Withdraw To Payment Method</string>
       </property>
       <widget class="QPushButton" name="mWithdrawToPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>110</x>
@@ -273,7 +279,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="mDepositFromPayMethodGroup_2">
+     <widget class="QGroupBox" name="mBuySpotGroup">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -285,12 +291,15 @@
       <property name="title">
        <string>Buy @ Spot</string>
       </property>
-      <widget class="QPushButton" name="mQuoteBuyForPaymentMethodButton">
+      <widget class="QPushButton" name="mQuoteBuySpotForPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>14</x>
          <y>152</y>
-         <width>161</width>
+         <width>121</width>
          <height>31</height>
         </rect>
        </property>
@@ -298,7 +307,7 @@
         <string>Quote</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="mDepositFromAmount_2">
+      <widget class="QLineEdit" name="mBuySpotAmount">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -308,7 +317,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="mSpotBuyWithPaymentMethodComboBox">
+      <widget class="QComboBox" name="mBuySpotWithPaymentMethodComboBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -318,7 +327,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLabel" name="mBuyFeeLabel">
+      <widget class="QLabel" name="mBuySpotFeeLabel">
        <property name="geometry">
         <rect>
          <x>80</x>
@@ -331,7 +340,7 @@
         <string>$</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepToComboBox_3">
+      <widget class="QComboBox" name="mBuySpotTypeComboBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -392,10 +401,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>Total</string>
+        <string>Paying</string>
        </property>
       </widget>
-      <widget class="QLabel" name="mBuyTotalLabel">
+      <widget class="QLabel" name="mBuySpotTotalLabel">
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -408,8 +417,24 @@
         <string>$</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="mBuySpotForPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>160</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Buy</string>
+       </property>
+      </widget>
      </widget>
-     <widget class="QGroupBox" name="mDepositFromPayMethodGroup_3">
+     <widget class="QGroupBox" name="mSellSpotGroup">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -421,12 +446,15 @@
       <property name="title">
        <string>Sell @ Spot</string>
       </property>
-      <widget class="QPushButton" name="mQuoteSellForPaymentMethodButton">
+      <widget class="QPushButton" name="mQuoteSellSpotForPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>14</x>
          <y>152</y>
-         <width>161</width>
+         <width>121</width>
          <height>31</height>
         </rect>
        </property>
@@ -434,7 +462,7 @@
         <string>Quote</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="mDepositFromAmount_3">
+      <widget class="QLineEdit" name="mSellSpotAmount">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -444,7 +472,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="mSpotSellWithPaymentMethodComboBox">
+      <widget class="QComboBox" name="mSellSpotWithPaymentMethodComboBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -454,7 +482,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLabel" name="mSellFeeLabel">
+      <widget class="QLabel" name="mSellSpotFeeLabel">
        <property name="geometry">
         <rect>
          <x>80</x>
@@ -467,7 +495,7 @@
         <string>$</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepToComboBox_5">
+      <widget class="QComboBox" name="mSellSpotTypeComboBox">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -528,10 +556,10 @@
         </rect>
        </property>
        <property name="text">
-        <string>Total</string>
+        <string>Getting</string>
        </property>
       </widget>
-      <widget class="QLabel" name="mSellTotalLabel">
+      <widget class="QLabel" name="mSellSpotTotalLabel">
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -544,6 +572,32 @@
         <string>$</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="mSellSpotForPaymentMethodButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>160</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Sell</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTextEdit" name="mCoinbaseTabLog">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>240</y>
+        <width>241</width>
+        <height>351</height>
+       </rect>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="mCbAutoSpotTab">

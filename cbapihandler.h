@@ -46,10 +46,15 @@ public:
     void say( QString sayThis );
     void processResponse( cbApiResponse *resp );
     void processBadListAccountsResponse();
+    void processBuySpotQuoteResponse( cbApiResponse *resp );
+    void processSellSpotQuoteResponse( cbApiResponse *resp );
     void listAccountProcessResponse( cbApiResponse *resp );
     void listPayMethodProcessResponse( cbApiResponse *resp );
     void listAccounts();    
     void listPaymentMethods();
+    QString trimPriceStringDecimal( QString priceString);
+    void cbTabLog(QString logString);
+
 private:
     QString mPtrName;
     QString mCbApiKey;
@@ -63,9 +68,16 @@ public slots:
     void fetchETHSpotPrice();
     void depositFromButtonSlot();
     void withdrawToButtonSlot();
+    void QuoteBuySpotClicked();
+    void QuoteSellSpotClicked();
+    void disableBuySpotButton();
+    void disableSellSpotButton();
+    void buySpotClicked();
+    void sellSpotClicked();
+    void processBuySpotResponse( cbApiResponse *resp );
+    void processSellSpotResponse( cbApiResponse *resp );
 signals:
 
-public slots:
 
 
 };

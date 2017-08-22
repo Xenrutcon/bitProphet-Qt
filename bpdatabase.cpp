@@ -300,7 +300,7 @@ bool bpDatabase::createCbSpotPriceHistoryTable() {
 }
 
 void bpDatabase::loadAccountByName(coinbaseAccount *target, QString accountName) {
-
+    say(QString().setNum(target->mDefaultAccount) + "^" + accountName);
 }
 
 void bpDatabase::loadAccountById(coinbaseAccount *target, QString id) {
