@@ -40,7 +40,8 @@ SOURCES += \
     spotprice.cpp \
     coinbasepaymentmethod.cpp \
     cbtransaction.cpp \
-    cbtransactiontable.cpp
+    cbtransactiontable.cpp \
+    cbautospottrader.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -58,7 +59,8 @@ HEADERS += \
     spotprice.h \
     coinbasepaymentmethod.h \
     cbtransaction.h \
-    cbtransactiontable.h
+    cbtransactiontable.h \
+    cbautospottrader.h
 
 FORMS += \
         bpwindow.ui \

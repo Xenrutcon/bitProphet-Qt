@@ -115,6 +115,33 @@ QList<QString> bpDatabase::getAccountList() {
     return accList;
 }
 
+void bpDatabase::getSpotPriceHistoryLast(QString coin,int maxResults, QList<QString> *priceList) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from cbSpotPriceHistory WHERE coin='"+ coin +"' AND id in (select id from cbSpotPriceHistory WHERE coin='"+ coin +"' ORDER BY ts DESC LIMIT "+QString().setNum(maxResults)+") ORDER BY ts ASC "); //First(Past) to Last(current)
+            if (query.exec()) {
+                int y=0;
+               while (query.next()) {
+                  int idVal = query.record().indexOf("price");
+                  priceList->append(query.value(idVal).toString());
+                  y++;
+               }
+            } else {
+                say("No Coin Prices In History For ETH");
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 void bpDatabase::getBtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
@@ -298,6 +325,55 @@ bool bpDatabase::createCbSpotPriceHistoryTable() {
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
     return retVal;
 }
+
+bool bpDatabase::createAutoSpotTradeHistoryTable() {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: CREATE connection ok.");
+           QSqlQuery query;
+           query.prepare("CREATE TABLE autoSpotTradeHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(12),amount varchar(256),boughtAt varchar(256),soldAt varchar(256), status varchar(256),ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL );");
+           if(query.exec()) {
+              retVal = true;
+           } else {
+              say("createAccountsTable() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+//will need coin varchar(8),type varchar(12),boughtAt varchar(256),soldAt varchar(256), status varchar(256) ,amount varchar(256) when inserting
+
+void bpDatabase::insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("INSERT INTO autoSpotTradeHistory (coin,type,amount,boughtAt,soldAt,status) VALUES ('" + coin + "','" + type + "','" + amount + "','" + boughtAt + "','" + soldAt + "','" + status + "')");
+           query.prepare(q);
+           if(query.exec()) {
+              say("insertAutoSpotTrade() Success");
+           } else {
+              say("insertAutoSpotTrade() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 
 void bpDatabase::loadAccountByName(coinbaseAccount *target, QString accountName) {
     say(QString().setNum(target->mDefaultAccount) + "^" + accountName);

@@ -30,8 +30,10 @@ public:
     void createDatabase();
     bool createAccountsTable();
     bool createCbSpotPriceHistoryTable();
+    bool createAutoSpotTradeHistoryTable();
     void addToCbSpotPriceHistory( QString coin, QString price );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
+    void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
     QList<QString> getAccountList();
     void deleteAccount(QString id );
     QString getDefaultAccountId();
@@ -40,6 +42,7 @@ public:
     void getBtcSpotPriceHistoryLast(int howManyMax, bpSplineChart *chart);
     void getLtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);
     void getEthSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);
+    void getSpotPriceHistoryLast(QString coin,int maxResults, QList<QString> *priceList);
 private:
     void say(QString sayThis);
 

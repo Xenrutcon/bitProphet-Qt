@@ -24,7 +24,7 @@ cbTransactionTable::~cbTransactionTable() {
 
 
 void cbTransactionTable::addTransaction(cbTransaction *t, int r) {
-    int row = (mTableWidget->rowCount()-1);
+    int row = (mTableWidget->rowCount()-1)+r-r; //haha im lazy, bye warning
     mTableWidget->insertRow(row);
     int column = 0;
     QTableWidgetItem *newItem = new QTableWidgetItem(t->mType);

@@ -39,8 +39,12 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             say("Default Account was not found.");
             say("Create one using the Setup Menu.");
         }
+        say("Api Handler Loaded!");
     }
 }
+
+
+
 
 cbApiHandler::~cbApiHandler() {
     if (mTransactionTable != NULL ) { delete mTransactionTable; }
@@ -840,7 +844,7 @@ void cbApiHandler::fetchLTCSpotPrice() {
 
 void cbApiHandler::fetchSpotPrices() {
     fetchBTCSpotPrice();
-    QTimer::singleShot(700,this,SLOT(fetchLTCSpotPrice()));
+    QTimer::singleShot(500,this,SLOT(fetchLTCSpotPrice()));
     QTimer::singleShot(1000,this,SLOT(fetchETHSpotPrice()));
     if ( mParentProphet->mAutoCheckSpotPrices ) {
         QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));

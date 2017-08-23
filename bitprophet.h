@@ -11,6 +11,7 @@
 #include "coinbaseaccount.h"
 #include "cbapihandler.h"
 #include "bpsplinechart.h"
+#include "cbautospottrader.h"
 
 class bpWindow;
 class bpDatabase;
@@ -18,6 +19,7 @@ class coinbaseAccount;
 class cbApiHandler;
 class cbApiResponse;
 class bpSplineChart;
+class cbAutoSpotTrader;
 
 class bitProphet : public QObject {
     Q_OBJECT    
@@ -37,8 +39,11 @@ public:
     bool mAutoCheckSpotPrices;
     int mAutoCheckSpotPricesInterval;
     //Simple Trading (non-neural net, simple dumb logix)
-    bool mAutoSimpleTrade;
-    // TODO add autoSimpleTrading (have done it before :P, its slower but works )
+    bool mAutoSpotTrade;
+    int mAutoSpotTradeInterval;
+
+    //////////////
+    // Other junk
     bpWindow *mParent;
     void setBtcSpotPrice(cbApiResponse*);
     void setLtcSpotPrice(cbApiResponse*);
@@ -47,6 +52,7 @@ private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
+    cbAutoSpotTrader *mAutoSpot;
 signals:
 
 public slots:

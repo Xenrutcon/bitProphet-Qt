@@ -35,8 +35,16 @@ QTextEdit * bpWindow::getDebugLog() {
 
 QTextEdit* bpWindow::getCoinbaseTabLog() { return ui->mCoinbaseTabLog; }
 
+QTextEdit* bpWindow::getAutoTraderBTCLog() { return ui->mAutoSpotBTCLog; }
+QTextEdit* bpWindow::getAutoTraderLTCLog() { return ui->mAutoSpotLTCLog; }
+QTextEdit* bpWindow::getAutoTraderETHLog() { return ui->mAutoSpotETHLog; }
+
 QTableWidget *bpWindow::getAccountTablePlacer() {
     return ui->cbAccountTablePlacer;
+}
+
+QTableWidget *bpWindow::getCbAutoSpotTraderTransactionTablePlacer() {
+    return ui->mCbAutoSpotTraderTransactionTablePlacer;
 }
 
 QWidget *bpWindow::getAccountsTab() {
@@ -183,6 +191,10 @@ QPushButton* bpWindow::getSellSpotForPaymentMethodButton() {
 
 QPushButton* bpWindow::getRefreshTransactionsButton() {
     return ui->mRefreshTransactionsButton;
+}
+
+QPushButton *bpWindow::getRefreshAutoSpotTraderTransactionsButton() {
+    return ui->mRefreshAutoSpotTraderTransactionsButton;
 }
 
 void bpWindow::killAccSetupWindow() {

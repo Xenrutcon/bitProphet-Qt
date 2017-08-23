@@ -7,7 +7,7 @@ class spotPrice : public QObject
 {
     Q_OBJECT
 public:
-    explicit spotPrice(QObject *parent,QString id,QString coin, QString price,QString timestamp);
+    explicit spotPrice(QObject *parent);
     QString mId;
     QString mCoin;
     QString mPrice;

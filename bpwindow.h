@@ -25,6 +25,9 @@ public:
     QTextEdit *getStatusOutput();
     QTextEdit *getDebugLog();
     QTextEdit *getCoinbaseTabLog();
+    QTextEdit* getAutoTraderBTCLog();
+    QTextEdit* getAutoTraderLTCLog();
+    QTextEdit* getAutoTraderETHLog();
     coinbaseAccountSetupWindow *getAccSetupWindow();
     QComboBox* getAccountsCombo();
     QComboBox* getDepositFromPayMethodCombo();
@@ -42,6 +45,7 @@ public:
     QPushButton* getBuySpotForPaymentMethodButton();
     QPushButton* getSellSpotForPaymentMethodButton();
     QPushButton* getRefreshTransactionsButton();
+    QPushButton *getRefreshAutoSpotTraderTransactionsButton();
     QLineEdit* getDepositFromPayMethodAmount();
     QLineEdit* getWithdrawToPayMethodAmount();
     void killAccSetupWindow();
@@ -49,6 +53,7 @@ public:
     QWidget *getTransactionTab();
     QTableWidget *getAccountTablePlacer();
     QTableWidget *getTransactionTablePlacer();
+    QTableWidget *getCbAutoSpotTraderTransactionTablePlacer();
     QLabel *getAccountsNativeBalanceTotalLabel();
     QLabel *getBtcSpotPriceLabel();
     QLabel *getLtcSpotPriceLabel();
