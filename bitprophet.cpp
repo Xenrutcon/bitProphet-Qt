@@ -159,6 +159,9 @@ void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
     mSplineChartList.at(2)->reloadEthSpotPriceHistoryData(mDb);
 }
 
+coinbaseAccount *bitProphet::getHandlerAccount() {
+    return mApiHandler->mAccount;
+}
 
 /////////
 // Slots

@@ -495,6 +495,43 @@ void cbApiHandler::disableSellSpotButton() {
     mParentProphet->mParent->getSellSpotForPaymentMethodButton()->setEnabled(0);
 }
 
+void cbApiHandler::buyAutoSpot(QString total,QString coin) {
+    say("Total: " + total);
+    QString paidWith("USD");
+    say("paidWith: " + paidWith);
+    // Payment Method will always be USD fiat_account for AutoSpot Buys
+    QString paymentMethod;
+    for ( int c=0;c<mAccount->getWalletCount();c++ ){
+        if ( mAccount->getWallet(c)->mCurrency == paidWith ) {
+            paymentMethod = mAccount->getWallet(c)->mId;
+        }
+    }
+
+    QString reqBody = "{ \"total\": \"" + total + "\", \"currency\": \"" + paidWith + "\", \"payment_method\": \"" + paymentMethod + "\" , \"commit\": true }";
+    //say("## rBody -> " + reqBody);
+    cbTabLog("#auto Sending Total: " + total);
+    cbTabLog("#auto Sending Currency: " + paidWith);
+    cbTabLog("#auto Sending commit: TRUE");
+    //Creating a new coinbaseApiRequest
+    cbApiRequest* req = new cbApiRequest(this);
+    req->setMethod("POST");
+    // We need the id of the account the buy will GO TO
+    // ie: BTC buy = BTC wallet
+    // find selected wallet and get id for URL
+    QString destAccount;
+    for ( int c=0;c<mAccount->getWalletCount();c++ ){
+        //say("Wallet Currency: " + mAccount->getWallet(c)->mCurrency );
+        if ( mAccount->getWallet(c)->mCurrency == coin ) {
+            destAccount = mAccount->getWallet(c)->mId;
+        }
+    }
+    req->setPath("/v2/accounts/" + destAccount + "/buys");
+    req->setBody(reqBody);
+    req->setType("buyAutoSpot"); //just for us
+    req->sendRequest();
+    cbTabLog("# AutoBuy Requested");
+}
+
 void cbApiHandler::buySpotClicked() {
     cbTabLog("### BUY @ SPOT PRICE ### ");
     QString buyAmount = mParentProphet->mParent->getBuySpotAmount()->text();

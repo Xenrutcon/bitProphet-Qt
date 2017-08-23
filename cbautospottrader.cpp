@@ -39,14 +39,38 @@ void cbAutoSpotTrader::say(QString sayIt,QString coinLog) {
 ////////
 
 void cbAutoSpotTrader::autoTradeCheck() {
-    for (int c=0;c<mTradeTypes.length();c++){
+    int hourRange = 2;
+    QString USDBalance("0.00");
+    for ( int a=0;a<mParent->getHandlerAccount()->getWalletCount();a++ ) {
+        if ( mParent->getHandlerAccount()->getWallet(a)->mCurrency == "USD" && mParent->getHandlerAccount()->getWallet(a)->mType == "fiat") {
+            USDBalance =  mParent->getHandlerAccount()->getWallet(a)->mAmount;
+        }
+    }
+    for (int c=0;c<mTradeTypes.length();c++) {
         QString currCoin = mTradeTypes.at(c);
+        if ( USDBalance.toDouble() < 1.00) {
+            say("# Not enough money, fml.",currCoin);
+            return;
+        }
+        QString howMuchToSpend("0.00");
+        if ( USDBalance.toDouble() * 0.10 > 10.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.10);
+        } else if ( USDBalance.toDouble() * 0.25 > 10.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.25);
+        } else if ( USDBalance.toDouble() * 0.5 > 10.01 ) { //put at least 20 bucks in you cheap bastard
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
+        } else if ( USDBalance.toDouble() > 10.01 ) { //put at least 10 bucks in you cheap bastard
+            howMuchToSpend = QString().setNum(USDBalance.toDouble());
+        } else {
+            say("# Not enough money, fml.",currCoin);
+            return;
+        }
         QString currPrice;
         say("#################",currCoin);
         say("# Analyzing Price History",currCoin);
         say("# Coin: " + currCoin,currCoin);
         QList<QString> lastPriceRange;
-        mParent->getDb()->getSpotPriceHistoryLast(currCoin,600,&lastPriceRange); //600 @ 5.5s is 1hour
+        mParent->getDb()->getSpotPriceHistoryLast(currCoin,600*hourRange,&lastPriceRange); //600 @ 5.5s is 1hour
         if ( lastPriceRange.length() > 0 ) {
             currPrice = lastPriceRange.last();
         }
@@ -66,6 +90,10 @@ void cbAutoSpotTrader::autoTradeCheck() {
         // 1/10th of the gap is how far from the bottom and top we must be.
         // ie: if gap is 20(lo0hi20), 2 is 1/10th which means valid range is 2 to 18, 1 and
         QString tenthGap = QString().setNum( gap.toDouble() * 0.10 );
+        if ( tenthGap.toDouble() < 0.99 ) {
+            //Theres no avoiding huge fees on spot trading, autoSpot doesnt quote buys, he just grabs em
+            tenthGap = QString().setNum(tenthGap.toDouble() + ( 1.00 - tenthGap.toDouble() ) );
+        }
         say("# 10%ofGap : $" + tenthGap,currCoin);
         bool hiPass;
         bool loPass;
@@ -81,6 +109,10 @@ void cbAutoSpotTrader::autoTradeCheck() {
         //go or no
         if ( loPass && hiPass ) {
             say("# AutoSpot buying " + currCoin,currCoin);
+            // Determine amount
+            say("# Balance: " + USDBalance,currCoin);
+            say("# Spend: " + howMuchToSpend,currCoin);
+            USDBalance = QString().setNum( USDBalance.toDouble() - howMuchToSpend.toDouble() );
         } else {
             say("# AutoSpot passes on " + currCoin,currCoin);
         }

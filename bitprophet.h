@@ -48,6 +48,7 @@ public:
     void setBtcSpotPrice(cbApiResponse*);
     void setLtcSpotPrice(cbApiResponse*);
     void setEthSpotPrice(cbApiResponse*);
+    coinbaseAccount *getHandlerAccount();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;

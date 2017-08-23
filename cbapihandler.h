@@ -56,12 +56,12 @@ public:
     void listPaymentMethods();
     QString trimPriceStringDecimal( QString priceString);
     void cbTabLog(QString logString);
-
+    void buyAutoSpot(QString total,QString coin);
+    coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)
 private:
     QString mPtrName;
     QString mCbApiKey;
-    QString mCbApiSecret;
-    coinbaseAccount *mAccount; //api handler 'has' only one account(at a time) even if more exist (TODO: make switchable)    
+    QString mCbApiSecret;    
     cbWalletTable *mWalletTableWidget;
     cbTransactionTable *mTransactionTable;
 public slots:
