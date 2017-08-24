@@ -58,10 +58,10 @@ void cbAutoSpotTrader::autoTradeCheck() {
             break;
         }
         QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.10 > 5.01 ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.10);
-        } else if ( USDBalance.toDouble() * 0.25 > 5.01 ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.25);
+        if ( USDBalance.toDouble() * 0.20 > 5.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
+        } else if ( USDBalance.toDouble() * 0.3 > 5.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.30);
         } else if ( USDBalance.toDouble() * 0.5 > 5.01 ) { //put at least 5 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
         } else if ( USDBalance.toDouble() > 5.01 ) { //put at least 5 bucks in you cheap bastard
