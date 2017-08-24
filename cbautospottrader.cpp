@@ -167,12 +167,12 @@ void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
             sellFee = "0.99";
         }
         QString ifSoldNowAfterFee = QString().setNum( ifSoldNow.toDouble() - sellFee.toDouble() );
-        say("# Est: "+ifSoldNowAfterFee,coin);
+        //say("# Est: "+ ifSoldNowAfterFee,coin);
+        QString profitUSD = QString().setNum( ifSoldNowAfterFee.toDouble() - forSaleBoughtForPrices.at(z).toDouble() );
         if ( forSaleBoughtForPrices.at(z).toDouble() >= ifSoldNowAfterFee.toDouble() ) {
-            //say("# NEG_Profit: -$" + QString().setNum( forSaleBoughtForPrices.at(z).toDouble() - ifSoldNowAfterFee.toDouble() ) ,coin);
+            say("# NP :" + mParent->getHandler()->trimPriceStringDecimal(profitUSD) ,coin);
         } else {
-            QString profitUSD = QString().setNum( ifSoldNowAfterFee.toDouble() - forSaleBoughtForPrices.at(z).toDouble() );
-            say("# Profit: $" + QString().setNum( ifSoldNowAfterFee.toDouble() - forSaleBoughtForPrices.at(z).toDouble() ) ,coin);
+            say("# Est Profit: $" + mParent->getHandler()->trimPriceStringDecimal(profitUSD) ,coin);
             if ( profitUSD.toDouble() > 1.01) {
                 say("# SELLNOW id: "+forSale.at(z),coin);
                 mParent->sellAutoBuyId(forSale.at(z),coin,ifSoldNowAfterFee);

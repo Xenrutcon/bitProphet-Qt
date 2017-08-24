@@ -418,7 +418,7 @@ void bpDatabase::updateAutoSpotTradeSoldAt( QString id, QString soldAt) {
         } else {
            //say("Database: connection ok.");
            QSqlQuery query;
-           QString q("UPDATE autoSpotTradeHistory SET soldAt='" + soldAt + "' WHERE id="+ id );
+           QString q("UPDATE autoSpotTradeHistory SET soldAt='" + soldAt + "',status='SOLD' WHERE id="+ id );
            query.prepare(q);
            if(query.exec()) {
               say("updateAutoSpotTradeSoldAt() Success");
