@@ -278,8 +278,10 @@ QString bpDatabase::getDefaultAccountId() {
     return idResult;
 }
 
-void bpDatabase::getAutoSpotBuysForSaleList(QList<QString> *idList, QString coin) {
-    QString idResult = 0;
+void bpDatabase::getAutoSpotBuysForSaleList(QList<QString> *idList,QList<QString> *boughtAtList,QList<QString> *coinAmountList, QString coin) {
+    QString idResult;
+    QString batResult;
+    QString amountResult;
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
@@ -294,6 +296,14 @@ void bpDatabase::getAutoSpotBuysForSaleList(QList<QString> *idList, QString coin
                   int idVal = query.record().indexOf("id");
                   idResult = query.value(idVal).toString();
                   idList->append(idResult);
+
+                  int batVal = query.record().indexOf("boughtAt");
+                  batResult = query.value(batVal).toString();
+                  boughtAtList->append(batResult);
+
+                  int camVal = query.record().indexOf("coinAmount");
+                  amountResult = query.value(camVal).toString();
+                  coinAmountList->append(amountResult);
                }
             }
         }
