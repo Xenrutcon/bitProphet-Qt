@@ -1,6 +1,6 @@
 #include "cbapirequest.h"
 
-cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent),mDone(0), mNetAccMan(NULL) ,mResponse(NULL){
+cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent), mDone(0), mNetAccMan(NULL) ,mResponse(NULL){
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
         //mParent->say("CBApiRequest Created!");
         QDateTime current(QDateTime::currentDateTime());

@@ -37,6 +37,7 @@ public:
     QString getAccessSign();
     void sendRequest();
     cbApiHandler *getMyHandler();
+    QString mAutoSpotTradeId;
 private:
     cbApiHandler *mParent;
     QString mTimestamp;

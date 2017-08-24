@@ -26,6 +26,7 @@ public:
     void setType(QString newType);
     cbApiRequest *getParent();
     QJsonObject *getResponseContent();
+    QString mAutoSpotTradeId;
 private:
     cbApiRequest *mParent;
     QJsonObject *mResponseContent;
