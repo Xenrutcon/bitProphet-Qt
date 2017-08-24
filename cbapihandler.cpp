@@ -1003,15 +1003,24 @@ void cbApiHandler::fetchSpotPrices() {
     fetchBTCSpotPrice();
     fetchLTCSpotPrice();
     fetchETHSpotPrice();
-    QTimer::singleShot(1000,this,SLOT(fetchBTCSpotBuyPrice()));
-    QTimer::singleShot(1000,this,SLOT(fetchLTCSpotBuyPrice()));
-    QTimer::singleShot(1000,this,SLOT(fetchETHSpotBuyPrice()));
-    QTimer::singleShot(2000,this,SLOT(fetchBTCSpotSellPrice()));
-    QTimer::singleShot(2000,this,SLOT(fetchLTCSpotSellPrice()));
-    QTimer::singleShot(2000,this,SLOT(fetchETHSpotSellPrice()));
+    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices2()));
     if ( mParentProphet->mAutoCheckSpotPrices ) {
         QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
     }
+}
+
+void cbApiHandler::fetchSpotPrices2() {
+    fetchBTCSpotBuyPrice();
+    fetchLTCSpotBuyPrice();
+    fetchETHSpotBuyPrice();
+    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices3()));
+}
+
+
+void cbApiHandler::fetchSpotPrices3() {
+    fetchBTCSpotSellPrice();
+    fetchLTCSpotSellPrice();
+    fetchETHSpotSellPrice();
 }
 
 void cbApiHandler::withdrawToButtonSlot() {

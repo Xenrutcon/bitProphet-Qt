@@ -278,6 +278,31 @@ QString bpDatabase::getDefaultAccountId() {
     return idResult;
 }
 
+void bpDatabase::getAutoSpotBuysForSaleList(QList<QString> *idList, QString coin) {
+    QString idResult = 0;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from autoSpotTradeHistory where status='BOUGHT' AND type='BUY' AND coin='"+coin+"'");
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  idResult = query.value(idVal).toString();
+                  idList->append(idResult);
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 bool bpDatabase::createAccountsTable() {
     bool retVal = false;
     {

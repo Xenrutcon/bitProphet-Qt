@@ -67,6 +67,8 @@ private:
     cbTransactionTable *mTransactionTable;
 public slots:
     void fetchSpotPrices();
+    void fetchSpotPrices2();
+    void fetchSpotPrices3();
     void fetchBTCSpotPrice();
     void fetchLTCSpotPrice();
     void fetchETHSpotPrice();

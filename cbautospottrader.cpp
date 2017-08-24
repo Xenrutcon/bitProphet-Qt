@@ -1,9 +1,9 @@
 #include "cbautospottrader.h"
 
 cbAutoSpotTrader::cbAutoSpotTrader(bitProphet *parent) : QObject(parent), mParent(parent) {
-    mTradeTypes.append("BTC");
     mTradeTypes.append("LTC");
     mTradeTypes.append("ETH");
+    mTradeTypes.append("BTC");
     mBTCLog = mParent->mParent->getAutoTraderBTCLog();
     mLTCLog = mParent->mParent->getAutoTraderLTCLog();
     mETHLog = mParent->mParent->getAutoTraderETHLog();
@@ -51,7 +51,7 @@ void cbAutoSpotTrader::autoTradeCheck() {
         if ( USDBalance.toDouble() < 1.00) {
             say("# Not enough money, fml.",currCoin);
             QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
-            return;
+            break;
         }
         QString howMuchToSpend("0.00");
         if ( USDBalance.toDouble() * 0.10 > 5.01 ) {
@@ -65,7 +65,7 @@ void cbAutoSpotTrader::autoTradeCheck() {
         } else {
             say("# Not enough money, fml.",currCoin);
             QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
-            return;
+            break;
         }
         QString currPrice;
         say("#################",currCoin);
@@ -126,13 +126,22 @@ void cbAutoSpotTrader::autoTradeCheck() {
             //deduce profit,
             //compare to minProfit
                 //sell or hodl
-
+    for (int c=0;c<mTradeTypes.length();c++) {
+        QString currCoin = mTradeTypes.at(c);
+        checkAutoBuysForProfit(currCoin);
+    }
     //Finally, restart timer
     QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
 }
 
-void cbAutoSpotTrader::checkAutoBuysForProfit () {
-
+void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
+    say("# Check Sales "+coin,coin);
+    QList<QString> forSale;
+    mParent->getDb()->getAutoSpotBuysForSaleList(&forSale,coin);
+    say("# No. For Sale: "+ QString().setNum(forSale.count()),coin);
+    for ( int z=0;z<forSale.count();z++ ) {
+        say("# ID: "+QString().setNum(forSale.at(z).toInt()),coin);
+    }
 }
 
 QString cbAutoSpotTrader::findLowestPrice(QList<QString> hayStack) {
