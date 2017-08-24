@@ -211,6 +211,47 @@ void bitProphet::setEthSpotSellPrice(cbApiResponse *resp) {
 
 }
 
+void bitProphet::sellAutoBuyId(QString id, QString coin, QString total) {
+    say("#auto SELL ID: " + id);
+    say("#auto SELL COIN: " + coin);
+    say("#auto SELL TOTAL: $" + total);
+    QString destAccount;
+    QString paidWith("USD");
+    QString paymentMethod;
+    for ( int c=0;c<mApiHandler->mAccount->getPaymentMethodCount();c++ ){
+        if ( mApiHandler->mAccount->getPaymentMethod(c)->mCurrency == paidWith && mApiHandler->mAccount->getPaymentMethod(c)->mType == "fiat_account") {
+            paymentMethod = mApiHandler->mAccount->getPaymentMethod(c)->mId;
+        }
+    }
+    // Send Request
+    QString selectedPayment = paymentMethod;
+    if ( selectedPayment.length() > 0 ) {
+        QString currencySold = coin;
+        QString currencyPaidTo = paidWith;
+        QString reqBody = "{ \"total\": \"" + total + "\", \"currency\": \"" + currencyPaidTo + "\", \"payment_method\": \"" + selectedPayment + "\" , \"commit\": true }";
+        //say("## rBody -> " + reqBody);
+        mApiHandler->cbTabLog("#auto Sending total: " + total);
+        mApiHandler->cbTabLog("#auto Sending Currency: " + currencyPaidTo);
+        mApiHandler->cbTabLog("#auto Sending commit: TRUE");
+        //Creating a new coinbaseApiRequest
+        cbApiRequest* req = new cbApiRequest(mApiHandler);
+        req->setMethod("POST");
+        // We need the id of the account the buy will GO TO
+        // ie: BTC buy = BTC wallet
+        // find selected wallet and get id for URL
+        QString destAccount;
+        for ( int c=0;c<mApiHandler->mAccount->getWalletCount();c++ ){
+            if ( mApiHandler->mAccount->getWallet(c)->mCurrency == currencySold ) {
+                destAccount = mApiHandler->mAccount->getWallet(c)->mId;
+            }
+        }
+        req->setPath("/v2/accounts/" + destAccount + "/sells");
+        req->setBody(reqBody);
+        req->setType("sellAutoSpot"); //just for us
+        req->sendRequest();
+    }
+    mDb->updateAutoSpotTradeSoldAt(id,total);
+}
 
 coinbaseAccount *bitProphet::getHandlerAccount() {
     return mApiHandler->mAccount;

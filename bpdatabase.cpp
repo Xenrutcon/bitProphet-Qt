@@ -409,6 +409,29 @@ void bpDatabase::insertAutoSpotTrade( QString coin, QString type, QString bought
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
+void bpDatabase::updateAutoSpotTradeSoldAt( QString id, QString soldAt) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("UPDATE autoSpotTradeHistory SET soldAt='" + soldAt + "' WHERE id="+ id );
+           query.prepare(q);
+           if(query.exec()) {
+              say("updateAutoSpotTradeSoldAt() Success");
+           } else {
+              say("updateAutoSpotTradeSoldAt() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 
 void bpDatabase::loadAccountByName(coinbaseAccount *target, QString accountName) {
     say(QString().setNum(target->mDefaultAccount) + "^" + accountName);

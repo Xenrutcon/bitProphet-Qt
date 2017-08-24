@@ -21,7 +21,8 @@ public:
     QTextEdit *mBTCLog;
     QTextEdit *mLTCLog;
     QTextEdit *mETHLog;
-    QList<QString> mTradeTypes;
+    QList<QString> mTradeTypes; //actively sell these coins
+    QList<QString> mBuyTypes; //actively buy these coins
     QString findLowestPrice(QList<QString> hayStack);
     QString findHighestPrice(QList<QString> hayStack);
     QString findPriceGap(QList<QString> hayStack);

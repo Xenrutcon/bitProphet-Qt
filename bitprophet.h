@@ -54,6 +54,7 @@ public:
     void setBtcSpotBuyPrice(cbApiResponse*);
     void setLtcSpotBuyPrice(cbApiResponse*);
     void setEthSpotBuyPrice(cbApiResponse*);
+    void sellAutoBuyId(QString id, QString coin, QString total);
     coinbaseAccount *getHandlerAccount();
     cbApiHandler *getHandler();
 private:

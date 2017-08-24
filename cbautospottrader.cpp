@@ -4,9 +4,14 @@ cbAutoSpotTrader::cbAutoSpotTrader(bitProphet *parent) : QObject(parent), mParen
     mTradeTypes.append("LTC");
     mTradeTypes.append("ETH");
     mTradeTypes.append("BTC");
+    mBuyTypes.append("LTC");
+    mBuyTypes.append("ETH");
     mBTCLog = mParent->mParent->getAutoTraderBTCLog();
     mLTCLog = mParent->mParent->getAutoTraderLTCLog();
     mETHLog = mParent->mParent->getAutoTraderETHLog();
+    mBTCLog->document()->setMaximumBlockCount(256);
+    mLTCLog->document()->setMaximumBlockCount(256);
+    mETHLog->document()->setMaximumBlockCount(256);
     say("# AutoSpot Trader Exists #");
 }
 
@@ -46,8 +51,8 @@ void cbAutoSpotTrader::autoTradeCheck() {
             USDBalance =  mParent->getHandlerAccount()->getWallet(a)->mAmount;
         }
     }
-    for (int c=0;c<mTradeTypes.length();c++) {
-        QString currCoin = mTradeTypes.at(c);
+    for (int c=0;c<mBuyTypes.length();c++) {
+        QString currCoin = mBuyTypes.at(c);
         if ( USDBalance.toDouble() < 1.00) {
             say("# Not enough money, fml.",currCoin);
             break;
@@ -90,9 +95,11 @@ void cbAutoSpotTrader::autoTradeCheck() {
         // 1/10th of the gap is how far from the bottom and top we must be.
         // ie: if gap is 20(lo0hi20), 2 is 1/10th which means valid range is 2 to 18, 1 and
         QString tenthGap = QString().setNum( gap.toDouble() * 0.10 );
-        if ( tenthGap.toDouble() < 0.99 ) {
+        if ( tenthGap.toDouble() < 0.99 ) { //clamp tenthgap to 0.99 OR 45% of gap (could be less than a buck difference)
             //Theres no avoiding huge fees on spot trading, autoSpot doesnt quote buys, he just grabs em
-            tenthGap = QString().setNum(tenthGap.toDouble() + ( 1.00 - tenthGap.toDouble() ) );
+            if ( tenthGap.toDouble() < (gap.toDouble() * 0.45) ) {
+                tenthGap = QString().setNum(gap.toDouble() * 0.45);
+            }
         }
         say("# 10%ofGap : $" + tenthGap,currCoin);
         bool hiPass;
@@ -168,6 +175,7 @@ void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
             say("# Profit: $" + QString().setNum( ifSoldNowAfterFee.toDouble() - forSaleBoughtForPrices.at(z).toDouble() ) ,coin);
             if ( profitUSD.toDouble() > 1.01) {
                 say("# SELLNOW id: "+forSale.at(z),coin);
+                mParent->sellAutoBuyId(forSale.at(z),coin,ifSoldNowAfterFee);
             }
         }
     }

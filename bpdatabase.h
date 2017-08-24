@@ -34,6 +34,7 @@ public:
     void addToCbSpotPriceHistory( QString coin, QString price );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
+    void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
     QList<QString> getAccountList();
     void deleteAccount(QString id );
     QString getDefaultAccountId();
