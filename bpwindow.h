@@ -62,6 +62,12 @@ public:
     QLabel *getBuySpotTotalLabel();
     QLabel *getSellSpotFeeLabel();
     QLabel *getSellSpotTotalLabel();
+    QLabel *getBtcSpotBuyPriceLabel();
+    QLabel *getLtcSpotBuyPriceLabel();
+    QLabel *getEthSpotBuyPriceLabel();
+    QLabel *getBtcSpotSellPriceLabel();
+    QLabel *getLtcSpotSellPriceLabel();
+    QLabel *getEthSpotSellPriceLabel();
     QLineEdit *getBuySpotAmount();
     QLineEdit *getSellSpotAmount();
     QFrame *getCbBTCPricePlacer();

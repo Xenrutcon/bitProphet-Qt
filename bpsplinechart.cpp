@@ -28,7 +28,7 @@ void bpSplineChart::addBtcSpotPriceHistoryData(bpDatabase *theDb) {
     say("Adding Btc Spot Price To History...");
     mSeries->clear();
     mChart->removeSeries(mSeries);
-    theDb->getBtcSpotPriceHistoryLast(500,this);
+    theDb->getBtcSpotPriceHistoryLast(1200,this);
     mChart->addSeries(mSeries);
     mChart->createDefaultAxes();
     mView->repaint();
@@ -37,7 +37,7 @@ void bpSplineChart::addBtcSpotPriceHistoryData(bpDatabase *theDb) {
 void bpSplineChart::reloadBtcSpotPriceHistoryData(bpDatabase *theDb) {
     mSeries->clear();
     mChart->removeSeries(mSeries);
-    theDb->getBtcSpotPriceHistoryLast(500,this);
+    theDb->getBtcSpotPriceHistoryLast(1200,this);
     mChart->addSeries(mSeries);
     mChart->createDefaultAxes();
     mView->repaint();
@@ -46,7 +46,7 @@ void bpSplineChart::reloadBtcSpotPriceHistoryData(bpDatabase *theDb) {
 void bpSplineChart::reloadLtcSpotPriceHistoryData(bpDatabase *theDb) {
     mSeries->clear();
     mChart->removeSeries(mSeries);
-    theDb->getLtcSpotPriceHistoryLast(500,this);
+    theDb->getLtcSpotPriceHistoryLast(1200,this);
     mChart->addSeries(mSeries);
     mChart->createDefaultAxes();
     mView->repaint();
@@ -55,7 +55,7 @@ void bpSplineChart::reloadLtcSpotPriceHistoryData(bpDatabase *theDb) {
 void bpSplineChart::reloadEthSpotPriceHistoryData(bpDatabase *theDb) {
     mSeries->clear();
     mChart->removeSeries(mSeries);
-    theDb->getEthSpotPriceHistoryLast(500,this);
+    theDb->getEthSpotPriceHistoryLast(1200,this);
     mChart->addSeries(mSeries);
     mChart->createDefaultAxes();
     mView->repaint();

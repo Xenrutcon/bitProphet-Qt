@@ -67,6 +67,32 @@ QLabel *bpWindow::getEthSpotPriceLabel() {
     return ui->mEthSpotPriceLabel;
 }
 
+QLabel *bpWindow::getBtcSpotBuyPriceLabel() {
+    return ui->mBtcSpotBuyPriceLabel;
+}
+
+QLabel *bpWindow::getLtcSpotBuyPriceLabel() {
+    return ui->mLtcSpotBuyPriceLabel;
+}
+
+QLabel *bpWindow::getEthSpotBuyPriceLabel() {
+    return ui->mEthSpotBuyPriceLabel;
+}
+
+QLabel *bpWindow::getBtcSpotSellPriceLabel() {
+    return ui->mBtcSpotSellPriceLabel;
+}
+
+QLabel *bpWindow::getLtcSpotSellPriceLabel() {
+    return ui->mLtcSpotSellPriceLabel;
+}
+
+QLabel *bpWindow::getEthSpotSellPriceLabel() {
+    return ui->mEthSpotSellPriceLabel;
+}
+
+
+
 QLabel *bpWindow::getBuySpotFeeLabel() {
     return ui->mBuySpotFeeLabel;
 }

@@ -41,19 +41,26 @@ public:
     //Simple Trading (non-neural net, simple dumb logix)
     bool mAutoSpotTrade;
     int mAutoSpotTradeInterval;
-
+    cbAutoSpotTrader *mAutoSpot;
     //////////////
     // Other junk
     bpWindow *mParent;
     void setBtcSpotPrice(cbApiResponse*);
     void setLtcSpotPrice(cbApiResponse*);
     void setEthSpotPrice(cbApiResponse*);
+    void setBtcSpotSellPrice(cbApiResponse*);
+    void setLtcSpotSellPrice(cbApiResponse*);
+    void setEthSpotSellPrice(cbApiResponse*);
+    void setBtcSpotBuyPrice(cbApiResponse*);
+    void setLtcSpotBuyPrice(cbApiResponse*);
+    void setEthSpotBuyPrice(cbApiResponse*);
     coinbaseAccount *getHandlerAccount();
+    cbApiHandler *getHandler();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
-    cbAutoSpotTrader *mAutoSpot;
+
 signals:
 
 public slots:

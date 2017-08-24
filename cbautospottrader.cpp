@@ -50,19 +50,21 @@ void cbAutoSpotTrader::autoTradeCheck() {
         QString currCoin = mTradeTypes.at(c);
         if ( USDBalance.toDouble() < 1.00) {
             say("# Not enough money, fml.",currCoin);
+            QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
             return;
         }
         QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.10 > 10.01 ) {
+        if ( USDBalance.toDouble() * 0.10 > 5.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.10);
-        } else if ( USDBalance.toDouble() * 0.25 > 10.01 ) {
+        } else if ( USDBalance.toDouble() * 0.25 > 5.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.25);
-        } else if ( USDBalance.toDouble() * 0.5 > 10.01 ) { //put at least 20 bucks in you cheap bastard
+        } else if ( USDBalance.toDouble() * 0.5 > 5.01 ) { //put at least 5 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
-        } else if ( USDBalance.toDouble() > 10.01 ) { //put at least 10 bucks in you cheap bastard
+        } else if ( USDBalance.toDouble() > 5.01 ) { //put at least 5 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble());
         } else {
             say("# Not enough money, fml.",currCoin);
+            QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
             return;
         }
         QString currPrice;
@@ -112,7 +114,9 @@ void cbAutoSpotTrader::autoTradeCheck() {
             // Determine amount
             say("# Balance: " + USDBalance,currCoin);
             say("# Spend: " + howMuchToSpend,currCoin);
-            USDBalance = QString().setNum( USDBalance.toDouble() - howMuchToSpend.toDouble() );
+            mParent->getHandler()->buyAutoSpot(howMuchToSpend,currCoin);
+            //mParent->getDb()->insertAutoSpotTrade(currCoin,"BUY",howMuchToSpend,"0.00","UNK","AUTOBUY"); //do this on the response
+            USDBalance = QString().setNum( USDBalance.toDouble() - howMuchToSpend.toDouble() ); //even if the buy fails, reduce the current cycles working amount, will reset next check
         } else {
             say("# AutoSpot passes on " + currCoin,currCoin);
         }
@@ -125,6 +129,10 @@ void cbAutoSpotTrader::autoTradeCheck() {
 
     //Finally, restart timer
     QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
+}
+
+void cbAutoSpotTrader::checkAutoBuysForProfit () {
+
 }
 
 QString cbAutoSpotTrader::findLowestPrice(QList<QString> hayStack) {

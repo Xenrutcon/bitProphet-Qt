@@ -50,6 +50,7 @@ public:
     void processBadListAccountsResponse();
     void processBuySpotQuoteResponse( cbApiResponse *resp );
     void processSellSpotQuoteResponse( cbApiResponse *resp );
+    void processBuyAutoSpotResponse(cbApiResponse *resp);
     void listAccountProcessResponse( cbApiResponse *resp );
     void listPayMethodProcessResponse( cbApiResponse *resp );
     void listAccounts();    
@@ -69,6 +70,12 @@ public slots:
     void fetchBTCSpotPrice();
     void fetchLTCSpotPrice();
     void fetchETHSpotPrice();
+    void fetchBTCSpotBuyPrice();
+    void fetchLTCSpotBuyPrice();
+    void fetchETHSpotBuyPrice();
+    void fetchBTCSpotSellPrice();
+    void fetchLTCSpotSellPrice();
+    void fetchETHSpotSellPrice();
     void depositFromButtonSlot();
     void withdrawToButtonSlot();
     void QuoteBuySpotClicked();

@@ -159,8 +159,65 @@ void bitProphet::setEthSpotPrice(cbApiResponse *resp) {
     mSplineChartList.at(2)->reloadEthSpotPriceHistoryData(mDb);
 }
 
+void bitProphet::setBtcSpotBuyPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getBtcSpotBuyPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "BTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+    // Check for accounts
+}
+
+void bitProphet::setLtcSpotBuyPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getLtcSpotBuyPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "LTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+}
+
+void bitProphet::setEthSpotBuyPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getEthSpotBuyPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "ETH Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+
+}
+
+void bitProphet::setBtcSpotSellPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getBtcSpotSellPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "BTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+    // Check for accounts
+}
+
+void bitProphet::setLtcSpotSellPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getLtcSpotSellPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "LTC Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+}
+
+void bitProphet::setEthSpotSellPrice(cbApiResponse *resp) {
+    QLabel *ptr = mParent->getEthSpotSellPriceLabel();
+    QJsonObject r = *(resp->getResponseContent());
+    QJsonObject data  = r["data"].toObject();
+    //say( "ETH Spot Price: " + data["amount"].toString() );
+    ptr->setText(data["amount"].toString());
+
+}
+
+
 coinbaseAccount *bitProphet::getHandlerAccount() {
     return mApiHandler->mAccount;
+}
+
+cbApiHandler *bitProphet::getHandler() {
+    return mApiHandler;
 }
 
 /////////

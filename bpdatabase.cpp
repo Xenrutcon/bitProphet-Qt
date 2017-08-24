@@ -336,7 +336,7 @@ bool bpDatabase::createAutoSpotTradeHistoryTable() {
         } else {
            say("Database: CREATE connection ok.");
            QSqlQuery query;
-           query.prepare("CREATE TABLE autoSpotTradeHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(12),amount varchar(256),boughtAt varchar(256),soldAt varchar(256), status varchar(256),ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL );");
+           query.prepare("CREATE TABLE autoSpotTradeHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(12),boughtAt varchar(256),soldAt varchar(256), status varchar(256),coinAmount varchar(256),ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL );");
            if(query.exec()) {
               retVal = true;
            } else {
@@ -351,7 +351,7 @@ bool bpDatabase::createAutoSpotTradeHistoryTable() {
 }
 //will need coin varchar(8),type varchar(12),boughtAt varchar(256),soldAt varchar(256), status varchar(256) ,amount varchar(256) when inserting
 
-void bpDatabase::insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status) {
+void bpDatabase::insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString status,QString coinAmount) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
@@ -360,7 +360,7 @@ void bpDatabase::insertAutoSpotTrade( QString coin, QString type, QString bought
         } else {
            //say("Database: connection ok.");
            QSqlQuery query;
-           QString q("INSERT INTO autoSpotTradeHistory (coin,type,amount,boughtAt,soldAt,status) VALUES ('" + coin + "','" + type + "','" + amount + "','" + boughtAt + "','" + soldAt + "','" + status + "')");
+           QString q("INSERT INTO autoSpotTradeHistory (coin,type,boughtAt,soldAt,status,coinAmount) VALUES ('" + coin + "','" + type + "','" + boughtAt + "','" + soldAt + "','" + status + "','" + coinAmount + "')");
            query.prepare(q);
            if(query.exec()) {
               say("insertAutoSpotTrade() Success");
