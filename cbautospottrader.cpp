@@ -143,7 +143,7 @@ void cbAutoSpotTrader::autoTradeCheck() {
             say("# AutoSpot passes on " + currCoin,currCoin);
             if ( priceRoof ) {
                 say("# Price Roof Passed");
-                say("# Waiting for drop below $" + mLastSellPrice );
+                say("# Waiting for Price drop");
             }
         }
     }
