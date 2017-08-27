@@ -12,6 +12,9 @@ cbAutoSpotTrader::cbAutoSpotTrader(bitProphet *parent) : QObject(parent), mParen
     mBTCLog->document()->setMaximumBlockCount(256);
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);
+    mLastSellPriceBtc = "0.00";
+    mLastSellPriceLtc = "0.00";
+    mLastSellPriceEth = "0.00";
     say("# AutoSpot Trader Exists #");
 }
 
@@ -58,11 +61,11 @@ void cbAutoSpotTrader::autoTradeCheck() {
             break;
         }
         QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.20 > 5.01 ) {
+        if ( USDBalance.toDouble() * 0.20 > 20.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
-        } else if ( USDBalance.toDouble() * 0.3 > 5.01 ) {
+        } else if ( USDBalance.toDouble() * 0.3 > 15.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.30);
-        } else if ( USDBalance.toDouble() * 0.5 > 5.01 ) { //put at least 5 bucks in you cheap bastard
+        } else if ( USDBalance.toDouble() * 0.5 > 10.01 ) { //put at least 10 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
         } else if ( USDBalance.toDouble() > 5.01 ) { //put at least 5 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble());
@@ -81,6 +84,20 @@ void cbAutoSpotTrader::autoTradeCheck() {
         }
         say("# " + QString().setNum(lastPriceRange.count()) + " Prices",currCoin);
         say("# Current: $" + currPrice,currCoin);
+        bool priceRoof = false;
+        if ( currCoin == "BTC" ) {
+            if ( currPrice.toDouble() >= mLastSellPriceBtc.toDouble() && mLastSellPriceBtc != "0.00" ) {
+                priceRoof = true; //STOP BUYING until price drops below the last price we sold on
+            }
+        } else if ( currCoin == "LTC" ) {
+            if ( currPrice.toDouble() >= mLastSellPriceLtc.toDouble() && mLastSellPriceLtc != "0.00" ) {
+                priceRoof = true; //STOP BUYING until price drops below the last price we sold on
+            }
+        } else if ( currCoin == "ETH" ) {
+            if ( currPrice.toDouble() >= mLastSellPriceEth.toDouble() && mLastSellPriceEth != "0.00" ) {
+                priceRoof = true; //STOP BUYING until price drops below the last price we sold on
+            }
+        }
         say("#################",currCoin);
         //check for high price (ranged)
         QString high = findHighestPrice(lastPriceRange);
@@ -114,7 +131,7 @@ void cbAutoSpotTrader::autoTradeCheck() {
             loPass = true;
         } else { loPass = false; }
         //go or no
-        if ( loPass && hiPass ) {
+        if ( loPass && hiPass && (!priceRoof) ) {
             say("# AutoSpot buying " + currCoin,currCoin);
             // Determine amount
             say("# Balance: " + USDBalance,currCoin);
@@ -124,6 +141,10 @@ void cbAutoSpotTrader::autoTradeCheck() {
             USDBalance = QString().setNum( USDBalance.toDouble() - howMuchToSpend.toDouble() ); //even if the buy fails, reduce the current cycles working amount, will reset next check
         } else {
             say("# AutoSpot passes on " + currCoin,currCoin);
+            if ( priceRoof ) {
+                say("# Price Roof Passed");
+                say("# Waiting for drop below $" + mLastSellPrice );
+            }
         }
     }
     //Next check our autoBuys,

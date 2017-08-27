@@ -251,6 +251,13 @@ void bitProphet::sellAutoBuyId(QString id, QString coin, QString total) {
         req->sendRequest();
     }
     mDb->updateAutoSpotTradeSoldAt(id,total);
+    if ( coin == "BTC" ) {
+        mAutoSpot->mLastSellPriceBtc = mParent->getBtcSpotSellPriceLabel()->text();
+    } else if ( coin == "LTC" ) {
+        mAutoSpot->mLastSellPriceLtc = mParent->getLtcSpotSellPriceLabel()->text();
+    } else if ( coin == "ETH" ) {
+        mAutoSpot->mLastSellPriceEth = mParent->getEthSpotSellPriceLabel()->text();
+    }
 }
 
 coinbaseAccount *bitProphet::getHandlerAccount() {
