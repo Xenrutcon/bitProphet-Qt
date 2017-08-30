@@ -646,6 +646,31 @@ void cbApiHandler::buySpotClicked() {
     cbTabLog(" ");
 }
 
+//COIN BASE SELL FEES
+//subtotal -> Fee
+//------------
+
+//For ETH fees are:
+//$1-$10 = $0.99
+//$10-$25 = $1.49
+//$25-$50 = $1.99
+//$50-$200 = $2.99
+//$200+ = 1.49%
+
+//LTC:
+//$1-$10 = $0.99
+//$10-$25 = $1.49
+//$25-$50 = $1.99
+//$50-$200 = $2.99
+//$200+ = 1.49%
+
+//BTC:
+//$1-$10 = $0.99
+//$10-$25 = $1.49
+//$25-$50 = $1.99
+//$50-$200 = $2.99
+//$200+ = 1.49%
+
 void cbApiHandler::sellSpotClicked() {
     cbTabLog("### SELL @ SPOT PRICE ### ");
     QString sellAmount = mParentProphet->mParent->getSellSpotAmount()->text();
@@ -664,8 +689,8 @@ void cbApiHandler::sellSpotClicked() {
     cbTabLog("# Sub-Total: $" + subTotal );
     QString fee = mParentProphet->mParent->getSellSpotFeeLabel()->text();
     fee = trimPriceStringDecimal(fee);
-    if ( fee.toDouble() < 0.99 ) {
-        fee = "0.99";
+    if ( fee.toDouble() < 1.49 ) {
+        fee = "1.49";
     }
     cbTabLog("# Actual Sell Fee: $" + fee );
     QString totalSellAmountAfterFee = QString().setNum(subTotal.toDouble() - fee.toDouble());
@@ -802,14 +827,9 @@ void cbApiHandler::QuoteSellSpotClicked() {
     QString subTotal = QString().setNum(spot.toDouble() * sellAmount.toDouble());
     subTotal = trimPriceStringDecimal(subTotal);
     cbTabLog("# Sub-Total: $" + subTotal );
-    QString feePct = "1.49"; //For ACH minimum is $0.15
-    QString feeDec = QString().setNum(feePct.toDouble()*0.01);
-    QString fee = QString().setNum(subTotal.toDouble() * feeDec.toDouble());
-    cbTabLog("# Sell Fee (%): " + feePct + "%");
-    fee = trimPriceStringDecimal(fee);
-    if ( fee.toDouble() < 0.99 ) {
-        fee = "0.99";
-    }
+    QString feePct = "Varies"; //For ACH minimum is $0.15
+    QString fee = mParentProphet->findCoinbaseFee(subTotal);
+    fee = trimPriceStringDecimal(fee);    
     cbTabLog("# Sell Fee: $" + fee );
     QString totalSellAmountAfterFee = QString().setNum(subTotal.toDouble() - fee.toDouble());
     totalSellAmountAfterFee = trimPriceStringDecimal(totalSellAmountAfterFee);

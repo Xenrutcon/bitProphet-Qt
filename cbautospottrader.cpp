@@ -5,7 +5,7 @@ cbAutoSpotTrader::cbAutoSpotTrader(bitProphet *parent) : QObject(parent), mParen
     mTradeTypes.append("ETH");
     mTradeTypes.append("BTC");
     mBuyTypes.append("LTC");
-    mBuyTypes.append("ETH");
+    //mBuyTypes.append("ETH");
     mBTCLog = mParent->mParent->getAutoTraderBTCLog();
     mLTCLog = mParent->mParent->getAutoTraderLTCLog();
     mETHLog = mParent->mParent->getAutoTraderETHLog();
@@ -57,20 +57,22 @@ void cbAutoSpotTrader::autoTradeCheck() {
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
         if ( USDBalance.toDouble() < 1.00) {
-            say("# Not enough money, fml.",currCoin);
+            say("# Not enough money, fail.",currCoin);
             break;
         }
         QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.20 > 20.01 ) {
+        if ( USDBalance.toDouble() * 0.20 > 200.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
-        } else if ( USDBalance.toDouble() * 0.3 > 15.01 ) {
+        } else if ( USDBalance.toDouble() * 0.3 > 150.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.30);
-        } else if ( USDBalance.toDouble() * 0.5 > 10.01 ) { //put at least 10 bucks in you cheap bastard
+        } else if ( USDBalance.toDouble() * 0.5 > 100.01 ) { //put at least 100 bucks in you cheap bastard
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
-        } else if ( USDBalance.toDouble() > 5.01 ) { //put at least 5 bucks in you cheap bastard
+        } else if ( USDBalance.toDouble() > 80.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble());
+        } else if ( USDBalance.toDouble() > 50.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble());
         } else {
-            say("# Not enough money, fml.",currCoin);
+            say("# Not enough money, fail.",currCoin);
             break;
         }
         QString currPrice;
@@ -142,8 +144,8 @@ void cbAutoSpotTrader::autoTradeCheck() {
         } else {
             say("# AutoSpot passes on " + currCoin,currCoin);
             if ( priceRoof ) {
-                say("# Price Roof Passed");
-                say("# Waiting for Price drop");
+                say("# Price Roof Passed",currCoin);
+                say("# Waiting for Price drop",currCoin);
             }
         }
     }
@@ -183,18 +185,18 @@ void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
             curSellPrice = mParent->mParent->getEthSpotSellPriceLabel()->text();
         }
         QString ifSoldNow = QString().setNum(curSellPrice.toDouble() * forSaleCoinAmounts.at(z).toDouble());
-        QString sellFee = QString().setNum( ifSoldNow.toDouble() * 0.0149 );
-        if ( sellFee.toDouble() < 0.99 ) {
-            sellFee = "0.99";
-        }
+        QString sellFee = mParent->findCoinbaseFee(ifSoldNow);
+
         QString ifSoldNowAfterFee = QString().setNum( ifSoldNow.toDouble() - sellFee.toDouble() );
         //say("# Est: "+ ifSoldNowAfterFee,coin);
         QString profitUSD = QString().setNum( ifSoldNowAfterFee.toDouble() - forSaleBoughtForPrices.at(z).toDouble() );
         if ( forSaleBoughtForPrices.at(z).toDouble() >= ifSoldNowAfterFee.toDouble() ) {
+            say("# Est Fee: " + sellFee,coin);
             say("# NP :" + mParent->getHandler()->trimPriceStringDecimal(profitUSD) ,coin);
         } else {
+            say("# Est Fee: " + sellFee,coin);
             say("# Est Profit: $" + mParent->getHandler()->trimPriceStringDecimal(profitUSD) ,coin);
-            if ( profitUSD.toDouble() > 1.01) {
+            if ( profitUSD.toDouble() > 0.10) {
                 say("# SELLNOW id: "+forSale.at(z),coin);
                 mParent->sellAutoBuyId(forSale.at(z),coin,ifSoldNowAfterFee);
             }

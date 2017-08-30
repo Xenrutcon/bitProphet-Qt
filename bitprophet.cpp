@@ -1,7 +1,7 @@
 #include "bitprophet.h"
 
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(8500),
-    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(5500), mAutoSpotTrade(1), mAutoSpotTradeInterval(20500),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL) {
+    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(8000), mAutoSpotTrade(1), mAutoSpotTradeInterval(20500),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    
@@ -266,6 +266,26 @@ coinbaseAccount *bitProphet::getHandlerAccount() {
 
 cbApiHandler *bitProphet::getHandler() {
     return mApiHandler;
+}
+
+QString bitProphet::findCoinbaseFee(QString dollarAmount) {
+    //COINBASE SELL and BUY FEES
+    //$1-$10 = $0.99
+    //$10-$25 = $1.49
+    //$25-$50 = $1.99
+    //$50-$200 = $2.99
+    //$200+ = 1.49%
+    if ( dollarAmount.toDouble() < 10.00 ) {
+        return "0.99";
+    } else if ( dollarAmount.toDouble() > 10.00 && dollarAmount.toDouble() < 25.00 ) {
+        return "1.49";
+    } else if ( dollarAmount.toDouble() > 25.00 && dollarAmount.toDouble() < 50.00 ) {
+        return "1.99";
+    } else if ( dollarAmount.toDouble() > 50.00 && dollarAmount.toDouble() < 200.00 ) {
+        return "2.99";
+    } else if ( dollarAmount.toDouble() > 200.00 ) {
+        return QString().setNum( dollarAmount.toDouble() * 0.0149 );
+    }
 }
 
 /////////

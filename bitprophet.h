@@ -57,6 +57,7 @@ public:
     void sellAutoBuyId(QString id, QString coin, QString total);
     coinbaseAccount *getHandlerAccount();
     cbApiHandler *getHandler();
+    QString findCoinbaseFee(QString dollarAmount);
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
