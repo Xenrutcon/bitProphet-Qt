@@ -687,11 +687,8 @@ void cbApiHandler::sellSpotClicked() {
     QString subTotal = QString().setNum(mParentProphet->mParent->getSellSpotTotalLabel()->text().toDouble() + mParentProphet->mParent->getSellSpotFeeLabel()->text().toDouble());
     subTotal = trimPriceStringDecimal(subTotal);
     cbTabLog("# Sub-Total: $" + subTotal );
-    QString fee = mParentProphet->mParent->getSellSpotFeeLabel()->text();
-    fee = trimPriceStringDecimal(fee);
-    if ( fee.toDouble() < 1.49 ) {
-        fee = "1.49";
-    }
+    QString fee = mParentProphet->findCoinbaseFee(subTotal);
+    fee = trimPriceStringDecimal(fee);    
     cbTabLog("# Actual Sell Fee: $" + fee );
     QString totalSellAmountAfterFee = QString().setNum(subTotal.toDouble() - fee.toDouble());
     totalSellAmountAfterFee = trimPriceStringDecimal(totalSellAmountAfterFee);

@@ -235,9 +235,8 @@ void bitProphet::sellAutoBuyId(QString id, QString coin, QString total) {
         mApiHandler->cbTabLog("#auto Sending commit: TRUE");
         //Creating a new coinbaseApiRequest
         cbApiRequest* req = new cbApiRequest(mApiHandler);
-        req->setMethod("POST");
-        // We need the id of the account the buy will GO TO
-        // ie: BTC buy = BTC wallet
+        req->setMethod("POST");        
+        // ie: BTC buy/sell = BTC wallet
         // find selected wallet and get id for URL
         QString destAccount;
         for ( int c=0;c<mApiHandler->mAccount->getWalletCount();c++ ){
