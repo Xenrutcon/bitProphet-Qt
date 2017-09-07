@@ -41,7 +41,8 @@ SOURCES += \
     coinbasepaymentmethod.cpp \
     cbtransaction.cpp \
     cbtransactiontable.cpp \
-    cbautospottrader.cpp
+    cbautospottrader.cpp \
+    gdaxapihandler.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -60,7 +61,8 @@ HEADERS += \
     coinbasepaymentmethod.h \
     cbtransaction.h \
     cbtransactiontable.h \
-    cbautospottrader.h
+    cbautospottrader.h \
+    gdaxapihandler.h
 
 FORMS += \
         bpwindow.ui \

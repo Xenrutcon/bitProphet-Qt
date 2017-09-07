@@ -47,6 +47,7 @@ void cbAutoSpotTrader::say(QString sayIt,QString coinLog) {
 ////////
 
 void cbAutoSpotTrader::autoTradeCheck() {
+    if ( mParent->mAutoSpotTrade == false ) { return; }
     int hourRange = 2;
     QString USDBalance("0.00");
     for ( int a=0;a<mParent->getHandlerAccount()->getWalletCount();a++ ) {
@@ -159,7 +160,9 @@ void cbAutoSpotTrader::autoTradeCheck() {
         checkAutoBuysForProfit(currCoin);
     }
     //Finally, restart timer
-    QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
+    if ( mParent->mAutoSpotTrade ) {
+        QTimer::singleShot(mParent->mAutoSpotTradeInterval,this,SLOT(autoTradeCheck()));
+    }
 }
 
 void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
@@ -196,7 +199,7 @@ void cbAutoSpotTrader::checkAutoBuysForProfit (QString coin) {
         } else {
             say("# Est Fee: " + sellFee,coin);
             say("# Est Profit: $" + mParent->getHandler()->trimPriceStringDecimal(profitUSD) ,coin);
-            if ( profitUSD.toDouble() > 0.10) {
+            if ( profitUSD.toDouble() > 1.00) {
                 say("# SELLNOW id: "+forSale.at(z),coin);
                 mParent->sellAutoBuyId(forSale.at(z),coin,ifSoldNowAfterFee);
             }

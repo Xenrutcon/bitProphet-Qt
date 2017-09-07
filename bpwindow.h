@@ -23,7 +23,6 @@ public:
     explicit bpWindow(QWidget *parent = 0);
     ~bpWindow();
     QTextEdit *getStatusOutput();
-    QTextEdit *getDebugLog();
     QTextEdit *getCoinbaseTabLog();
     QTextEdit* getAutoTraderBTCLog();
     QTextEdit* getAutoTraderLTCLog();
@@ -80,6 +79,7 @@ private:
     coinbaseAccountSetupWindow *mCbSetupWin;
 private slots:
     void accountSetupClicked();
+    void on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked);
 };
 
 #endif // BPWINDOW_H

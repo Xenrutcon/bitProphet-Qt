@@ -389,8 +389,6 @@ void cbApiHandler::listAccountProcessResponse(cbApiResponse *resp) {
 
 void cbApiHandler::listPayMethodProcessResponse( cbApiResponse *resp ) {
     QJsonObject *r = resp->getResponseContent();
-
-
     QStringList keys = r->keys();
     int k;
     for(k=0;k<keys.count();k++) {
@@ -1018,9 +1016,9 @@ void cbApiHandler::fetchLTCSpotSellPrice() {
 
 void cbApiHandler::fetchSpotPrices() {
     fetchBTCSpotPrice();
-    QTimer::singleShot(250,this,SLOT(fetchLTCSpotPrice()));
-    QTimer::singleShot(500,this,SLOT(fetchETHSpotPrice()));
-    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices2()));
+    QTimer::singleShot(1000,this,SLOT(fetchLTCSpotPrice()));
+    QTimer::singleShot(2000,this,SLOT(fetchETHSpotPrice()));
+    QTimer::singleShot(3000,this,SLOT(fetchSpotPrices2()));
     if ( mParentProphet->mAutoCheckSpotPrices ) {
         QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
     }
@@ -1028,16 +1026,16 @@ void cbApiHandler::fetchSpotPrices() {
 
 void cbApiHandler::fetchSpotPrices2() {
     fetchBTCSpotBuyPrice();
-    QTimer::singleShot(250,this,SLOT(fetchLTCSpotBuyPrice()));
-    QTimer::singleShot(500,this,SLOT(fetchETHSpotBuyPrice()));
-    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices3()));
+    QTimer::singleShot(1000,this,SLOT(fetchLTCSpotBuyPrice()));
+    QTimer::singleShot(2000,this,SLOT(fetchETHSpotBuyPrice()));
+    QTimer::singleShot(3000,this,SLOT(fetchSpotPrices3()));
 }
 
 
 void cbApiHandler::fetchSpotPrices3() {
     fetchBTCSpotSellPrice();
-    QTimer::singleShot(250,this,SLOT(fetchLTCSpotSellPrice()));
-    QTimer::singleShot(500,this,SLOT(fetchETHSpotSellPrice()));
+    QTimer::singleShot(2000,this,SLOT(fetchLTCSpotSellPrice()));
+    QTimer::singleShot(3000,this,SLOT(fetchETHSpotSellPrice()));
 }
 
 void cbApiHandler::withdrawToButtonSlot() {

@@ -1,7 +1,7 @@
 #include "bitprophet.h"
 
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(8500),
-    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(8000), mAutoSpotTrade(1), mAutoSpotTradeInterval(20500),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL) {
+    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(15000), mAutoSpotTrade(0), mAutoSpotTradeInterval(20500),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL) {
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    
@@ -84,7 +84,6 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
 
     //Prevent QTextEdits from exhausting memory with logged output ( from say() )
     mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
-    mParent->getDebugLog()->document()->setMaximumBlockCount(200);
 }
 
 bitProphet::~bitProphet() {
@@ -114,10 +113,9 @@ bpDatabase *bitProphet::getDb() {
 
 void bitProphet::say(QString sayThis, bool debug) {            
     if ( debug ) {
-        mParent->getDebugLog()->append(QString(mPtrName + ">  " + sayThis));
+        //no longer exists
     } else {
         mParent->getStatusOutput()->append(mPtrName + ">  " + sayThis);
-        mParent->getDebugLog()->append(QString(mPtrName + ">  " + sayThis));
     }
     std::cout<<QString(mPtrName + ">  " + sayThis).toLocal8Bit().toStdString()<<std::endl;
 }
@@ -252,10 +250,13 @@ void bitProphet::sellAutoBuyId(QString id, QString coin, QString total) {
     mDb->updateAutoSpotTradeSoldAt(id,total);
     if ( coin == "BTC" ) {
         mAutoSpot->mLastSellPriceBtc = mParent->getBtcSpotSellPriceLabel()->text();
+        QTimer::singleShot(1800000,this,SLOT(resetLastSellPriceBtc()));
     } else if ( coin == "LTC" ) {
         mAutoSpot->mLastSellPriceLtc = mParent->getLtcSpotSellPriceLabel()->text();
+        QTimer::singleShot(1800000,this,SLOT(resetLastSellPriceLtc()));
     } else if ( coin == "ETH" ) {
         mAutoSpot->mLastSellPriceEth = mParent->getEthSpotSellPriceLabel()->text();
+        QTimer::singleShot(1800000,this,SLOT(resetLastSellPriceEth()));
     }
 }
 
@@ -285,6 +286,19 @@ QString bitProphet::findCoinbaseFee(QString dollarAmount) {
     } else if ( dollarAmount.toDouble() > 200.00 ) {
         return QString().setNum( dollarAmount.toDouble() * 0.0149 );
     }
+    return "";
+}
+
+void bitProphet::disableAutoSpotTrader() {
+    mAutoSpotTrade = false;
+    mAutoSpot->deleteLater();
+    mAutoSpot = NULL;
+}
+
+void bitProphet::enableAutoSpotTrader() {
+    mAutoSpotTrade = true;
+    mAutoSpot = new cbAutoSpotTrader(this);
+    QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
 }
 
 /////////
@@ -292,4 +306,16 @@ QString bitProphet::findCoinbaseFee(QString dollarAmount) {
 /////////
 void bitProphet::listAccountSlot() {
     mApiHandler->listAccounts();
+}
+
+void bitProphet::resetLastSellPriceBtc() {
+    mAutoSpot->mLastSellPriceBtc = "0.00";
+}
+
+void bitProphet::resetLastSellPriceLtc() {
+    mAutoSpot->mLastSellPriceLtc = "0.00";
+}
+
+void bitProphet::resetLastSellPriceEth() {
+    mAutoSpot->mLastSellPriceEth = "0.00";
 }

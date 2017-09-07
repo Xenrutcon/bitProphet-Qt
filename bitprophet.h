@@ -58,6 +58,8 @@ public:
     coinbaseAccount *getHandlerAccount();
     cbApiHandler *getHandler();
     QString findCoinbaseFee(QString dollarAmount);
+    void enableAutoSpotTrader();
+    void disableAutoSpotTrader();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
@@ -67,7 +69,9 @@ signals:
 
 public slots:
 void listAccountSlot();
-
+void resetLastSellPriceBtc();
+void resetLastSellPriceLtc();
+void resetLastSellPriceEth();
 };
 
 #endif // BITPROPHET_H

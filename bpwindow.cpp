@@ -29,9 +29,7 @@ QTextEdit * bpWindow::getStatusOutput() {
     return ui->mStatusOutput;
 }
 
-QTextEdit * bpWindow::getDebugLog() {
-    return ui->mDebugLog;
-}
+
 
 QTextEdit* bpWindow::getCoinbaseTabLog() { return ui->mCoinbaseTabLog; }
 
@@ -239,4 +237,14 @@ void bpWindow::accountSetupClicked() {
         mCbSetupWin = new coinbaseAccountSetupWindow(this);
     }
     mCbSetupWin->show();
+}
+
+void bpWindow::on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked) {
+    if ( checked ) {
+        mProphet->say("Enabling Auto Spot Trader.");
+        mProphet->enableAutoSpotTrader();
+    } else {
+        mProphet->say("Disabling Auto Spot Trader.");
+        mProphet->disableAutoSpotTrader();
+    }
 }
