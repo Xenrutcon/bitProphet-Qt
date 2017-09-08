@@ -12,6 +12,7 @@
 #include "cbapihandler.h"
 #include "bpsplinechart.h"
 #include "cbautospottrader.h"
+#include "gdaxapihandler.h"
 
 class bpWindow;
 class bpDatabase;
@@ -20,6 +21,7 @@ class cbApiHandler;
 class cbApiResponse;
 class bpSplineChart;
 class cbAutoSpotTrader;
+class gdaxApiHandler;
 
 class bitProphet : public QObject {
     Q_OBJECT    
@@ -41,7 +43,7 @@ public:
     //Simple Trading (non-neural net, simple dumb logix)
     bool mAutoSpotTrade;
     int mAutoSpotTradeInterval;
-    cbAutoSpotTrader *mAutoSpot;
+    cbAutoSpotTrader *mAutoSpot;    
     //////////////
     // Other junk
     bpWindow *mParent;
@@ -60,11 +62,13 @@ public:
     QString findCoinbaseFee(QString dollarAmount);
     void enableAutoSpotTrader();
     void disableAutoSpotTrader();
+    void disableGDAXTrader();
+    void enableGDAXTrader();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
-
+    gdaxApiHandler *mGDAXApiHandler;
 signals:
 
 public slots:

@@ -1,7 +1,8 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(8500),
-    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(15000), mAutoSpotTrade(0), mAutoSpotTradeInterval(20500),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL) {
+bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(60000),
+    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(27000), mAutoSpotTrade(0), mAutoSpotTradeInterval(90000),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL),
+    mGDAXApiHandler(NULL){
     mParent = reinterpret_cast<bpWindow*>(parent);
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     // Startup    
@@ -76,6 +77,8 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
 
     // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
     mApiHandler = new cbApiHandler(this);
+    // Create GDAXApiHandler
+    mGDAXApiHandler = new gdaxApiHandler(this);
     // Finish startup process
     setProphetState("IDLE");
     // Start bitProphet based on saved settings (or defaults)
@@ -90,6 +93,7 @@ bitProphet::~bitProphet() {
     if (mDb != NULL ) { delete mDb; }    
     if (mAutoSpot != NULL ) { delete mAutoSpot; }
     if (mApiHandler != NULL ) { delete mApiHandler; }
+    if (mGDAXApiHandler != NULL ) { delete mGDAXApiHandler; }
     //delete all charts
     for(int c=0;c<mSplineChartList.length();c++) {
         delete mSplineChartList.at(c);
@@ -289,6 +293,11 @@ QString bitProphet::findCoinbaseFee(QString dollarAmount) {
     return "";
 }
 
+
+
+/////////
+// Slots
+/////////
 void bitProphet::disableAutoSpotTrader() {
     mAutoSpotTrade = false;
     mAutoSpot->deleteLater();
@@ -301,9 +310,18 @@ void bitProphet::enableAutoSpotTrader() {
     QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
 }
 
-/////////
-// Slots
-/////////
+void bitProphet::disableGDAXTrader() {
+//    mAutoGDAXTrade = false;
+//    mAuto->deleteLater();
+//    mAutoSpot = NULL;
+}
+
+void bitProphet::enableGDAXTrader() {
+//    mAutoSpotTrade = true;
+//    mAutoSpot = new cbAutoSpotTrader(this);
+//    QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
+}
+
 void bitProphet::listAccountSlot() {
     mApiHandler->listAccounts();
 }

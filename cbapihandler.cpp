@@ -31,7 +31,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
            // say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
             //Start Spot Check
             if ( mParentProphet->mAutoCheckSpotPrices ) {
-                QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
+                QTimer::singleShot(100,this,SLOT(fetchSpotPrices()));
             }
             //start Auto Simple Trading (if)
 
@@ -39,7 +39,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             say("Default Account was not found.");
             say("Create one using the Setup Menu.");
         }
-        say("Api Handler Loaded!");
+        say("Api Handler Loaded.");
     }
 }
 
@@ -1016,26 +1016,27 @@ void cbApiHandler::fetchLTCSpotSellPrice() {
 
 void cbApiHandler::fetchSpotPrices() {
     fetchBTCSpotPrice();
-    QTimer::singleShot(1000,this,SLOT(fetchLTCSpotPrice()));
-    QTimer::singleShot(2000,this,SLOT(fetchETHSpotPrice()));
-    QTimer::singleShot(3000,this,SLOT(fetchSpotPrices2()));
-    if ( mParentProphet->mAutoCheckSpotPrices ) {
-        QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
-    }
+    fetchLTCSpotPrice();
+    fetchETHSpotPrice();
+    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices2()));
+
 }
 
 void cbApiHandler::fetchSpotPrices2() {
     fetchBTCSpotBuyPrice();
-    QTimer::singleShot(1000,this,SLOT(fetchLTCSpotBuyPrice()));
-    QTimer::singleShot(2000,this,SLOT(fetchETHSpotBuyPrice()));
-    QTimer::singleShot(3000,this,SLOT(fetchSpotPrices3()));
+    fetchLTCSpotBuyPrice();
+    fetchETHSpotBuyPrice();
+    QTimer::singleShot(1000,this,SLOT(fetchSpotPrices3()));
 }
 
 
 void cbApiHandler::fetchSpotPrices3() {
     fetchBTCSpotSellPrice();
-    QTimer::singleShot(2000,this,SLOT(fetchLTCSpotSellPrice()));
-    QTimer::singleShot(3000,this,SLOT(fetchETHSpotSellPrice()));
+    fetchLTCSpotSellPrice();
+    fetchETHSpotSellPrice();
+    if ( mParentProphet->mAutoCheckSpotPrices ) {
+        QTimer::singleShot(mParentProphet->mAutoCheckSpotPricesInterval,this,SLOT(fetchSpotPrices()));
+    }
 }
 
 void cbApiHandler::withdrawToButtonSlot() {

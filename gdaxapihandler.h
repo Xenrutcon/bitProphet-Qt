@@ -32,6 +32,11 @@ class gdaxApiHandler : public QObject {
 public:
     explicit gdaxApiHandler(bitProphet *parent);
     ~gdaxApiHandler();
+    bitProphet *mParent;
+    void say(QString sayThis);
+    QString mPtrName;
+private:
+    coinbaseAccount *mAccount;
 signals:
 
 public slots:
