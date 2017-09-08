@@ -73,6 +73,7 @@ public:
     QFrame *getCbLTCPricePlacer();
     QFrame *getCbETHPricePlacer();
     QWidget *getChartsTab();
+    QCheckBox *getAutoSpotTraderEnabledCheckBox();
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

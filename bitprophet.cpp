@@ -74,7 +74,6 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
         mAutoSpot = new cbAutoSpotTrader(this);
         QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
     }
-
     // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
     mApiHandler = new cbApiHandler(this);
     // Create GDAXApiHandler
@@ -82,9 +81,6 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
     // Finish startup process
     setProphetState("IDLE");
     // Start bitProphet based on saved settings (or defaults)
-
-
-
     //Prevent QTextEdits from exhausting memory with logged output ( from say() )
     mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
 }

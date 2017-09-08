@@ -221,6 +221,10 @@ QPushButton *bpWindow::getRefreshAutoSpotTraderTransactionsButton() {
     return ui->mRefreshAutoSpotTraderTransactionsButton;
 }
 
+QCheckBox *bpWindow::getAutoSpotTraderEnabledCheckBox() {
+    return ui->mAutoSpotTradeEnabledCheckBox;
+}
+
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;
     mCbSetupWin = NULL;
