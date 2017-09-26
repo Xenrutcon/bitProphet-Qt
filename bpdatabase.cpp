@@ -564,6 +564,30 @@ void bpDatabase::insertAccount( QString name, QString apiKey, QString apiSecret,
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
+void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           query.prepare("INSERT INTO gdaxAccounts (exchange, apiKey, apiSecret,defaultAccount,name) VALUES ('" +
+                         exchange + "','" + apiKey + "','" + apiSecret + "'," + QString().setNum(QVariant(defaultAccount).toInt()) +
+                         ",'" + name + "')");
+           if(query.exec()) {
+              say("insertGdaxAccount() Success");
+           } else {
+              say("insertGdaxAccount() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
@@ -600,6 +624,28 @@ void bpDatabase::deleteAccount(QString id ) {
               say("deleteAccount() Success");
            } else {
               say("deleteAccount() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::deleteGdaxAccount(QString id ) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           query.prepare("DELETE FROM gdaxAccounts WHERE id=" + QVariant(id).toString());
+           if(query.exec()) {
+              say("deleteGdaxAccount() Success");
+           } else {
+              say("deleteGdaxAccount() error:  " + query.lastError().text());
            }
         }
         Db.close();

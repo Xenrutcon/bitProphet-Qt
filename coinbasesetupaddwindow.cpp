@@ -2,8 +2,7 @@
 #include "ui_coinbasesetupaddwindow.h"
 #include <QMessageBox>
 
-coinbaseSetupAddWindow::coinbaseSetupAddWindow(QWidget *parent) :
-    QDialog(parent), ui(new Ui::coinbaseSetupAddWindow),mDb(NULL) {
+coinbaseSetupAddWindow::coinbaseSetupAddWindow(QWidget *parent) :  QDialog(parent), ui(new Ui::coinbaseSetupAddWindow),mDb(NULL) {
     ui->setupUi(this);
     mParent = reinterpret_cast<coinbaseAccountSetupWindow*>(parent);
     setWindowFlag(Qt::WindowCloseButtonHint,false);

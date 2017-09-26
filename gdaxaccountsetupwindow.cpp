@@ -53,13 +53,15 @@ void gdaxAccountSetupWindow::addAccountClicked() {
 
 void gdaxAccountSetupWindow::deleteAccountClicked() {
     mDb = new bpDatabase(this);
-    QString delId = ui->mAccountList->currentItem()->text();
-    std::cout<<delId.toStdString().c_str()<<std::endl;
-    std::string dId(delId.toStdString());
-    delId = dId.substr(0,dId.find(" - ",0)).c_str();
-    std::cout<<"#### "<<dId<<std::endl;
-    if ( mDb->hasTable("gdaxAccounts") ) {
-        mDb->deleteAccount(delId);
+    if ( ui->mAccountList->currentItem() != NULL ) {
+        QString delId = ui->mAccountList->currentItem()->text();
+        std::cout<<delId.toStdString().c_str()<<std::endl;
+        std::string dId(delId.toStdString());
+        delId = dId.substr(0,dId.find(" - ",0)).c_str();
+        std::cout<<"#### "<<dId<<std::endl;
+        if ( mDb->hasTable("gdaxAccounts") ) {
+            mDb->deleteGdaxAccount(delId);
+        }
     }
     delete mDb;
     loadAccountList();

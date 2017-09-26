@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Add GDAX Account</string>
   </property>
   <widget class="QLineEdit" name="mApiKeyEntry">
    <property name="geometry">

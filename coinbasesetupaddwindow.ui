@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add Coinbase Account</string>
   </property>
   <widget class="QPushButton" name="mSaveButton">
    <property name="geometry">

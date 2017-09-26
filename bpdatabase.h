@@ -34,11 +34,13 @@ public:
     bool createAutoSpotTradeHistoryTable();
     void addToCbSpotPriceHistory( QString coin, QString price );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
+    void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange="GDAX");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
     void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
     QList<QString> getAccountList();
     QList<QString> getGdaxAccountList();
     void deleteAccount(QString id );
+    void deleteGdaxAccount(QString id );
     QString getDefaultAccountId();
     void loadAccountByName(coinbaseAccount *target, QString accountName);
     void loadAccountById(coinbaseAccount *target, QString id);
