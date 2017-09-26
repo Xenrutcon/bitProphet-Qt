@@ -50,6 +50,7 @@ public:
     QLineEdit* getDepositFromPayMethodAmount();
     QLineEdit* getWithdrawToPayMethodAmount();
     void killAccSetupWindow();
+    void killGdaxAccSetupWindow();
     QWidget *getAccountsTab();
     QWidget *getTransactionTab();
     QTableWidget *getAccountTablePlacer();

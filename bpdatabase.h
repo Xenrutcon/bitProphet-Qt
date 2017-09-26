@@ -29,6 +29,7 @@ public:
     bool hasTable(QString tableName);
     void createDatabase();
     bool createAccountsTable();
+    bool createGdaxAccountsTable();
     bool createCbSpotPriceHistoryTable();
     bool createAutoSpotTradeHistoryTable();
     void addToCbSpotPriceHistory( QString coin, QString price );
@@ -36,6 +37,7 @@ public:
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
     void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
     QList<QString> getAccountList();
+    QList<QString> getGdaxAccountList();
     void deleteAccount(QString id );
     QString getDefaultAccountId();
     void loadAccountByName(coinbaseAccount *target, QString accountName);

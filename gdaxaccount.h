@@ -13,7 +13,7 @@ class gdaxAccount : public QObject {
 public:
     explicit gdaxAccount(gdaxApiHandler *parent);
     ~gdaxAccount();
-    say(QString sayThis);
+    void say(QString sayThis);
 private:
     QString mPtrName;
     gdaxApiHandler *mParent;

@@ -39,6 +39,15 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
                 say("Click Setup Menu next to enter Api Info.");
             } else { say("Error, Check debug log!"); }
         }
+
+        if ( !mDb->hasTable("gdaxAccounts") ) {
+            if ( mDb->createGdaxAccountsTable() ) {
+                say("gdaxAccounts Table Initialized!");
+            } else { say("Error, Check debug log!"); }
+        } else {
+            say("Found gdaxAccounts Table.");
+        }
+
         //autoSpotTradeHistory
         if ( !mDb->hasTable("autoSpotTradeHistory") ) {
             if ( mDb->createAutoSpotTradeHistoryTable() ) {

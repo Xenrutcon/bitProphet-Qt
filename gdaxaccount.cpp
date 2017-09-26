@@ -13,7 +13,7 @@ gdaxAccount::~gdaxAccount() {
 // METHODS
 /////////
 
-gdaxAccount::say(QString sayThis) {
+void gdaxAccount::say(QString sayThis) {
     mParent->say( "[" + mPtrName + "] " + sayThis);
 }
 

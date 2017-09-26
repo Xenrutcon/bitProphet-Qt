@@ -231,6 +231,11 @@ void bpWindow::killAccSetupWindow() {
     mCbSetupWin = NULL;
 }
 
+void bpWindow::killGdaxAccSetupWindow() {
+    delete mGdaxSetupWin;
+    mGdaxSetupWin = NULL;
+}
+
 ///////////
 //Slots
 ///////////

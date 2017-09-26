@@ -20,6 +20,10 @@ coinbaseAccountSetupWindow::~coinbaseAccountSetupWindow() {
     delete ui;
 }
 
+///////////
+// METHODS
+///////////
+
 void coinbaseAccountSetupWindow::killSetupAddWindow() {
     delete mAddAccountWin;
     mAddAccountWin = NULL;

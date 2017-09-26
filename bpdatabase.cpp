@@ -115,6 +115,35 @@ QList<QString> bpDatabase::getAccountList() {
     return accList;
 }
 
+QList<QString> bpDatabase::getGdaxAccountList() {
+    QList<QString> accList;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from gdaxAccounts WHERE exchange='GDAX'");
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int nameVal = query.record().indexOf("name");
+                  QString nameResult = query.value(nameVal).toString();
+                  accList.append(idResult+" - "+nameResult);
+                  say("id: " + idResult + " name: " + nameResult);
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return accList;
+}
+
 void bpDatabase::getSpotPriceHistoryLast(QString coin,int maxResults, QList<QString> *priceList) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
@@ -328,6 +357,30 @@ bool bpDatabase::createAccountsTable() {
               retVal = true;
            } else {
               say("createAccountsTable() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+bool bpDatabase::createGdaxAccountsTable() {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: CREATE connection ok.");
+           QSqlQuery query;
+           query.prepare("CREATE TABLE gdaxAccounts (id INTEGER PRIMARY KEY AUTOINCREMENT,exchange varchar(64),apiKey varchar(512),apiSecret varchar(512),defaultAccount bool default 0, name VARCHAR(64) );");
+           if(query.exec()) {
+              retVal = true;
+           } else {
+              say("createGdaxAccountsTable() error:  " + query.lastError().text());
            }
         }
         Db.close();
