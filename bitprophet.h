@@ -40,10 +40,16 @@ public:
     //Spot Prices (ie: not gdax market price, coinbase spot price for coinbase buy/sell (stupid, dont use it except for quick reference) )
     bool mAutoCheckSpotPrices;
     int mAutoCheckSpotPricesInterval;
+    //GDAX Prices
+    bool mAutoCheckGDAXPrices;
+    int mAutoCheckGDAXPricesInterval;
     //Simple Trading (non-neural net, simple dumb logix)
-    bool mAutoSpotTrade;
+    bool mAutoSpotTrade;    
     int mAutoSpotTradeInterval;
-    cbAutoSpotTrader *mAutoSpot;    
+
+    //Simple Trading (GDAX)
+    bool mAutoGDAXTrade;
+    int mAutoGDAXTradeInterval;
     //////////////
     // Other junk
     bpWindow *mParent;
@@ -68,7 +74,11 @@ private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
+public:
+    cbAutoSpotTrader *mAutoSpot;
+private:
     gdaxApiHandler *mGDAXApiHandler;
+
 signals:
 
 public slots:

@@ -1,88 +1,89 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(60000),
-    mAutoCheckSpotPrices(true), mAutoCheckSpotPricesInterval(27000), mAutoSpotTrade(0), mAutoSpotTradeInterval(90000),mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL),
-    mGDAXApiHandler(NULL){
-    mParent = reinterpret_cast<bpWindow*>(parent);
-    mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-    // Startup    
-    say("(\\.....\\..........,/)");
-    say(".\\(....|\\.........)/");
-    say(".//\\...| \\......./\\\\");
-    say("(/./\\_#oo#_/\\.\\)");
-    say(".\\/\\..####../\\/");
-    say("......`##'......");
-    say("[!] bitProphet [!]");
-    // Loading
-    mDb = new bpDatabase(this);
-    if ( mDb->fileExists() ) { // Check for database file (Sqllite)
-        // If File does exist, load available data
-        say("Found Database...");
-        if ( mDb->hasAccountsTable() ) {
-            say("Found Accounts Table.");
-            // Check for accounts
+bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(250000),
+    mAutoCheckSpotPrices(false), mAutoCheckSpotPricesInterval(60000),
+    mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
+    mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL), mGDAXApiHandler(NULL) {
+        mParent = reinterpret_cast<bpWindow*>(parent);
+        mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
+        // Startup
+        say("(\\.....\\..........,/)");
+        say(".\\(....|\\.........)/");
+        say(".//\\...| \\......./\\\\");
+        say("(/./\\_#oo#_/\\.\\)");
+        say(".\\/\\..####../\\/");
+        say("......`##'......");
+        say("[!] bitProphet [!]");
+        // Loading
+        mDb = new bpDatabase(this);
+        if ( mDb->fileExists() ) { // Check for database file (Sqllite)
+            // If File does exist, load available data
+            say("Found Database...");
+            if ( mDb->hasAccountsTable() ) {
+                say("Found Accounts Table.");
+                // Check for accounts
+            } else {
+                say("Accounts Table Not Found.");
+                if ( mDb->createAccountsTable() ) {
+                    say("Accounts Table Initialized!");
+                    say("Click Setup Menu next to enter Api Info.");
+                } else { say("Error, Check debug log!"); }
+            }
         } else {
-            say("Accounts Table Not Found.");
+            // If File does not exist, create and initialize
+            say("No Database Found!");
+            mDb->createDatabase();
+            say("Database Created...");
             if ( mDb->createAccountsTable() ) {
                 say("Accounts Table Initialized!");
                 say("Click Setup Menu next to enter Api Info.");
             } else { say("Error, Check debug log!"); }
         }
-    } else {
-        // If File does not exist, create and initialize
-        say("No Database Found!");
-        mDb->createDatabase();
-        say("Database Created...");
-        if ( mDb->createAccountsTable() ) {
-            say("Accounts Table Initialized!");
-            say("Click Setup Menu next to enter Api Info.");
-        } else { say("Error, Check debug log!"); }
-    }
-    //autoSpotTradeHistory
-    if ( !mDb->hasTable("autoSpotTradeHistory") ) {
-        if ( mDb->createAutoSpotTradeHistoryTable() ) {
-            say("autoSpotTradeHistory Table Initialized!");
-        } else { say("Error, Check debug log!"); }
-    } else {
-        say("Found autoSpotTradeHistory Table.");
-    }
-
-    //Price history charts
-    if ( mDb->hasTable("cbSpotPriceHistory") ) {
-        say("Found cbSpotPriceHistory Table.");
-    } else {
-        if ( mDb->createCbSpotPriceHistoryTable() ) {
-            say("Created cbSpotPriceHistory Table.");
+        //autoSpotTradeHistory
+        if ( !mDb->hasTable("autoSpotTradeHistory") ) {
+            if ( mDb->createAutoSpotTradeHistoryTable() ) {
+                say("autoSpotTradeHistory Table Initialized!");
+            } else { say("Error, Check debug log!"); }
         } else {
-            say("ERROR creating cbSpotPriceHistory Table.");
+            say("Found autoSpotTradeHistory Table.");
         }
-    }
 
-    //Spawn Charts on Charts Tab
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"BTC Spot Price History"));
-    mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
-    mSplineChartList.at(0)->mView->show();
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"LTC Spot Price History"));
-    mSplineChartList.at(1)->mView->setGeometry(mParent->getCbLTCPricePlacer()->geometry());
-    mSplineChartList.at(1)->mView->show();
-    mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"ETH Spot Price History"));
-    mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
-    mSplineChartList.at(2)->mView->show();
+        //Price history charts
+        if ( mDb->hasTable("cbSpotPriceHistory") ) {
+            say("Found cbSpotPriceHistory Table.");
+        } else {
+            if ( mDb->createCbSpotPriceHistoryTable() ) {
+                say("Created cbSpotPriceHistory Table.");
+            } else {
+                say("ERROR creating cbSpotPriceHistory Table.");
+            }
+        }
 
-    // Create autoSpot AFTER all db init (or shit will get CRAAAZEEE)
-    if ( mAutoSpotTrade ) {
-        mAutoSpot = new cbAutoSpotTrader(this);
-        QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
-    }
-    // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
-    mApiHandler = new cbApiHandler(this);
-    // Create GDAXApiHandler
-    mGDAXApiHandler = new gdaxApiHandler(this);
-    // Finish startup process
-    setProphetState("IDLE");
-    // Start bitProphet based on saved settings (or defaults)
-    //Prevent QTextEdits from exhausting memory with logged output ( from say() )
-    mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
+        //Spawn Charts on Charts Tab
+        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"BTC Spot Price History"));
+        mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
+        mSplineChartList.at(0)->mView->show();
+        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"LTC Spot Price History"));
+        mSplineChartList.at(1)->mView->setGeometry(mParent->getCbLTCPricePlacer()->geometry());
+        mSplineChartList.at(1)->mView->show();
+        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"ETH Spot Price History"));
+        mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
+        mSplineChartList.at(2)->mView->show();
+
+        // Create autoSpot AFTER all db init (or shit will get CRAAAZEEE)
+        if ( mAutoSpotTrade ) {
+            mAutoSpot = new cbAutoSpotTrader(this);
+            QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
+        }
+        // Create cbApiHandler AFTER all db init (or shit will get CRAAAZEEE)
+        mApiHandler = new cbApiHandler(this);
+        // Create GDAXApiHandler
+        mGDAXApiHandler = new gdaxApiHandler(this);
+        // Finish startup process
+        setProphetState("IDLE");
+        // Start bitProphet based on saved settings (or defaults)
+        //Prevent QTextEdits from exhausting memory with logged output ( from say() )
+        mParent->getStatusOutput()->document()->setMaximumBlockCount(200);
 }
 
 bitProphet::~bitProphet() {

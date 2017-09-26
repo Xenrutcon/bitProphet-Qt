@@ -1,7 +1,7 @@
 #include "bpwindow.h"
 #include "ui_bpwindow.h"
 
-bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow), mCbSetupWin(NULL) {
+bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow), mCbSetupWin(NULL),mGdaxSetupWin(NULL) {
     ui->setupUi(this);
     //bpWindow creates the actual bitProphet
     //bitProphet controls everything
@@ -10,6 +10,7 @@ bpWindow::bpWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::bpWindow),
 
     //Bind Menus
     connect(ui->actionAccount,&QAction::triggered,this, &bpWindow::accountSetupClicked);
+    connect(ui->actionGDAX_Account,&QAction::triggered,this, &bpWindow::accountSetupGDAXClicked);
 }
 
 ///////////
@@ -241,6 +242,16 @@ void bpWindow::accountSetupClicked() {
         mCbSetupWin = new coinbaseAccountSetupWindow(this);
     }
     mCbSetupWin->show();
+}
+
+void bpWindow::accountSetupGDAXClicked() {
+    if ( mGdaxSetupWin != NULL ) {
+        delete mGdaxSetupWin;
+        mGdaxSetupWin = new gdaxAccountSetupWindow(this);
+    } else {
+        mGdaxSetupWin = new gdaxAccountSetupWindow(this);
+    }
+    mGdaxSetupWin->show();
 }
 
 void bpWindow::on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked) {

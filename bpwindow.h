@@ -8,6 +8,7 @@
 #include <QLabel>
 #include "bitprophet.h"
 #include "coinbaseaccountsetupwindow.h"
+#include "gdaxaccountsetupwindow.h"
 
 namespace Ui {
     class bpWindow;
@@ -15,6 +16,7 @@ namespace Ui {
 
 class bitProphet;
 class coinbaseAccountSetupWindow;
+class gdaxAccountSetupWindow;
 class QComboBox;
 
 class bpWindow : public QMainWindow {
@@ -78,8 +80,10 @@ private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;
     coinbaseAccountSetupWindow *mCbSetupWin;
+    gdaxAccountSetupWindow *mGdaxSetupWin;
 private slots:
     void accountSetupClicked();
+    void accountSetupGDAXClicked();
     void on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked);
 };
 

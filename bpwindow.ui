@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -1480,7 +1480,7 @@
     </widget>
     <widget class="QCheckBox" name="mAutoGDAXTradeEnabledCheckBox_3">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -1493,11 +1493,14 @@
      <property name="text">
       <string>Auto Refresh GDAX Price</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QCheckBox" name="mAutoGDAXTradeEnabledCheckBox_2">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -1511,7 +1514,7 @@
      <string>Auto Refresh Spot Price</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -1529,6 +1532,7 @@
      <string>Setup</string>
     </property>
     <addaction name="actionAccount"/>
+    <addaction name="actionGDAX_Account"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1543,7 +1547,7 @@
   </widget>
   <action name="actionAccount">
    <property name="text">
-    <string>Account</string>
+    <string>Accounts</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -1565,6 +1569,11 @@
   <action name="actionDonate">
    <property name="text">
     <string>Donate</string>
+   </property>
+  </action>
+  <action name="actionGDAX_Account">
+   <property name="text">
+    <string>GDAX Accounts</string>
    </property>
   </action>
  </widget>

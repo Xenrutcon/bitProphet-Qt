@@ -42,7 +42,10 @@ SOURCES += \
     cbtransaction.cpp \
     cbtransactiontable.cpp \
     cbautospottrader.cpp \
-    gdaxapihandler.cpp
+    gdaxapihandler.cpp \
+    gdaxaccount.cpp \
+    gdaxaccountsetupwindow.cpp \
+    gdaxsetupaddwindow.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -62,9 +65,14 @@ HEADERS += \
     cbtransaction.h \
     cbtransactiontable.h \
     cbautospottrader.h \
-    gdaxapihandler.h
+    gdaxapihandler.h \
+    gdaxaccount.h \
+    gdaxaccountsetupwindow.h \
+    gdaxsetupaddwindow.h
 
 FORMS += \
         bpwindow.ui \
     coinbaseaccountsetupwindow.ui \
-    coinbasesetupaddwindow.ui
+    coinbasesetupaddwindow.ui \
+    gdaxaccountsetupwindow.ui \
+    gdaxsetupaddwindow.ui

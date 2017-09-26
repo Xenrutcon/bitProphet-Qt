@@ -21,22 +21,22 @@
 
 #include "bpwindow.h"
 #include "bitprophet.h"
-#include "coinbaseaccount.h"
+#include "gdaxaccount.h"
 
 class bpWindow;
 class bitProphet;
-class coinbaseAccount;
+class gdaxAccount;
 
 class gdaxApiHandler : public QObject {
     Q_OBJECT
 public:
     explicit gdaxApiHandler(bitProphet *parent);
-    ~gdaxApiHandler();
-    bitProphet *mParent;
-    void say(QString sayThis);
+    ~gdaxApiHandler();    
+    void say(QString sayThis);    
+private:    
     QString mPtrName;
-private:
-    coinbaseAccount *mAccount;
+    bitProphet *mParent;
+    gdaxAccount *mAccount;
 signals:
 
 public slots:
