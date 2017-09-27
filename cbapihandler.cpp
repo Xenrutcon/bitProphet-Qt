@@ -19,6 +19,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             }
             //Check balance once
             listAccounts();
+            //I dont know why i created the transactionTable here. Move it.
             mTransactionTable = new cbTransactionTable(this);
             //Check for Payment Methods linked to account (Payment methods are used to fund cb and gdax accounts and to withdraw #winnings)
             if ( mAccount->getPaymentMethodCount() < 1 ) {

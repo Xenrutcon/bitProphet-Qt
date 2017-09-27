@@ -307,6 +307,32 @@ QString bpDatabase::getDefaultAccountId() {
     return idResult;
 }
 
+QString bpDatabase::getDefaultGdaxAccountId() {
+    QString idResult = 0;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from gdaxAccounts WHERE defaultAccount=1 and exchange='GDAX'");
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  idResult = query.value(idVal).toString();
+                  say("id: " + idResult);
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return idResult;
+}
+
 void bpDatabase::getAutoSpotBuysForSaleList(QList<QString> *idList,QList<QString> *boughtAtList,QList<QString> *coinAmountList, QString coin) {
     QString idResult;
     QString batResult;
@@ -376,7 +402,7 @@ bool bpDatabase::createGdaxAccountsTable() {
         } else {
            say("Database: CREATE connection ok.");
            QSqlQuery query;
-           query.prepare("CREATE TABLE gdaxAccounts (id INTEGER PRIMARY KEY AUTOINCREMENT,exchange varchar(64),apiKey varchar(512),apiSecret varchar(512),defaultAccount bool default 0, name VARCHAR(64) );");
+           query.prepare("CREATE TABLE gdaxAccounts (id INTEGER PRIMARY KEY AUTOINCREMENT,exchange varchar(64),apiKey varchar(512),apiSecret varchar(512),defaultAccount bool default 0, name VARCHAR(64), passPhrase VARCHAR(2048) );");
            if(query.exec()) {
               retVal = true;
            } else {
@@ -527,6 +553,45 @@ void bpDatabase::loadAccountById(coinbaseAccount *target, QString id) {
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
+void bpDatabase::loadGdaxAccountById(gdaxAccount *target, QString id) {
+    target->mId = id;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from gdaxAccounts WHERE id=" + id);
+            if (query.exec()) {
+               while (query.next()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  int nameVal = query.record().indexOf("name");
+                  target->mName = query.value(nameVal).toString();
+                  int keyVal = query.record().indexOf("apiKey");
+                  target->mApiKey = query.value(keyVal).toString();
+                  int secVal = query.record().indexOf("apiSecret");
+                  target->mApiSecret = query.value(secVal).toString();
+                  int defVal = query.record().indexOf("defaultAccount");
+                  target->mDefaultAccount = query.value(defVal).toBool();
+                  int excVal = query.record().indexOf("exchange");
+                  target->mExchange = query.value(excVal).toString();
+                  int passVal = query.record().indexOf("passPhrase");
+                  target->mPassPhrase = query.value(passVal).toString();
+                  say("id: " + target->mId);
+                  say("name: " + target->mName);
+                  say("Default?: " + QString().setNum(target->mDefaultAccount));
+               }
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
 void bpDatabase::say(QString sayThis) {
     std::cout<<"("<<mPtrName.toStdString().c_str()<<") "<<sayThis.toStdString().c_str()<<std::endl;
 }
@@ -564,7 +629,7 @@ void bpDatabase::insertAccount( QString name, QString apiKey, QString apiSecret,
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
-void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange) {
+void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount, QString passPhrase, QString exchange) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
@@ -573,9 +638,9 @@ void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSec
         } else {
            //say("Database: connection ok.");
            QSqlQuery query;
-           query.prepare("INSERT INTO gdaxAccounts (exchange, apiKey, apiSecret,defaultAccount,name) VALUES ('" +
+           query.prepare("INSERT INTO gdaxAccounts (exchange, apiKey, apiSecret,defaultAccount,name, passPhrase) VALUES ('" +
                          exchange + "','" + apiKey + "','" + apiSecret + "'," + QString().setNum(QVariant(defaultAccount).toInt()) +
-                         ",'" + name + "')");
+                         ",'" + name + "','"+ passPhrase + "')");
            if(query.exec()) {
               say("insertGdaxAccount() Success");
            } else {

@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>8</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -713,6 +713,11 @@
        <string>Auto GDAX Trade (0.25% Fee)</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Page</string>
+     </attribute>
     </widget>
     <widget class="QWidget" name="mTransactionsTab">
      <attribute name="title">

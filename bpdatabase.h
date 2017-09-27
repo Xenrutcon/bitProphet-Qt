@@ -12,11 +12,13 @@
 
 #include "bitprophet.h"
 #include "coinbaseaccount.h"
+#include "gdaxaccount.h"
 
 class bitProphet;
 class coinbaseAccount;
 class spotPrice;
 class bpSplineChart;
+class gdaxAccount;
 
 class bpDatabase : public QObject {
     Q_OBJECT
@@ -34,7 +36,7 @@ public:
     bool createAutoSpotTradeHistoryTable();
     void addToCbSpotPriceHistory( QString coin, QString price );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
-    void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount,  QString exchange="GDAX");
+    void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount, QString passPhrase, QString exchange="GDAX");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
     void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
     QList<QString> getAccountList();
@@ -42,8 +44,10 @@ public:
     void deleteAccount(QString id );
     void deleteGdaxAccount(QString id );
     QString getDefaultAccountId();
+    QString getDefaultGdaxAccountId();
     void loadAccountByName(coinbaseAccount *target, QString accountName);
     void loadAccountById(coinbaseAccount *target, QString id);
+    void loadGdaxAccountById(gdaxAccount *target, QString id);
     void getBtcSpotPriceHistoryLast(int howManyMax, bpSplineChart *chart);
     void getLtcSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);
     void getEthSpotPriceHistoryLast(int howManyMax,bpSplineChart *chart);

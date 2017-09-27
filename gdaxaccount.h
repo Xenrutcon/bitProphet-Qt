@@ -13,6 +13,13 @@ class gdaxAccount : public QObject {
 public:
     explicit gdaxAccount(gdaxApiHandler *parent);
     ~gdaxAccount();
+    QString mId;
+    QString mName;
+    QString mExchange;
+    QString mApiKey;
+    QString mApiSecret;
+    QString mPassPhrase;
+    bool mDefaultAccount;
     void say(QString sayThis);
 private:
     QString mPtrName;

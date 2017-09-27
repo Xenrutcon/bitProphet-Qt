@@ -45,7 +45,8 @@ SOURCES += \
     gdaxapihandler.cpp \
     gdaxaccount.cpp \
     gdaxaccountsetupwindow.cpp \
-    gdaxsetupaddwindow.cpp
+    gdaxsetupaddwindow.cpp \
+    gdaxapirequest.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -68,7 +69,8 @@ HEADERS += \
     gdaxapihandler.h \
     gdaxaccount.h \
     gdaxaccountsetupwindow.h \
-    gdaxsetupaddwindow.h
+    gdaxsetupaddwindow.h \
+    gdaxapirequest.h
 
 FORMS += \
         bpwindow.ui \

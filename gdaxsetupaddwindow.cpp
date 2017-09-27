@@ -32,12 +32,12 @@ void gdaxSetupAddWindow::doneClicked() {
 }
 
 void gdaxSetupAddWindow::saveClicked() {
-    if ( ui->mAccountNameEntry->text().length() > 0 && ui->mApiKeyEntry->text().length() > 0 && ui->mApiSecretEntry->text().length() > 0 ) {
+    if ( ui->mAccountNameEntry->text().length() > 0 && ui->mApiKeyEntry->text().length() > 0 && ui->mApiSecretEntry->text().length() > 0 && ui->mApiPassPhrase->text().length() > 0) {
         //good input :)
         bool check = false;
         if ( ui->mDefaultCheckbox->isChecked() ) { check = true; }
         mDb = new bpDatabase(this);
-        mDb->insertGdaxAccount(ui->mAccountNameEntry->text(),ui->mApiKeyEntry->text(),ui->mApiSecretEntry->text(),check);
+        mDb->insertGdaxAccount(ui->mAccountNameEntry->text(),ui->mApiKeyEntry->text(),ui->mApiSecretEntry->text(),check,ui->mApiPassPhrase->text());
         //die when done
         mParent->show();
         mParent->loadAccountList();
