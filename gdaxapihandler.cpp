@@ -72,3 +72,25 @@ QString gdaxApiHandler::getGdaxApiSecret() {
 QString gdaxApiHandler::getGdaxPassPhrase() {
     return mAccount->mPassPhrase;
 }
+
+///////////////////////
+// RESPONSE PROCESSORS
+///////////////////////
+
+void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
+    QString type = resp->getType();
+    say("Processing Response Type: " + type);
+    if (type == "listGdaxAccounts" ) {
+        say("Got Gdax Wallets...");
+        //listAccountProcessResponse(resp);
+//        if ( mParent->mAutoRefreshGdaxAccount ) {
+//            int timer= mParent->mAutoRefreshGdaxAccountInterval;
+//            //QTimer::singleShot(timer, mParent, SLOT(listGdaxAccountSlot()));
+//        }
+    } else if (type == "gdaxSomething" ) {
+        //processBuyAutoSpotResponse(resp);
+    } else {
+        say("Unknown Response Type: " + type);
+    }
+    say("Done Processing Response Type: " + type);
+}

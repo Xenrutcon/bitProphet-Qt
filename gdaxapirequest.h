@@ -18,8 +18,10 @@
 #include <QJsonObject>
 #include <QByteArray>
 #include "gdaxapihandler.h"
+#include "gdaxapiresponse.h"
 
 class gdaxApiHandler;
+class gdaxApiResponse;
 
 class gdaxApiRequest : public QObject {
     Q_OBJECT
@@ -34,6 +36,7 @@ public:
     void setBody(QString body);
     gdaxApiHandler *getMyHandler();
     void sendRequest();
+    gdaxApiResponse *mResponse;
 private:
     QString getAccessSign();
     gdaxApiHandler *mParent;
@@ -44,7 +47,7 @@ private:
     QString mPath;
     QString mBody;
     QString mAccessKey;
-    bool mDone;
+    bool mDone;    
 signals:
 public slots:
 private slots:

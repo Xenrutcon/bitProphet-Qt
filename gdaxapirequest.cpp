@@ -1,7 +1,7 @@
 #include "gdaxapirequest.h"
 #include <iostream>
 
-gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mNetAccMan(NULL) {
+gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mNetAccMan(NULL), mResponse(NULL) {
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mParent = parent;
     say("GDax Api Request Created.");
@@ -12,6 +12,7 @@ gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mNetAc
 }
 
 gdaxApiRequest::~gdaxApiRequest() {
+    if (mResponse != NULL) { mResponse->deleteLater(); }
     say("GDax Api Request Destroyed.");
 }
 
@@ -98,27 +99,27 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         QJsonParseError error;
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();
-        if ( mType != "anything" ) {
+        if ( mType != "listGdaxAccounts" ) {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }
         QJsonDocument jsonData = QJsonDocument::fromJson(unparsed,&error);
         QJsonObject jsonObj = jsonData.object();
         //COMING SOON..response parsing.
-//        mResponse = new gdaxApiResponse(this,&jsonObj);
-//        mResponse->setType(mType);
-////        mResponse->printResponse();
-//        mParent->mParentProphet->setProphetState("IDLE");
-//        mParent->processResponse(mResponse); //reply and response are deleted HERE
+        mResponse = new gdaxApiResponse(this,&jsonObj);
+        mResponse->setType(mType);
+        mParent->processResponse(mResponse);
+        mParent->mParent->setProphetState("IDLE");
         mNetAccMan->deleteLater();
-        //mResponse->deleteLater();
+        mResponse->deleteLater();
+        mResponse = NULL;
     } else {
         mParent->say("Bad Response, Aborted Request!");
         mParent->say("Response Status: " + QString().setNum(statusCode));
         mParent->say("Response Type: " + mType);
         QByteArray unparsed = reply->readAll();
-        reply->deleteLater();
         mParent->say ("unparsed --- " + unparsed);
+        reply->deleteLater();        
         mNetAccMan->deleteLater();
 
 //        //If this was a special timered call, restart its timer
@@ -126,4 +127,5 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
 //            mParent->processBadListAccountsResponse();
 //        }
     }
+    this->deleteLater(); //After process reponse (or fail to process (with error) ), this request is gone forever.
 }

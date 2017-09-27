@@ -23,11 +23,13 @@
 #include "bitprophet.h"
 #include "gdaxaccount.h"
 #include "gdaxapirequest.h"
+#include "gdaxapiresponse.h"
 
 class bpWindow;
 class bitProphet;
 class gdaxAccount;
 class gdaxApiRequest;
+class gdaxApiResponse;
 
 class gdaxApiHandler : public QObject {
     Q_OBJECT
@@ -38,14 +40,15 @@ public:
     QString getGdaxApiKey();
     QString getGdaxApiSecret();
     QString getGdaxPassPhrase();
-private:    
-    QString mPtrName;
+    void processResponse( gdaxApiResponse *resp );
     bitProphet *mParent;
+private:    
+    QString mPtrName;    
     gdaxAccount *mAccount;    
     void listGdaxAccounts();
 signals:
 
-public slots:
+public slots:    
 };
 
 #endif // GDAXAPIHANDLER_H
