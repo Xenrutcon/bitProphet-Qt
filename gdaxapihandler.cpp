@@ -92,5 +92,6 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
     } else {
         say("Unknown Response Type: " + type);
     }
+    mParent->mParent->getGdaxStatProcessedLabel()->setText(QString().setNum(mParent->mParent->getGdaxStatProcessedLabel()->text().toInt() + 1));
     say("Done Processing Response Type: " + type);
 }

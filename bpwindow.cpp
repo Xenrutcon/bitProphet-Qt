@@ -108,6 +108,39 @@ QLabel *bpWindow::getSellSpotTotalLabel() {
     return ui->mSellSpotTotalLabel;
 }
 
+QLabel *bpWindow::getCbStatRequestsLabel() {
+    return ui->mCbStatRequests;
+}
+
+QLabel *bpWindow::getCbStatResponsesLabel() {
+    return ui->mCbStatResponses;
+}
+
+QLabel *bpWindow::getCbStatProcessedLabel() {
+    return ui->mCbStatProcessed;
+}
+
+QLabel *bpWindow::getCbStatDestroyedLabel() {
+    return ui->mCbStatDestroyed;
+}
+
+QLabel *bpWindow::getGdaxStatRequestsLabel() {
+    return ui->mGdaxStatRequests;
+}
+
+QLabel *bpWindow::getGdaxStatResponsesLabel() {
+    return ui->mGdaxStatResponses;
+}
+
+QLabel *bpWindow::getGdaxStatProcessedLabel() {
+    return ui->mGdaxStatProcessed;
+}
+
+QLabel *bpWindow::getGdaxStatDestroyedLabel() {
+    return ui->mGdaxStatDestroyed;
+}
+
+
 QLineEdit *bpWindow::getBuySpotAmount() {
     return ui->mBuySpotAmount;
 }

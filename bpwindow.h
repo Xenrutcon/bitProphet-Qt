@@ -57,6 +57,7 @@ public:
     QTableWidget *getTransactionTablePlacer();
     QTableWidget *getCbAutoSpotTraderTransactionTablePlacer();
     QLabel *getAccountsNativeBalanceTotalLabel();
+    // Spot Price Labels
     QLabel *getBtcSpotPriceLabel();
     QLabel *getLtcSpotPriceLabel();
     QLabel *getEthSpotPriceLabel();
@@ -70,6 +71,17 @@ public:
     QLabel *getBtcSpotSellPriceLabel();
     QLabel *getLtcSpotSellPriceLabel();
     QLabel *getEthSpotSellPriceLabel();
+    ///////////////////////////////////
+    //Request Stats Labels
+    QLabel *getCbStatRequestsLabel();
+    QLabel *getCbStatResponsesLabel();
+    QLabel *getCbStatProcessedLabel();
+    QLabel *getCbStatDestroyedLabel();
+    QLabel *getGdaxStatRequestsLabel();
+    QLabel *getGdaxStatResponsesLabel();
+    QLabel *getGdaxStatProcessedLabel();
+    QLabel *getGdaxStatDestroyedLabel();
+    ////////////////////////////////////
     QLineEdit *getBuySpotAmount();
     QLineEdit *getSellSpotAmount();
     QFrame *getCbBTCPricePlacer();

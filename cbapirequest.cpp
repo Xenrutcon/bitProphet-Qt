@@ -7,9 +7,13 @@ cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent), mDone(0), m
         uint timestamp = current.toTime_t();
         QString ts = QVariant(timestamp).toString();
         mTimestamp = ts;
+        int newReq = mParent->mParentProphet->mParent->getCbStatRequestsLabel()->text().toInt() + 1;
+        mParent->mParentProphet->mParent->getCbStatRequestsLabel()->setText(QString().setNum(newReq));
 }
 
 cbApiRequest::~cbApiRequest() { 
+    int dedReq = mParent->mParentProphet->mParent->getCbStatDestroyedLabel()->text().toInt() + 1;
+    mParent->mParentProphet->mParent->getCbStatDestroyedLabel()->setText(QString().setNum(dedReq));
     //mParent->say("CBApiRequest Fading...");
 }
 
@@ -110,6 +114,8 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
             mParent->processBadListAccountsResponse();
         }
     }
+    int dedReq = mParent->mParentProphet->mParent->getCbStatResponsesLabel()->text().toInt() + 1;
+    mParent->mParentProphet->mParent->getCbStatResponsesLabel()->setText(QString().setNum(dedReq));
 }
 
 cbApiHandler *cbApiRequest::getMyHandler() {

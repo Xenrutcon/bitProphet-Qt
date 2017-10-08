@@ -1,7 +1,7 @@
 #include "gdaxapirequest.h"
 #include <iostream>
 
-gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mNetAccMan(NULL), mResponse(NULL) {
+gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mResponse(NULL),mNetAccMan(NULL) {
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mParent = parent;
     say("GDax Api Request Created.");
@@ -9,9 +9,13 @@ gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mNetAc
     uint timestamp = current.toTime_t();
     QString ts = QVariant(timestamp).toString();
     mTimestamp = ts;
+    int newReq = mParent->mParent->mParent->getGdaxStatRequestsLabel()->text().toInt() + 1;
+    mParent->mParent->mParent->getGdaxStatRequestsLabel()->setText(QString().setNum(newReq));
 }
 
 gdaxApiRequest::~gdaxApiRequest() {
+    int dedReq = mParent->mParent->mParent->getGdaxStatDestroyedLabel()->text().toInt() + 1;
+    mParent->mParent->mParent->getGdaxStatDestroyedLabel()->setText(QString().setNum(dedReq));
     if (mResponse != NULL) { mResponse->deleteLater(); }
     say("GDax Api Request Destroyed.");
 }
@@ -127,5 +131,7 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
 //            mParent->processBadListAccountsResponse();
 //        }
     }
+    int dedReq = mParent->mParent->mParent->getGdaxStatResponsesLabel()->text().toInt() + 1;
+    mParent->mParent->mParent->getGdaxStatResponsesLabel()->setText(QString().setNum(dedReq));
     this->deleteLater(); //After process reponse (or fail to process (with error) ), this request is gone forever.
 }

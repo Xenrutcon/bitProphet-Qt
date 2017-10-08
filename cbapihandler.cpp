@@ -143,6 +143,7 @@ void cbApiHandler::processResponse( cbApiResponse *resp ) {
     }
     // say("Done Processing Response Type: " + type);
     resp->getParent()->deleteLater();
+    mParentProphet->mParent->getCbStatProcessedLabel()->setText(QString().setNum(mParentProphet->mParent->getCbStatProcessedLabel()->text().toInt() + 1));
 }
 
 
