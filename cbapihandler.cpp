@@ -9,6 +9,8 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
         QString defCbId = mParentProphet->getDb()->getDefaultAccountId();
         if ( defCbId != "0" ) {
             say("Found Default Account. [" + defCbId +"]");
+            mParentProphet->mParent->getAutoSpotTraderEnabledCheckBox()->setEnabled(true);
+            mParentProphet->mParent->getAutoRefreshCbBalanceEnabledCheckBox()->setEnabled(true);
             mAccount = new coinbaseAccount(this);
             //Load Default Account
             mParentProphet->getDb()->loadAccountById(mAccount,defCbId);
@@ -30,8 +32,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
             }
             //say( "KeyLen: " + QString().setNum(mAccount->mApiKey.length()) );
            // say( "SecLen: " + QString().setNum(mAccount->mApiSecret.length()) );
-            //Start Spot Check
-            mParentProphet->mParent->getAutoSpotTraderEnabledCheckBox()->setEnabled(1);
+            //Start Spot Check            
             if ( mParentProphet->mAutoCheckSpotPrices ) {
                 QTimer::singleShot(1000,this,SLOT(fetchSpotPrices()));
             }

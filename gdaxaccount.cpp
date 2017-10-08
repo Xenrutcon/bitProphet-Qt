@@ -4,6 +4,7 @@ gdaxAccount::gdaxAccount(gdaxApiHandler *parent) : QObject(parent) {
     mParent = parent;
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mWalletList.clear();
+    mCbWalletList.clear();
     //say("gdaxAccount Created...");
 }
 

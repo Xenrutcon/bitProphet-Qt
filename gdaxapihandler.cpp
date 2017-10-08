@@ -8,6 +8,7 @@ gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(N
         QString defGdaxId = mParent->getDb()->getDefaultGdaxAccountId();
         if ( defGdaxId != "0" ) {
             say("Found Default GDAX Account. [ " + defGdaxId +" ]");
+            mParent->mParent->getAutoRefreshGdaxBalanceEnabledCheckBox()->setEnabled(true);
             mAccount = new gdaxAccount(this);
             //Load Default Account
             mParent->getDb()->loadGdaxAccountById(mAccount,defGdaxId);
@@ -19,6 +20,8 @@ gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(N
             }
             //Check GDAX balances once
             listGdaxAccounts();
+            //fetch our coinbase accounts and load them into combo boxes for transfers
+            listCoinbaseAccountsAvailableToGdax();
         } else {
             say("GDAX Api Handler Has No Default Account.");
             say("Use Setup Menu to add one.");
@@ -61,6 +64,19 @@ void gdaxApiHandler::listGdaxAccounts() {
     say("Request Sent.");
 }
 
+void gdaxApiHandler::listCoinbaseAccountsAvailableToGdax() {
+    say("Fetching Coinbase Accounts (Available To Gdax)");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("GET");        //list accounts is a GET
+    req->setPath("/coinbase-accounts");  //the url path,etc..
+    req->setBody("");             //no body needed (for this one)
+    req->setType("listCoinbaseAccounts"); //just for us
+    say("Sending Request...");
+    req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
+    say("Request Sent.");
+}
+
 QString gdaxApiHandler::getGdaxApiKey() {
     return mAccount->mApiKey;
 }
@@ -83,12 +99,12 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
     if (type == "listGdaxAccounts" ) {
         say("Got Gdax Wallets...");
         listAccountProcessResponse(resp);
-//        if ( mParent->mAutoRefreshGdaxAccount ) {
-//            int timer= mParent->mAutoRefreshGdaxAccountInterval;
-//            //QTimer::singleShot(timer, mParent, SLOT(listGdaxAccountSlot()));
-//        }
-    } else if (type == "gdaxSomething" ) {
-        //processBuyAutoSpotResponse(resp);
+        if ( mParent->mAutoRefreshGdaxAccount ) {
+            int timer= mParent->mAutoRefreshGdaxAccountInterval;
+            QTimer::singleShot(timer, this, SLOT(listGdaxAccountsSlot()));
+        }
+    } else if (type == "listCoinbaseAccounts" ) {
+        listCoinbaseAccountsProcessResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
@@ -97,10 +113,20 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
 }
 
 void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
+    if ( mAccount->getWalletCount() > 0 ) {
+        for ( int a=0;a<mAccount->getWalletCount();a++) {
+            mAccount->getWallet(a)->deleteLater();
+        }
+        mAccount->clearWallets();
+    }
     QString type = resp->getType();
     say("Processing Response >>> " + type);
     QJsonArray arr = *resp->getResponseArray();
     say("Items: " + QString().setNum(arr.count()) );
+    QComboBox *xferFromTarget = mParent->mParent->getXferFromCbWalletTargetComboBox();
+    QComboBox *xferToSource = mParent->mParent->getXferToCbWalletSourceComboBox();
+    bool addXfers = true;
+    if ( xferFromTarget->count() > 0) { addXfers = false; }
     for(int w=0;w<arr.count();w++) {
         int newWalletId = mAccount->addWallet();
         mAccount->getWallet(newWalletId)->mId = arr.at(w).toObject()["id"].toString(); //store entire string
@@ -115,6 +141,10 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
 //        say("available: " + arr.at(w).toObject()["available"].toString() );
 //        say("hold: " + arr.at(w).toObject()["hold"].toString() );
 //        say("profile_id: " + arr.at(w).toObject()["profile_id"].toString().mid(0,8) );
+        if ( addXfers ) {
+            xferFromTarget->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+            xferToSource->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+        }
     }
     if ( mWalletTableWidget != NULL ) {
         mWalletTableWidget->deleteLater();
@@ -123,3 +153,25 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
     say("Processed " + QString().setNum(mAccount->getWalletCount()) + " Wallets.");
 }
 
+void gdaxApiHandler::listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp ) {
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonArray arr = *resp->getResponseArray();
+    say("Items: " + QString().setNum(arr.count()) );
+    for(int w=0;w<arr.count();w++) {
+
+            say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) );
+            QComboBox *xferFrom = mParent->mParent->getXferFromCbWalletComboBox();
+            QComboBox *xferTo = mParent->mParent->getXferToCbWalletComboBox();
+            xferFrom->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+            xferTo->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+
+    }
+}
+
+/////////
+// Slots
+/////////
+void gdaxApiHandler::listGdaxAccountsSlot() {
+    listGdaxAccounts();
+}

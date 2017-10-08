@@ -37,6 +37,8 @@ public:
     //Account Refresh
     bool mAutoRefreshAccount;
     int mAutoRefreshAccountInterval; //all intervals in milliseconds
+    bool mAutoRefreshGdaxAccount;
+    int mAutoRefreshGdaxAccountInterval; //all intervals in milliseconds
     //Spot Prices (ie: not gdax market price, coinbase spot price for coinbase buy/sell (stupid, dont use it except for quick reference) )
     bool mAutoCheckSpotPrices;
     int mAutoCheckSpotPricesInterval;
@@ -44,7 +46,7 @@ public:
     bool mAutoCheckGDAXPrices;
     int mAutoCheckGDAXPricesInterval;
     //Simple Trading (non-neural net, simple dumb logix)
-    bool mAutoSpotTrade;    
+    bool mAutoSpotTrade;
     int mAutoSpotTradeInterval;
 
     //Simple Trading (GDAX)
@@ -66,6 +68,8 @@ public:
     coinbaseAccount *getHandlerAccount();
     cbApiHandler *getHandler();
     QString findCoinbaseFee(QString dollarAmount);
+    void enableAutoRefreshCbAccount();
+    void disableAutoRefreshCbAccount();
     void enableAutoSpotTrader();
     void disableAutoSpotTrader();
     void disableGDAXTrader();
@@ -74,10 +78,11 @@ private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;
     cbApiHandler *mApiHandler;    
+    gdaxApiHandler *mGDAXApiHandler;
 public:
     cbAutoSpotTrader *mAutoSpot;
 private:
-    gdaxApiHandler *mGDAXApiHandler;
+
 
 signals:
 

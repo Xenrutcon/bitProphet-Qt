@@ -134,6 +134,9 @@
       <property name="text">
        <string>AutoRefresh Balance</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QGroupBox" name="mDepositFromPayMethodGroup">
       <property name="geometry">
@@ -741,6 +744,9 @@
       <property name="text">
        <string>AutoRefresh Balance</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QComboBox" name="mGdaxAccountComboBox">
       <property name="geometry">
@@ -760,32 +766,6 @@
         <width>621</width>
         <height>192</height>
        </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="mTotalNativeValueGdax">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>260</y>
-        <width>121</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_33">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>260</y>
-        <width>101</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Total Native Value $</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="mDepositFromPayMethodGroup_2">
@@ -816,7 +796,7 @@
         <string>Transfer</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepFromComboBox_2">
+      <widget class="QComboBox" name="mXferFromCbWalletCombo">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -836,7 +816,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepToComboBox_2">
+      <widget class="QComboBox" name="mXferFromCbWalletTarget">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -888,7 +868,7 @@
         <string>Transfer</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepFromComboBox_3">
+      <widget class="QComboBox" name="mXferToCbWalletSource">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -908,7 +888,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QComboBox" name="mDepToComboBox_3">
+      <widget class="QComboBox" name="mXferToCbWalletCombo">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -938,7 +918,7 @@
         <x>410</x>
         <y>290</y>
         <width>221</width>
-        <height>301</height>
+        <height>241</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -1226,6 +1206,35 @@
        </property>
        <property name="text">
         <string>Buy</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="mBuySpotGroup_4">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>540</y>
+        <width>221</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Cancel All</string>
+      </property>
+      <widget class="QPushButton" name="mCancelAllGdaxOrders">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>201</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Cancel All GDAX Orders</string>
        </property>
       </widget>
      </widget>

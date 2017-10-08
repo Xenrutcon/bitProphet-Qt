@@ -6,9 +6,10 @@
 
 #include "gdaxapihandler.h"
 #include "gdaxwallet.h"
+#include "coinbasewallet.h"
 class gdaxApiHandler;
 class gdaxWallet;
-
+class coinbaseWallet;
 
 class gdaxAccount : public QObject {
     Q_OBJECT
@@ -31,6 +32,7 @@ private:
     QString mPtrName;
     gdaxApiHandler *mParent;
     QList<gdaxWallet*> mWalletList;
+    QList<coinbaseWallet*> mCbWalletList;
 signals:        
 public slots:
 };

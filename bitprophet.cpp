@@ -3,7 +3,7 @@
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(240000),
     mAutoCheckSpotPrices(false), mAutoCheckSpotPricesInterval(60000),
     mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
-    mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL), mGDAXApiHandler(NULL) {
+    mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL),mAutoSpot(NULL) {
         mParent = reinterpret_cast<bpWindow*>(parent);
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
         // Startup
@@ -328,6 +328,15 @@ void bitProphet::enableGDAXTrader() {
 //    mAutoSpotTrade = true;
 //    mAutoSpot = new cbAutoSpotTrader(this);
 //    QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
+}
+
+void bitProphet::enableAutoRefreshCbAccount() {
+    mAutoRefreshAccount = true;
+    QTimer::singleShot(mAutoRefreshAccountInterval,this,SLOT(listAccountSlot()));
+}
+
+void bitProphet::disableAutoRefreshCbAccount() {
+    mAutoRefreshAccount = false;
 }
 
 void bitProphet::listAccountSlot() {

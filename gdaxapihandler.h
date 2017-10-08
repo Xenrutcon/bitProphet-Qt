@@ -43,16 +43,20 @@ public:
     QString getGdaxApiSecret();
     QString getGdaxPassPhrase();
     void processResponse( gdaxApiResponse *resp );
-    void listAccountProcessResponse(gdaxApiResponse *resp );
     bitProphet *mParent;
 private:    
     QString mPtrName;    
     gdaxAccount *mAccount;    
     void listGdaxAccounts();
+    void listAccountProcessResponse(gdaxApiResponse *resp );
+    void listCoinbaseAccountsAvailableToGdax();
+    void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );
     gdaxWalletTable *mWalletTableWidget;
 signals:
 
 public slots:    
+private slots:
+    void listGdaxAccountsSlot();
 };
 
 #endif // GDAXAPIHANDLER_H

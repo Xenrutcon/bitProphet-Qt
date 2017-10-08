@@ -90,7 +90,16 @@ public:
     QFrame *getCbLTCPricePlacer();
     QFrame *getCbETHPricePlacer();
     QWidget *getChartsTab();
+    ////////////////////////
+    // Checkboxes, etc
     QCheckBox *getAutoSpotTraderEnabledCheckBox();
+    QCheckBox *getAutoRefreshGdaxBalanceEnabledCheckBox();
+    QCheckBox *getAutoRefreshCbBalanceEnabledCheckBox();
+    QComboBox *getXferFromCbWalletComboBox();
+    QComboBox *getXferToCbWalletComboBox();
+    QComboBox *getXferFromCbWalletTargetComboBox();
+    QComboBox *getXferToCbWalletSourceComboBox();
+    /////////////////////////////////////////////
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;
@@ -100,6 +109,7 @@ private slots:
     void accountSetupClicked();
     void accountSetupGDAXClicked();
     void on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked);
+    void on_mAutoRefreshBalanceCheckBox_toggled(bool checked);
 };
 
 #endif // BPWINDOW_H

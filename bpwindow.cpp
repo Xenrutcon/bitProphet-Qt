@@ -226,6 +226,22 @@ QComboBox* bpWindow::getSellSpotTypeComboBox() {
     return ui->mSellSpotTypeComboBox;
 }
 
+QComboBox* bpWindow::getXferFromCbWalletComboBox() {
+    return ui->mXferFromCbWalletCombo;
+}
+
+QComboBox* bpWindow::getXferToCbWalletComboBox() {
+    return ui->mXferToCbWalletCombo;
+}
+
+QComboBox* bpWindow::getXferFromCbWalletTargetComboBox() {
+    return ui->mXferFromCbWalletTarget;
+}
+
+QComboBox* bpWindow::getXferToCbWalletSourceComboBox() {
+    return ui->mXferToCbWalletSource;
+}
+
 QLineEdit* bpWindow::getDepositFromPayMethodAmount() {
     return ui->mDepositFromAmount;
 }
@@ -270,6 +286,15 @@ QCheckBox *bpWindow::getAutoSpotTraderEnabledCheckBox() {
     return ui->mAutoSpotTradeEnabledCheckBox;
 }
 
+QCheckBox *bpWindow::getAutoRefreshGdaxBalanceEnabledCheckBox() {
+    return ui->mAutoRefreshGdaxBalanceCheckBox;
+}
+
+QCheckBox *bpWindow::getAutoRefreshCbBalanceEnabledCheckBox() {
+    return ui->mAutoRefreshBalanceCheckBox;
+}
+
+
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;
     mCbSetupWin = NULL;
@@ -310,5 +335,15 @@ void bpWindow::on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked) {
     } else {
         mProphet->say("Disabling Auto Spot Trader.");
         mProphet->disableAutoSpotTrader();
+    }
+}
+
+void bpWindow::on_mAutoRefreshBalanceCheckBox_toggled(bool checked) {
+    if ( checked ) {
+        mProphet->say("Enabling AutoRefreshCbAccount.");
+        mProphet->enableAutoRefreshCbAccount();
+    } else {
+        mProphet->say("Disabling AutoRefreshCbAccount.");
+        mProphet->disableAutoRefreshCbAccount();
     }
 }
