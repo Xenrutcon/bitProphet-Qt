@@ -46,8 +46,20 @@ QTableWidget *bpWindow::getCbAutoSpotTraderTransactionTablePlacer() {
     return ui->mCbAutoSpotTraderTransactionTablePlacer;
 }
 
+QTableWidget *bpWindow::getTransactionTablePlacer() {
+    return ui->mCbTransactionTablePlacer;
+}
+
+QTableWidget *bpWindow::getGdaxAccountTablePlacer() {
+    return ui->mGdaxAccountTablePlacer;
+}
+
 QWidget *bpWindow::getAccountsTab() {
     return ui->mCoinbaseTab;
+}
+
+QWidget *bpWindow::getGdaxAccountsTab() {
+    return ui->mGdaxTab;
 }
 
 QLabel *bpWindow::getAccountsNativeBalanceTotalLabel() {
@@ -169,9 +181,8 @@ QWidget *bpWindow::getTransactionTab() {
     return ui->mTransactionsTab;
 }
 
-QTableWidget *bpWindow::getTransactionTablePlacer() {
-    return ui->mCbTransactionTablePlacer;
-}
+
+
 
 
 

@@ -24,12 +24,14 @@
 #include "gdaxaccount.h"
 #include "gdaxapirequest.h"
 #include "gdaxapiresponse.h"
+#include "gdaxwallettable.h"
 
 class bpWindow;
 class bitProphet;
 class gdaxAccount;
 class gdaxApiRequest;
 class gdaxApiResponse;
+class gdaxWalletTable;
 
 class gdaxApiHandler : public QObject {
     Q_OBJECT
@@ -41,11 +43,13 @@ public:
     QString getGdaxApiSecret();
     QString getGdaxPassPhrase();
     void processResponse( gdaxApiResponse *resp );
+    void listAccountProcessResponse(gdaxApiResponse *resp );
     bitProphet *mParent;
 private:    
     QString mPtrName;    
     gdaxAccount *mAccount;    
     void listGdaxAccounts();
+    gdaxWalletTable *mWalletTableWidget;
 signals:
 
 public slots:    

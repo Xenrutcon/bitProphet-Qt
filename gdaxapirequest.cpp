@@ -17,7 +17,7 @@ gdaxApiRequest::~gdaxApiRequest() {
     int dedReq = mParent->mParent->mParent->getGdaxStatDestroyedLabel()->text().toInt() + 1;
     mParent->mParent->mParent->getGdaxStatDestroyedLabel()->setText(QString().setNum(dedReq));
     if (mResponse != NULL) { mResponse->deleteLater(); }
-    say("GDax Api Request Destroyed.");
+    //say("GDax Api Request Destroyed.");
 }
 
 ///////////
@@ -73,7 +73,7 @@ void gdaxApiRequest::sendRequest() {
         mParent->say("URL: " + url + "\n-----\nSSL VERSION: " + QSslSocket::sslLibraryBuildVersionString() + "\nSSL Supported? -> "+QString().setNum(QSslSocket::supportsSsl())+"\n----\n");
     }
     httpsRequest.setUrl(QUrl(url));
-    say("URL: " + url);
+    //say("URL: " + url);
     //say("key: " + mParent->getGdaxApiKey());
     QByteArray version("2016-03-03"); //stop hardcoding this... eventually...
     httpsRequest.setHeader(QNetworkRequest::ServerHeader,"application/json");
@@ -108,9 +108,13 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
             mParent->say ("unparsed --- " + unparsed);
         }
         QJsonDocument jsonData = QJsonDocument::fromJson(unparsed,&error);
+        //say("JSon error? >>> " + error.errorString());
+        //say("Data: " + QString(jsonData.toJson().toStdString().c_str()));
+        QJsonArray jsonArr = jsonData.array();
+        //say ("Array SIZE >>>>>>>>>>>>> " + QString().setNum(jsonArr.count()));
         QJsonObject jsonObj = jsonData.object();
         //COMING SOON..response parsing.
-        mResponse = new gdaxApiResponse(this,&jsonObj);
+        mResponse = new gdaxApiResponse(this,&jsonObj,&jsonArr);
         mResponse->setType(mType);
         mParent->processResponse(mResponse);
         mParent->mParent->setProphetState("IDLE");

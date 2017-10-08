@@ -1,14 +1,15 @@
 #include "gdaxapiresponse.h"
 
-gdaxApiResponse::gdaxApiResponse(gdaxApiRequest *parent,QJsonObject *obj) : QObject(parent) {
+gdaxApiResponse::gdaxApiResponse(gdaxApiRequest *parent,QJsonObject *obj, QJsonArray *arr) : QObject(parent) {
     mParent = parent;
     mResponseContent = obj;
-    say("gdaxApiResponse Created.");
+    mResponseArray = arr;
+    //say("gdaxApiResponse Created.");
 }
 
 
 gdaxApiResponse::~gdaxApiResponse() {
-    say("gdaxApiResponse Destroyed.");
+    //say("gdaxApiResponse Destroyed.");
 }
 
 ///////////
@@ -33,6 +34,10 @@ gdaxApiRequest *gdaxApiResponse::getParent() {
 
 QJsonObject *gdaxApiResponse::getResponseContent() {
     return mResponseContent;
+}
+
+QJsonArray *gdaxApiResponse::getResponseArray() {
+    return mResponseArray;
 }
 
 /////////

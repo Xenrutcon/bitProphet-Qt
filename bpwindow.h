@@ -52,8 +52,10 @@ public:
     void killAccSetupWindow();
     void killGdaxAccSetupWindow();
     QWidget *getAccountsTab();
+    QWidget *getGdaxAccountsTab();
     QWidget *getTransactionTab();
     QTableWidget *getAccountTablePlacer();
+    QTableWidget *getGdaxAccountTablePlacer();
     QTableWidget *getTransactionTablePlacer();
     QTableWidget *getCbAutoSpotTraderTransactionTablePlacer();
     QLabel *getAccountsNativeBalanceTotalLabel();

@@ -1,6 +1,6 @@
 #include "bitprophet.h"
 
-bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(250000),
+bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(240000),
     mAutoCheckSpotPrices(false), mAutoCheckSpotPricesInterval(60000),
     mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
     mDb(NULL), mApiHandler(NULL), mAutoSpot(NULL), mGDAXApiHandler(NULL) {
@@ -68,16 +68,18 @@ bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(
             }
         }
 
-        //Spawn Charts on Charts Tab
-        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"BTC Spot Price History"));
-        mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
-        mSplineChartList.at(0)->mView->show();
-        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"LTC Spot Price History"));
-        mSplineChartList.at(1)->mView->setGeometry(mParent->getCbLTCPricePlacer()->geometry());
-        mSplineChartList.at(1)->mView->show();
-        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"ETH Spot Price History"));
-        mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
-        mSplineChartList.at(2)->mView->show();
+        //Spawn Charts on Charts Tab  (it was bullshit, cancelling this)
+        //There will be more charts, but not this way and not for the SPOT prices.
+        //This is what happens when you want to show off without doing the work...
+//        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"BTC Spot Price History"));
+//        mSplineChartList.at(0)->mView->setGeometry(mParent->getCbBTCPricePlacer()->geometry());
+//        mSplineChartList.at(0)->mView->show();
+//        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"LTC Spot Price History"));
+//        mSplineChartList.at(1)->mView->setGeometry(mParent->getCbLTCPricePlacer()->geometry());
+//        mSplineChartList.at(1)->mView->show();
+//        mSplineChartList.append(new bpSplineChart(mParent->getChartsTab(),"ETH Spot Price History"));
+//        mSplineChartList.at(2)->mView->setGeometry(mParent->getCbETHPricePlacer()->geometry());
+//        mSplineChartList.at(2)->mView->show();
 
         // Create autoSpot AFTER all db init (or shit will get CRAAAZEEE)
         if ( mAutoSpotTrade ) {

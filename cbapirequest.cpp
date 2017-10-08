@@ -2,7 +2,7 @@
 
 cbApiRequest::cbApiRequest (cbApiHandler *parent) : mParent(parent), mDone(0), mNetAccMan(NULL) ,mResponse(NULL){
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
-        //mParent->say("CBApiRequest Created!");
+        mParent->say("CBApiRequest Created!");
         QDateTime current(QDateTime::currentDateTime());
         uint timestamp = current.toTime_t();
         QString ts = QVariant(timestamp).toString();
@@ -80,7 +80,7 @@ void cbApiRequest::requestFinished(QNetworkReply *reply) {
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     mDone = 1;
     if ( statusCode == 200 || statusCode == 201 ) {
-        //mParent->say("Finished Request Type: " + mType);
+        mParent->say("Finished Request Type: " + mType);
         QJsonParseError error;
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();

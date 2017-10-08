@@ -5,7 +5,9 @@
 
 
 #include "gdaxapihandler.h"
+#include "gdaxwallet.h"
 class gdaxApiHandler;
+class gdaxWallet;
 
 
 class gdaxAccount : public QObject {
@@ -21,9 +23,14 @@ public:
     QString mPassPhrase;
     bool mDefaultAccount;
     void say(QString sayThis);
+    int addWallet();
+    gdaxWallet* getWallet(int index);
+    int getWalletCount();
+    void clearWallets();
 private:
     QString mPtrName;
     gdaxApiHandler *mParent;
+    QList<gdaxWallet*> mWalletList;
 signals:        
 public slots:
 };
