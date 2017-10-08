@@ -99,7 +99,9 @@ public:
     QComboBox *getXferToCbWalletComboBox();
     QComboBox *getXferFromCbWalletTargetComboBox();
     QComboBox *getXferToCbWalletSourceComboBox();
-    /////////////////////////////////////////////
+    QComboBox *getPlaceGdaxLimitSellTargetComboBox();
+    QComboBox *getPlaceGdaxLimitBuySourceComboBox();
+    ////////////////////////////////////////////////
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

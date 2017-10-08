@@ -242,6 +242,15 @@ QComboBox* bpWindow::getXferToCbWalletSourceComboBox() {
     return ui->mXferToCbWalletSource;
 }
 
+QComboBox* bpWindow::getPlaceGdaxLimitSellTargetComboBox() {
+    return ui->mPlaceGdaxLimitSellTarget;
+}
+
+QComboBox* bpWindow::getPlaceGdaxLimitBuySourceComboBox() {
+    return ui->mPlaceGdaxLimitBuySource;
+}
+
+
 QLineEdit* bpWindow::getDepositFromPayMethodAmount() {
     return ui->mDepositFromAmount;
 }

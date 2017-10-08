@@ -125,8 +125,12 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
     say("Items: " + QString().setNum(arr.count()) );
     QComboBox *xferFromTarget = mParent->mParent->getXferFromCbWalletTargetComboBox();
     QComboBox *xferToSource = mParent->mParent->getXferToCbWalletSourceComboBox();
+    QComboBox *placeLimitBuySource = mParent->mParent->getPlaceGdaxLimitBuySourceComboBox();
+    QComboBox *placeLimitSellTarget = mParent->mParent->getPlaceGdaxLimitSellTargetComboBox();
+    bool addLimitSellUsdWallets = true;
     bool addXfers = true;
     if ( xferFromTarget->count() > 0) { addXfers = false; }
+    if ( placeLimitBuySource ->count() > 0) { addLimitSellUsdWallets = false; }
     for(int w=0;w<arr.count();w++) {
         int newWalletId = mAccount->addWallet();
         mAccount->getWallet(newWalletId)->mId = arr.at(w).toObject()["id"].toString(); //store entire string
@@ -144,6 +148,12 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
         if ( addXfers ) {
             xferFromTarget->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
             xferToSource->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+        }
+        if ( addLimitSellUsdWallets ) {
+            if ( arr.at(w).toObject()["currency"].toString() == "USD" ) {
+                placeLimitBuySource->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]", QVariant(arr.at(w).toObject()["id"].toString()) );
+                placeLimitSellTarget->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]", QVariant(arr.at(w).toObject()["id"].toString()) );
+            }
         }
     }
     if ( mWalletTableWidget != NULL ) {
