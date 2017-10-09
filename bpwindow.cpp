@@ -251,6 +251,14 @@ QComboBox* bpWindow::getPlaceGdaxLimitBuySourceComboBox() {
 }
 
 
+QComboBox* bpWindow::getPlaceGdaxLimitBuyTypeComboBox() {
+    return ui->mPlaceLimitBuyType;
+}
+
+QComboBox* bpWindow::getPlaceGdaxLimitSellTypeComboBox() {
+    return ui->mPlaceLimitSellType;
+}
+
 QLineEdit* bpWindow::getDepositFromPayMethodAmount() {
     return ui->mDepositFromAmount;
 }
@@ -265,6 +273,24 @@ QLineEdit* bpWindow::getXferFromCoinbaseAmount() {
 
 QLineEdit* bpWindow::getXferToCoinbaseAmount() {
     return ui->mXferToCoinbaseAmount;
+}
+
+
+QLineEdit* bpWindow::getPlaceLimitBuyAmount() {
+    return ui->mPlaceLimitBuyAmount;
+}
+
+QLineEdit* bpWindow::getPlaceLimitBuyPrice() {
+    return ui->mPlaceLimitBuyPrice;
+}
+
+//mPlaceLimitSellAmount
+QLineEdit* bpWindow::getPlaceLimitSellAmount() {
+    return ui->mPlaceLimitSellAmount;
+}
+
+QLineEdit* bpWindow::getPlaceLimitSellPrice() {
+    return ui->mPlaceLimitSellPrice;
 }
 
 QPushButton* bpWindow::getDepositFromPayMethodButton() {
@@ -379,4 +405,16 @@ void bpWindow::on_mGdaxTransferFrom_released() {
 
 void bpWindow::on_mGdaxTransferTo_released() {
     mProphet->manualGdaxTransferToClicked();
+}
+
+void bpWindow::on_mPlaceGdaxLimitBuy_released() {
+    mProphet->manualPlaceGdaxLimitBuyClicked();
+}
+
+void bpWindow::on_mPlaceGdaxLimitSell_released() {
+    mProphet->manualPlaceGdaxLimitSellClicked();
+}
+
+void bpWindow::on_mCancelAllGdaxOrders_released() {
+    mProphet->cancelAllGdaxOrders();
 }

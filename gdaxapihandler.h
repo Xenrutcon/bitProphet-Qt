@@ -44,6 +44,9 @@ public:
     QString getGdaxPassPhrase();
     void xferFromCoinbaseToGdax(QString fromAccId, QString amount,QString currency);
     void xferFromGdaxToCoinbase(QString fromAccId, QString amount,QString currency);
+    void placeGdaxLimitBuy(QString prodId,QString size, QString price);
+    void placeGdaxLimitSell(QString prodId,QString size, QString price);
+    void cancelAllGdaxOrders();
     void processResponse( gdaxApiResponse *resp );
     bitProphet *mParent;
 private:    

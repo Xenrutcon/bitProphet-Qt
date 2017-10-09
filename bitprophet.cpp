@@ -343,7 +343,33 @@ void bitProphet::manualGdaxTransferToClicked() {
     }
 }
 
+void bitProphet::manualPlaceGdaxLimitBuyClicked() {
+    QString productId("-USD");
+    QString size("");
+    QString price("");
+    QString side("buy");
+    productId.prepend( mParent->getPlaceGdaxLimitBuyTypeComboBox()->currentText() );
+    size = mParent->getPlaceLimitBuyAmount()->text();
+    price = mParent->getPlaceLimitBuyPrice()->text();
+    say("Placing Limit Buy - " + size + " of " + productId.mid(0,3) + " at $" + price);
+    mGDAXApiHandler->placeGdaxLimitBuy(productId,size,price);
+}
 
+void bitProphet::manualPlaceGdaxLimitSellClicked() {
+    QString productId("-USD");
+    QString size("");
+    QString price("");
+    QString side("sell");
+    productId.prepend( mParent->getPlaceGdaxLimitSellTypeComboBox()->currentText() );
+    size = mParent->getPlaceLimitSellAmount()->text();
+    price = mParent->getPlaceLimitSellPrice()->text();
+    say("Placing Limit Sell - " + size + " of " + productId.mid(0,3) + " at $" + price);
+    mGDAXApiHandler->placeGdaxLimitSell(productId,size,price);
+}
+
+void bitProphet::cancelAllGdaxOrders() {
+    mGDAXApiHandler->cancelAllGdaxOrders();
+}
 
 /////////
 // Slots

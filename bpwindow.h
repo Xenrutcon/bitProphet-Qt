@@ -92,6 +92,10 @@ public:
     ////////////////////////////////////
     QLineEdit *getBuySpotAmount();
     QLineEdit *getSellSpotAmount();
+    QLineEdit *getPlaceLimitBuyAmount();
+    QLineEdit *getPlaceLimitBuyPrice();
+    QLineEdit *getPlaceLimitSellAmount();
+    QLineEdit *getPlaceLimitSellPrice();
     QFrame *getCbBTCPricePlacer();
     QFrame *getCbLTCPricePlacer();
     QFrame *getCbETHPricePlacer();
@@ -107,7 +111,9 @@ public:
     QComboBox *getXferToCbWalletSourceComboBox();
     QComboBox *getPlaceGdaxLimitSellTargetComboBox();
     QComboBox *getPlaceGdaxLimitBuySourceComboBox();
-    ////////////////////////////////////////////////
+    QComboBox *getPlaceGdaxLimitBuyTypeComboBox();
+    QComboBox *getPlaceGdaxLimitSellTypeComboBox();
+    ///////////////////////////////////////////////
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;
@@ -120,6 +126,9 @@ private slots:
     void on_mAutoRefreshBalanceCheckBox_toggled(bool checked);
     void on_mGdaxTransferFrom_released();
     void on_mGdaxTransferTo_released();
+    void on_mPlaceGdaxLimitBuy_released();
+    void on_mPlaceGdaxLimitSell_released();
+    void on_mCancelAllGdaxOrders_released();
 };
 
 #endif // BPWINDOW_H

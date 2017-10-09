@@ -87,6 +87,8 @@ void gdaxApiRequest::sendRequest() {
         mNetAccMan->post(httpsRequest, QByteArray(mBody.toStdString().c_str()) );
     } else if ( mMethod == "GET" ) {
         mNetAccMan->get(httpsRequest);
+    } else if ( mMethod == "DELETE" ) {
+        mNetAccMan->deleteResource(httpsRequest);
     }
     connect(mNetAccMan,SIGNAL(finished(QNetworkReply*)),this,SLOT(requestFinished(QNetworkReply*)));
 }

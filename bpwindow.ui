@@ -764,7 +764,7 @@
         <x>10</x>
         <y>70</y>
         <width>621</width>
-        <height>192</height>
+        <height>161</height>
        </rect>
       </property>
      </widget>
@@ -772,7 +772,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>280</y>
+        <y>240</y>
         <width>191</width>
         <height>141</height>
        </rect>
@@ -847,7 +847,7 @@
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>280</y>
+        <y>240</y>
         <width>191</width>
         <height>141</height>
        </rect>
@@ -922,9 +922,9 @@
       <property name="geometry">
        <rect>
         <x>410</x>
-        <y>290</y>
+        <y>250</y>
         <width>221</width>
-        <height>241</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="lineWidth">
@@ -941,20 +941,20 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>420</y>
+        <y>400</y>
         <width>191</width>
-        <height>171</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="title">
-       <string>Place Limit Buy</string>
+       <string>Place Limit Buy (No Fee)</string>
       </property>
-      <widget class="QLineEdit" name="mBuySpotAmount_2">
+      <widget class="QLineEdit" name="mPlaceLimitBuyAmount">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>171</width>
+         <x>60</x>
+         <y>60</y>
+         <width>121</width>
          <height>20</height>
         </rect>
        </property>
@@ -966,30 +966,17 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>100</y>
+         <y>120</y>
          <width>171</width>
          <height>22</height>
         </rect>
        </property>
       </widget>
-      <widget class="QLabel" name="mBuySpotFeeLabel_2">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>40</y>
-         <width>101</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>$</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="mBuySpotTypeComboBox_2">
+      <widget class="QComboBox" name="mPlaceLimitBuyType">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
+         <y>30</y>
          <width>171</width>
          <height>22</height>
         </rect>
@@ -1010,37 +997,11 @@
         </property>
        </item>
       </widget>
-      <widget class="QLabel" name="label_36">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>21</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fee</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_37">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>40</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0.25%</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_38">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
+         <y>150</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -1053,7 +1014,7 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>130</y>
+         <y>150</y>
          <width>121</width>
          <height>20</height>
         </rect>
@@ -1062,15 +1023,15 @@
         <string>$</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="mBuySpotForPaymentMethodButton_2">
+      <widget class="QPushButton" name="mPlaceGdaxLimitBuy">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>140</y>
-         <width>41</width>
+         <x>10</x>
+         <y>170</y>
+         <width>171</width>
          <height>21</height>
         </rect>
        </property>
@@ -1078,25 +1039,12 @@
         <string>Buy</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QGroupBox" name="mBuySpotGroup_3">
-      <property name="geometry">
-       <rect>
-        <x>210</x>
-        <y>420</y>
-        <width>191</width>
-        <height>171</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Place Limit Sell</string>
-      </property>
-      <widget class="QLineEdit" name="mBuySpotAmount_3">
+      <widget class="QLineEdit" name="mPlaceLimitBuyPrice">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>171</width>
+         <x>60</x>
+         <y>90</y>
+         <width>121</width>
          <height>20</height>
         </rect>
        </property>
@@ -1104,34 +1052,60 @@
         <string>0.0</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_33">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>63</y>
+         <width>47</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Amount</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_36">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>47</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Price</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="mBuySpotGroup_3">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>400</y>
+        <width>191</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Place Limit Sell (No Fee)</string>
+      </property>
       <widget class="QComboBox" name="mPlaceGdaxLimitSellTarget">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>100</y>
+         <y>120</y>
          <width>171</width>
          <height>22</height>
         </rect>
        </property>
       </widget>
-      <widget class="QLabel" name="mBuySpotFeeLabel_3">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>40</y>
-         <width>101</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>$</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="mBuySpotTypeComboBox_3">
+      <widget class="QComboBox" name="mPlaceLimitSellType">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
+         <y>30</y>
          <width>171</width>
          <height>22</height>
         </rect>
@@ -1152,37 +1126,11 @@
         </property>
        </item>
       </widget>
-      <widget class="QLabel" name="label_39">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>21</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Fee</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_40">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>40</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0.25%</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_41">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
+         <y>150</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -1195,7 +1143,7 @@
        <property name="geometry">
         <rect>
          <x>60</x>
-         <y>130</y>
+         <y>150</y>
          <width>121</width>
          <height>20</height>
         </rect>
@@ -1204,20 +1152,72 @@
         <string>$</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="mBuySpotForPaymentMethodButton_3">
+      <widget class="QPushButton" name="mPlaceGdaxLimitSell">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>140</y>
-         <width>41</width>
+         <x>10</x>
+         <y>170</y>
+         <width>171</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
-        <string>Buy</string>
+        <string>Sell</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="mPlaceLimitSellAmount">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>60</y>
+         <width>121</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0.0</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="mPlaceLimitSellPrice">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>90</y>
+         <width>121</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0.0</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_37">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>87</y>
+         <width>47</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Price</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_39">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>47</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Amount</string>
        </property>
       </widget>
      </widget>
@@ -1225,7 +1225,7 @@
       <property name="geometry">
        <rect>
         <x>410</x>
-        <y>540</y>
+        <y>450</y>
         <width>221</width>
         <height>51</height>
        </rect>

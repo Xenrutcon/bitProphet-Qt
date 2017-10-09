@@ -79,6 +79,9 @@ public:
     void enableGDAXTrader();
     void manualGdaxTransferFromClicked();
     void manualGdaxTransferToClicked();
+    void manualPlaceGdaxLimitBuyClicked();
+    void manualPlaceGdaxLimitSellClicked();
+    void cancelAllGdaxOrders();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;

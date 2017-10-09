@@ -114,6 +114,48 @@ void gdaxApiHandler::xferFromGdaxToCoinbase(QString fromAccId, QString amount,QS
     req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
 }
 
+void  gdaxApiHandler::placeGdaxLimitBuy(QString prodId,QString size, QString price) {
+    say("Placing Limit Buy " + size + " of " + prodId + ".");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");        //list accounts is a GET
+    req->setPath("/orders");  //the url path,etc..
+    req->setBody("{"
+                 "\"size\": " + size + ","
+                 "\"price\": \"" + price + "\"," +
+                 "\"product_id\": \"" + prodId + "\"," +
+                 "\"side\": \"buy\"" +
+                 "}");
+    req->setType("placeGdaxLimitBuy");
+    req->sendRequest();
+}
+
+void  gdaxApiHandler::placeGdaxLimitSell(QString prodId,QString size, QString price) {
+    say("Placing Limit Sell " + size + " of " + prodId + ".");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");        //list accounts is a GET
+    req->setPath("/orders");  //the url path,etc..
+    req->setBody("{"
+                 "\"size\": " + size + ","
+                 "\"price\": \"" + price + "\"," +
+                 "\"product_id\": \"" + prodId + "\"," +
+                 "\"side\": \"sell\"" +
+                 "}");
+    req->setType("placeGdaxLimitSell");
+    req->sendRequest();
+}
+
+void gdaxApiHandler::cancelAllGdaxOrders() {
+    say("Cancelling All GDAX Orders.");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("DELETE");        //list accounts is a GET
+    req->setPath("/orders");  //the url path,etc..
+    req->setBody("");             //no body needed (for this one)
+    req->setType("cancelAllGdaxOrders"); //just for us
+    req->sendRequest();
+}
 
 QString gdaxApiHandler::getGdaxApiKey() {
     return mAccount->mApiKey;
