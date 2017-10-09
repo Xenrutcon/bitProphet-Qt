@@ -34,6 +34,9 @@ public:
     void setProphetState(QString newState);
     void say(QString sayThis, bool debug=0);
     void addAccountToCoinbaseComboBox(QString accountName);
+    //Simple Trading (non-neural net, simple dumb logix)
+    bool mAutoSpotTrade;
+    int mAutoSpotTradeInterval;
     //Account Refresh
     bool mAutoRefreshAccount;
     int mAutoRefreshAccountInterval; //all intervals in milliseconds
@@ -45,9 +48,9 @@ public:
     //GDAX Prices
     bool mAutoCheckGDAXPrices;
     int mAutoCheckGDAXPricesInterval;
-    //Simple Trading (non-neural net, simple dumb logix)
-    bool mAutoSpotTrade;
-    int mAutoSpotTradeInterval;
+
+
+
 
     //Simple Trading (GDAX)
     bool mAutoGDAXTrade;
@@ -74,6 +77,8 @@ public:
     void disableAutoSpotTrader();
     void disableGDAXTrader();
     void enableGDAXTrader();
+    void manualGdaxTransferFromClicked();
+    void manualGdaxTransferToClicked();
 private:
     QList<bpSplineChart*> mSplineChartList;
     bpDatabase *mDb;

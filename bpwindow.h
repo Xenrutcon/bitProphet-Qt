@@ -47,8 +47,14 @@ public:
     QPushButton* getSellSpotForPaymentMethodButton();
     QPushButton* getRefreshTransactionsButton();
     QPushButton *getRefreshAutoSpotTraderTransactionsButton();
-    QLineEdit* getDepositFromPayMethodAmount();
-    QLineEdit* getWithdrawToPayMethodAmount();
+    QPushButton *getXferFromCbWalletButton();
+    QPushButton *getXferToCbWalletButton();
+    ///////////////////////////////////////
+    QLineEdit *getDepositFromPayMethodAmount();
+    QLineEdit *getWithdrawToPayMethodAmount();
+    QLineEdit *getXferFromCoinbaseAmount();
+    QLineEdit *getXferToCoinbaseAmount();
+    /////////////////////////////////////
     void killAccSetupWindow();
     void killGdaxAccSetupWindow();
     QWidget *getAccountsTab();
@@ -112,6 +118,8 @@ private slots:
     void accountSetupGDAXClicked();
     void on_mAutoSpotTradeEnabledCheckBox_toggled(bool checked);
     void on_mAutoRefreshBalanceCheckBox_toggled(bool checked);
+    void on_mGdaxTransferFrom_released();
+    void on_mGdaxTransferTo_released();
 };
 
 #endif // BPWINDOW_H

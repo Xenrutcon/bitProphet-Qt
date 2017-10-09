@@ -77,6 +77,44 @@ void gdaxApiHandler::listCoinbaseAccountsAvailableToGdax() {
     say("Request Sent.");
 }
 
+void gdaxApiHandler::xferFromCoinbaseToGdax(QString fromAccId, QString amount,QString currency) {
+    say("Xferring " + amount + " of " + currency + " From Coinbase to Gdax.");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");        //list accounts is a GET
+    req->setPath("/deposits/coinbase-account");  //the url path,etc..
+    req->setBody("{"
+                 "\"amount\": " + amount + ","
+                 "\"currency\": \"" + currency + "\"," +
+                 "\"coinbase_account_id\": \"" + fromAccId + "\"" +
+                 "}");
+    req->setType("xferFromCoinbaseToGdax");
+//    say("Sending Request...");
+    req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
+//    say("Request Sent.");
+//    say("Amount: " + amount);
+//    say("Currency: " + currency);
+//    say("coinbase_account_id: " + fromAccId);
+}
+
+//
+// POST /withdrawals/coinbase
+void gdaxApiHandler::xferFromGdaxToCoinbase(QString fromAccId, QString amount,QString currency) {
+    say("Xferring " + amount + " of " + currency + " From Gdax To Coinbase.");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");        //list accounts is a GET
+    req->setPath("/withdrawals/coinbase-account");  //the url path,etc..
+    req->setBody("{"
+                 "\"amount\": " + amount + ","
+                 "\"currency\": \"" + currency + "\"," +
+                 "\"coinbase_account_id\": \"" + fromAccId + "\"" +
+                 "}");
+    req->setType("xferFromGdaxToCoinbase");
+    req->sendRequest();           //sendRequest has the info/access it needs to do the rest.
+}
+
+
 QString gdaxApiHandler::getGdaxApiKey() {
     return mAccount->mApiKey;
 }
@@ -139,12 +177,6 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
         mAccount->getWallet(newWalletId)->mAvailable = arr.at(w).toObject()["available"].toString();
         mAccount->getWallet(newWalletId)->mHold = arr.at(w).toObject()["hold"].toString();
         mAccount->getWallet(newWalletId)->mProfileId = arr.at(w).toObject()["profile_id"].toString();
-//        say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) ); //display only first 8
-//        say("currency: " + arr.at(w).toObject()["currency"].toString() );
-//        say("balance: " + arr.at(w).toObject()["balance"].toString() );
-//        say("available: " + arr.at(w).toObject()["available"].toString() );
-//        say("hold: " + arr.at(w).toObject()["hold"].toString() );
-//        say("profile_id: " + arr.at(w).toObject()["profile_id"].toString().mid(0,8) );
         if ( addXfers ) {
             xferFromTarget->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
             xferToSource->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
@@ -168,14 +200,16 @@ void gdaxApiHandler::listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp )
     say("Processing Response >>> " + type);
     QJsonArray arr = *resp->getResponseArray();
     say("Items: " + QString().setNum(arr.count()) );
+    if ( arr.count() > 0 ) {
+        mParent->mParent->getXferFromCbWalletButton()->setEnabled(true);
+        mParent->mParent->getXferToCbWalletButton()->setEnabled(true);
+    }
     for(int w=0;w<arr.count();w++) {
-
-            say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) );
-            QComboBox *xferFrom = mParent->mParent->getXferFromCbWalletComboBox();
-            QComboBox *xferTo = mParent->mParent->getXferToCbWalletComboBox();
-            xferFrom->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
-            xferTo->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
-
+        say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) );
+        QComboBox *xferFrom = mParent->mParent->getXferFromCbWalletComboBox();
+        QComboBox *xferTo = mParent->mParent->getXferToCbWalletComboBox();
+        xferFrom->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
+        xferTo->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
     }
 }
 

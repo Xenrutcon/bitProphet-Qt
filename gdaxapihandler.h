@@ -42,6 +42,8 @@ public:
     QString getGdaxApiKey();
     QString getGdaxApiSecret();
     QString getGdaxPassPhrase();
+    void xferFromCoinbaseToGdax(QString fromAccId, QString amount,QString currency);
+    void xferFromGdaxToCoinbase(QString fromAccId, QString amount,QString currency);
     void processResponse( gdaxApiResponse *resp );
     bitProphet *mParent;
 private:    
@@ -50,7 +52,7 @@ private:
     void listGdaxAccounts();
     void listAccountProcessResponse(gdaxApiResponse *resp );
     void listCoinbaseAccountsAvailableToGdax();
-    void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );
+    void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );    
     gdaxWalletTable *mWalletTableWidget;
 signals:
 

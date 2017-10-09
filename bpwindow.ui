@@ -780,7 +780,7 @@
       <property name="title">
        <string>Transfer From Coinbase Wallet</string>
       </property>
-      <widget class="QPushButton" name="mDepositFromPaymentMethodButton_2">
+      <widget class="QPushButton" name="mGdaxTransferFrom">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -806,7 +806,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="mDepositFromAmount_2">
+      <widget class="QLineEdit" name="mXferFromCoinbaseAmount">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -855,7 +855,7 @@
       <property name="title">
        <string>Transfer To Coinbase Wallet</string>
       </property>
-      <widget class="QPushButton" name="mDepositFromPaymentMethodButton_3">
+      <widget class="QPushButton" name="mGdaxTransferTo">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -881,7 +881,7 @@
         </rect>
        </property>
       </widget>
-      <widget class="QLineEdit" name="mDepositFromAmount_3">
+      <widget class="QLineEdit" name="mXferToCoinbaseAmount">
        <property name="geometry">
         <rect>
          <x>10</x>

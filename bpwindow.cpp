@@ -259,6 +259,14 @@ QLineEdit* bpWindow::getWithdrawToPayMethodAmount() {
     return ui->mWithdrawToAmount;
 }
 
+QLineEdit* bpWindow::getXferFromCoinbaseAmount() {
+    return ui->mXferFromCoinbaseAmount;
+}
+
+QLineEdit* bpWindow::getXferToCoinbaseAmount() {
+    return ui->mXferToCoinbaseAmount;
+}
+
 QPushButton* bpWindow::getDepositFromPayMethodButton() {
     return ui->mDepositFromPaymentMethodButton;
 }
@@ -289,6 +297,14 @@ QPushButton* bpWindow::getRefreshTransactionsButton() {
 
 QPushButton *bpWindow::getRefreshAutoSpotTraderTransactionsButton() {
     return ui->mRefreshAutoSpotTraderTransactionsButton;
+}
+
+QPushButton *bpWindow::getXferFromCbWalletButton() {
+    return ui->mGdaxTransferFrom;
+}
+
+QPushButton *bpWindow::getXferToCbWalletButton() {
+    return ui->mGdaxTransferTo;
 }
 
 QCheckBox *bpWindow::getAutoSpotTraderEnabledCheckBox() {
@@ -355,4 +371,12 @@ void bpWindow::on_mAutoRefreshBalanceCheckBox_toggled(bool checked) {
         mProphet->say("Disabling AutoRefreshCbAccount.");
         mProphet->disableAutoRefreshCbAccount();
     }
+}
+
+void bpWindow::on_mGdaxTransferFrom_released() {
+    mProphet->manualGdaxTransferFromClicked();
+}
+
+void bpWindow::on_mGdaxTransferTo_released() {
+    mProphet->manualGdaxTransferToClicked();
 }

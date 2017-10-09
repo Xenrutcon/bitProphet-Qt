@@ -1,9 +1,9 @@
 #include "bitprophet.h"
 
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(240000),
-    mAutoCheckSpotPrices(false), mAutoCheckSpotPricesInterval(60000),
+    mAutoCheckSpotPrices(false), mAutoSpot(NULL), mAutoCheckSpotPricesInterval(60000),
     mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
-    mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL),mAutoSpot(NULL) {
+    mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL) {
         mParent = reinterpret_cast<bpWindow*>(parent);
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
         // Startup
@@ -299,6 +299,48 @@ QString bitProphet::findCoinbaseFee(QString dollarAmount) {
         return QString().setNum( dollarAmount.toDouble() * 0.0149 );
     }
     return "";
+}
+
+void bitProphet::manualGdaxTransferFromClicked() {
+    QString fromAccId("");
+    QString toAccId("");
+    if ( mParent->getXferFromCbWalletComboBox()->currentData().toString().length() > 0 ) {
+        fromAccId = mParent->getXferFromCbWalletComboBox()->currentData().toString();
+    }
+    if ( mParent->getXferFromCbWalletTargetComboBox()->currentData().toString().length() > 0 ) {
+        toAccId = mParent->getXferFromCbWalletTargetComboBox()->currentData().toString();
+    }
+    say("From: " + fromAccId);
+    say("To: " + toAccId);
+    QString amount = mParent->getXferFromCoinbaseAmount()->text();
+    say("Amount: " + amount);
+    if ( amount.toDouble() > 0.0 && fromAccId.length() > 0 && toAccId.length() > 0 ) {
+        //do it
+        mGDAXApiHandler->xferFromCoinbaseToGdax(fromAccId,amount, mParent->getXferFromCbWalletComboBox()->currentText().mid(0,mParent->getXferFromCbWalletComboBox()->currentText().indexOf(" ",0) ));
+    } else {
+        say("Fix the input form and try again.");
+    }
+
+}
+
+void bitProphet::manualGdaxTransferToClicked() {
+    QString fromAccId("");
+    QString toAccId("");
+    if ( mParent->getXferToCbWalletSourceComboBox()->currentData().toString().length() > 0 ) {
+        fromAccId = mParent->getXferToCbWalletSourceComboBox()->currentData().toString();
+    }
+    if ( mParent->getXferToCbWalletComboBox()->currentData().toString().length() > 0 ) {
+        toAccId = mParent->getXferToCbWalletComboBox()->currentData().toString();
+    }
+    say("From: " + fromAccId);
+    say("To: " + toAccId);
+    QString amount = mParent->getXferToCoinbaseAmount()->text();
+    say("Amount: " + amount);
+    if ( amount.toDouble() > 0.0 && toAccId.length() > 0 && toAccId.length() > 0 ) {
+        mGDAXApiHandler->xferFromGdaxToCoinbase(toAccId,amount, mParent->getXferToCbWalletComboBox()->currentText().mid(0,mParent->getXferToCbWalletComboBox()->currentText().indexOf(" ",0) ) );
+    } else {
+        say("Fix the input form and try again.");
+    }
 }
 
 
