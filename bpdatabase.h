@@ -41,8 +41,11 @@ public:
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
     void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount, QString passPhrase, QString exchange="GDAX");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
-    void insertGdaxAutoSpotTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd, int *insertId);
+    void insertGdaxAutoTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd);
+
     void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
+    void updateRowById( QString id, QString table, QString column, QString newValue );
+    int getLastIdForTable(QString table);
     QList<QString> getAccountList();
     QList<QString> getGdaxAccountList();
     void deleteAccount(QString id );

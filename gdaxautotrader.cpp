@@ -83,7 +83,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         sayGdaxAutoTrader("# Available: " + USDBalance,currCoin);
         if ( USDBalance.toDouble() < mMinUSDBuyAmount ) {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
-            //continue;
+            continue;
         }
         QString howMuchToSpend("0.00");
         if ( USDBalance.toDouble() * 0.20 > mMinUSDBuyAmount ) {
@@ -97,11 +97,19 @@ void gdaxAutoTrader::autoTradeCheck() {
         } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
+            howMuchToSpend = QString().setNum(USDBalance.toDouble());
         } else {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
-            //break;
+            break;
         }
+        //shave off more than .00
+        if ( howMuchToSpend.indexOf(".",0) != -1 ) {
+            //it has at least one deci
+            QString pre=howMuchToSpend.mid(0,howMuchToSpend.indexOf(".",0));
+            QString post= howMuchToSpend.mid(howMuchToSpend.indexOf(".",0)+1,2);
+            howMuchToSpend = pre + "." + post;
+        }
+
         sayGdaxAutoTrader("# Allocated $" + howMuchToSpend +" For " + currCoin,currCoin);
         sayGdaxAutoTrader("#################",currCoin);
         sayGdaxAutoTrader("# Analyzing Price History",currCoin);
@@ -263,9 +271,13 @@ void gdaxAutoTrader::autoTradeCheck() {
                         //insert buy into db with SELLTARGET (update when buyresponse comes in(status), and updateAgain when SOLD)
                     int lastId=0;
                     double pct = (mMinPercentProfit * 100.0);
-                    mParent->getDb()->insertGdaxAutoSpotTrade(currCoin,"BUY","placed",QString().setNum(totalBuyAmount),curBid,QString().setNum(totalBuyCost),QString().setNum(sellTarget),QString().setNum(sellTotal),QString().setNum(pct),QString().setNum(profNeeded), &lastId );
+                    mParent->getDb()->insertGdaxAutoTrade(currCoin,"BUY","placed",QString().setNum(totalBuyAmount),curBid,QString().setNum(totalBuyCost),QString().setNum(sellTarget),QString().setNum(sellTotal),QString().setNum(pct),QString().setNum(profNeeded));
+                    lastId = mParent->getDb()->getLastIdForTable("gdaxAutoTraderHistory");
                     sayGdaxAutoTrader("TradeId: " + QString().setNum(lastId),currCoin);
                     //PLACE Buy @ curBID (no fee)
+//                    if ( currCoin == "BTC") { mLastBuyPriceBTC = curBid.toDouble(); }
+//                    if ( currCoin == "LTC") { mLastBuyPriceLTC = curBid.toDouble(); }
+//                    if ( currCoin == "ETH") { mLastBuyPriceETH = curBid.toDouble(); }
                     mParent->getGdaxHandler()->placeGdaxAutoTraderLimitBuy(currCoin+"-USD",QString().setNum(totalBuyAmount),curBid,lastId);
                     //Update USDBalance ( -howMuchToSpend )
                     USDBalance = QString().setNum(USDBalance.toDouble() - totalBuyCost);

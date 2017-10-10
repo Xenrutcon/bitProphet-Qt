@@ -60,6 +60,7 @@ private:
     void listCoinbaseAccountsAvailableToGdax();
     void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );    
     void fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString productId);
+    void placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse *resp);
     gdaxWalletTable *mWalletTableWidget;
     void fetchGdaxPrice(QString prodId);
 signals:

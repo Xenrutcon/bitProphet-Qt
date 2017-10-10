@@ -19,7 +19,7 @@ gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(N
             } else {
                 say("Found gdaxPriceHistory Table.");
             }
-            if ( !mParent->getDb()->hasTable("gdaxTraderHistory") ) {
+            if ( !mParent->getDb()->hasTable("gdaxAutoTraderHistory") ) {
                 mParent->getDb()->createGdaxTraderHistoryTable();
                 say("Created gdaxTraderHistory Table.");
             } else {
@@ -242,6 +242,8 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         fetchGdaxPriceProcessResponse(resp,"LTC-USD");
     } else if ( type == "fetchGdaxPricesETH-USD") {
         fetchGdaxPriceProcessResponse(resp,"ETH-USD");
+    } else if ( type== "placeGdaxAutoTraderLimitBuy" ) {
+        placeGdaxAutoTraderLimitBuyProcessResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
@@ -376,6 +378,22 @@ void gdaxApiHandler::fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString
         }
         mParent->getDb()->addToGdaxPriceHistory("LTC",p,a,b);
     }
+}
+
+void gdaxApiHandler::placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse *resp) {
+    QString tradeId(resp->mAutoTradeId);
+    //if successful, update gdaxTraderHistory entry
+    //if failed, remove gdaxTraderHistor entry
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    QString orderId = obj["id"].toString();
+    if ( orderId.length() > 0 ) {
+        say("# Gdax Auto Buy orderId - "+orderId+" was placed!");
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","orderId",orderId);
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","placed2"); //placed is sent, placed2 is confirmed successful placed.
+    }
+
 }
 
 /////////

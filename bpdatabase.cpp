@@ -483,10 +483,10 @@ bool bpDatabase::createGdaxTraderHistoryTable() {
         } else {
            say("Database: CREATE connection ok.");
            QSqlQuery query;
-           query.prepare("CREATE TABLE gdaxTraderHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(4),status varchar(16),"
+           query.prepare("CREATE TABLE gdaxAutoTraderHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(4),status varchar(16),"
                          "amount varchar(512),buyPrice varchar(24),buyTotal varchar(24),sellTarget varchar(24), sellTotal varchar(24),minProfitPct varchar(8),"
                          "minProfitUsd varchar(16), timePlaced TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,"
-                         "timeBought TIMESTAMP DEFAULT NULL, timeSellPlaced TIMESTAMP DEFAULT NULL, timeSold TIMESTAMP DEFAULT NULL );");
+                         "timeBought TIMESTAMP DEFAULT NULL, timeSellPlaced TIMESTAMP DEFAULT NULL, timeSold TIMESTAMP DEFAULT NULL,orderId varchar(128) DEFAULT NULL );");
            if(query.exec()) {
               retVal = true;
            } else {
@@ -737,8 +737,8 @@ void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSec
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
-//id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, timePlaced, timeBought, timeSellPlaced, timeSold
-void bpDatabase::insertGdaxAutoSpotTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd, int *insertId) {
+int bpDatabase::getLastIdForTable(QString table) {
+    int retVal = 0;
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
         Db.setDatabaseName("bitProphet.dat");
@@ -747,20 +747,46 @@ void bpDatabase::insertGdaxAutoSpotTrade( QString coin, QString type, QString st
         } else {
            //say("Database: connection ok.");
            QSqlQuery query;
-           QString q("INSERT INTO gdaxAutoTraderHistory (coin,type,status,amount,buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, "
-                     "timePlaced,timeBought,timeSellPlaced,timeSold) VALUES ('" +
-                     coin + "','" + type + "','" + status + "','" + amount + "','" + buyPrice + "','" + buyTotal + "','" +sellTarget+"','"+sellTotal+"','" +
-                     minProfitPct + "','" +minProfitUsd + "')");
+           QString q("select seq from sqlite_sequence where name='"+table+"'");
+           std::cout<<q.toStdString().c_str()<<std::endl;
            query.prepare(q);
            if(query.exec()) {
-              q = "select seq from sqlite_sequence where name='gdaxAutoTraderHistory'";
-              query.prepare(q);
-              if(query.exec()) {
-                  int idVal = query.record().indexOf("id");
-                  QString idResult = query.value(idVal).toString();
-                  idVal = idResult.toInt();
-                  insertId = &idVal;
-              }
+               if ( query.next() )  {
+                   int idVal = query.record().indexOf("seq");
+                   QString idResult = query.value(idVal).toString();
+                   retVal = idResult.toInt();
+               } else {
+                   say("getLastIdForTable() error:  " + query.lastError().text());
+                }
+           } else {
+               say("getLastIdForTable() error:  " + query.lastError().text());
+           }
+         }
+         Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+//id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, timePlaced, timeBought, timeSellPlaced, timeSold
+void bpDatabase::insertGdaxAutoTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd) {
+    int retVal = 0;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("INSERT INTO gdaxAutoTraderHistory (coin,type,status,amount,buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd"
+                     ") VALUES ('" +
+                     coin + "','" + type + "','" + status + "','" + amount + "','" + buyPrice + "','" + buyTotal + "','" +sellTarget+"','"+sellTotal+"','" +
+                     minProfitPct + "','" +minProfitUsd + "')");
+           std::cout<<q.toStdString().c_str()<<std::endl;
+           query.prepare(q);
+           if(query.exec()) {
               say("insertgdaxAutoTraderHistory() Success");
            } else {
               say("insertgdaxAutoTraderHistory() error:  " + query.lastError().text());
@@ -786,6 +812,30 @@ void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
               //say("addToCbSpotPriceHistory() Success");
            } else {
               say("addToCbSpotPriceHistory() Error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::updateRowById( QString id, QString table, QString column, QString newValue ) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("UPDATE " + table + " SET "+column+"='" + newValue + "' WHERE id=" + id );
+           query.prepare(q);
+           say(q);
+           if(query.exec()) {
+              //say("updateRowById() Success");
+           } else {
+              say("updateRowById() Error:  " + query.lastError().text());
            }
         }
         Db.close();
