@@ -46,6 +46,7 @@ public:
     void xferFromGdaxToCoinbase(QString fromAccId, QString amount,QString currency);
     void placeGdaxLimitBuy(QString prodId,QString size, QString price);
     void placeGdaxLimitSell(QString prodId,QString size, QString price);
+    void placeGdaxAutoTraderLimitBuy(QString prodId,QString size, QString price,int autoTradeId);
     void cancelAllGdaxOrders();
 
     void processResponse( gdaxApiResponse *resp );    

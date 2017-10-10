@@ -19,6 +19,13 @@ gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(N
             } else {
                 say("Found gdaxPriceHistory Table.");
             }
+            if ( !mParent->getDb()->hasTable("gdaxTraderHistory") ) {
+                mParent->getDb()->createGdaxTraderHistoryTable();
+                say("Created gdaxTraderHistory Table.");
+            } else {
+                say("Found gdaxTraderHistory Table.");
+            }
+
             mAccount = new gdaxAccount(this);
             //Load Default Account
             mParent->getDb()->loadGdaxAccountById(mAccount,defGdaxId);
@@ -143,6 +150,24 @@ void  gdaxApiHandler::placeGdaxLimitBuy(QString prodId,QString size, QString pri
     req->setType("placeGdaxLimitBuy");
     req->sendRequest();
 }
+
+void  gdaxApiHandler::placeGdaxAutoTraderLimitBuy(QString prodId,QString size, QString price, int autoTradeId) {
+    say("Placing Limit Buy " + size + " of " + prodId + ".");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");        //list accounts is a GET
+    req->setPath("/orders");  //the url path,etc..
+    req->setBody("{"
+                 "\"size\": " + size + ","
+                 "\"price\": \"" + price + "\"," +
+                 "\"product_id\": \"" + prodId + "\"," +
+                 "\"side\": \"buy\"" +
+                 "}");
+    req->setType("placeGdaxAutoTraderLimitBuy");
+    req->mAutoTradeId = QString().setNum(autoTradeId);
+    req->sendRequest();
+}
+
 
 void  gdaxApiHandler::placeGdaxLimitSell(QString prodId,QString size, QString price) {
     say("Placing Limit Sell " + size + " of " + prodId + ".");

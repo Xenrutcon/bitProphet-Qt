@@ -37,6 +37,7 @@ public:
     gdaxApiHandler *getMyHandler();
     void sendRequest();
     gdaxApiResponse *mResponse;
+    QString mAutoTradeId; //100% optional, may be useful for autoTrade request/response amount verification
 private:
     QString getAccessSign();
     gdaxApiHandler *mParent;
@@ -47,7 +48,7 @@ private:
     QString mPath;
     QString mBody;
     QString mAccessKey;
-    bool mDone;    
+    bool mDone;        
 signals:
 public slots:
 private slots:

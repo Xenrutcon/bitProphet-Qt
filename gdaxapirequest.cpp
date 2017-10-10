@@ -1,7 +1,7 @@
 #include "gdaxapirequest.h"
 #include <iostream>
 
-gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mResponse(NULL),mNetAccMan(NULL) {
+gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mResponse(NULL),mNetAccMan(NULL), mAutoTradeId("") {
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mParent = parent;
     say("GDax Api Request Created.");
@@ -109,7 +109,7 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
              mType != "fetchGdaxPricesETH-USD" ) {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
-        }
+        }        
         QJsonDocument jsonData = QJsonDocument::fromJson(unparsed,&error);
         //say("JSon error? >>> " + error.errorString());
         //say("Data: " + QString(jsonData.toJson().toStdString().c_str()));
@@ -119,6 +119,7 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         //COMING SOON..response parsing.
         mResponse = new gdaxApiResponse(this,&jsonObj,&jsonArr);
         mResponse->setType(mType);
+        if ( mAutoTradeId != "" ) { mResponse->mAutoTradeId = mAutoTradeId; }
         mParent->processResponse(mResponse);
         mParent->mParent->setProphetState("IDLE");
         mNetAccMan->deleteLater();

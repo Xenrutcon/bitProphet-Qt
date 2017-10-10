@@ -1,6 +1,6 @@
 #include "gdaxapiresponse.h"
 
-gdaxApiResponse::gdaxApiResponse(gdaxApiRequest *parent,QJsonObject *obj, QJsonArray *arr) : QObject(parent) {
+gdaxApiResponse::gdaxApiResponse(gdaxApiRequest *parent,QJsonObject *obj, QJsonArray *arr) : QObject(parent), mAutoTradeId("") {
     mParent = parent;
     mResponseContent = obj;
     mResponseArray = arr;

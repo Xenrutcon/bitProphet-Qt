@@ -17,7 +17,7 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);
     mUSDStartAmount = "0.00";
-    mMinUSDBuyAmount = 50.00;
+    mMinUSDBuyAmount = 20.00;
     mMinPercentProfit = 0.0025; //in DECIMAL
     mLastBuyPriceBTC = "0.00";mLastBuyPriceLTC = "0.00";mLastBuyPriceETH = "0.00";
     mLastSellPriceBTC = "0.00";mLastSellPriceLTC = "0.00";mLastSellPriceETH = "0.00";
@@ -70,15 +70,17 @@ void gdaxAutoTrader::autoTradeCheck() {
     QString USDBalance("0.00");
     //Dont forget to check mUSDStartAmount
     for ( int a=0;a<mParent->getGdaxHandlerAccount()->getWalletCount();a++ ) {
-        if ( mParent->getHandlerAccount()->getWallet(a)->mCurrency == "USD" ) {
+        if ( mParent->getGdaxHandlerAccount()->getWallet(a)->mCurrency == "USD" ) {
             USDBalance = mParent->getGdaxHandlerAccount()->getWallet(a)->mAvailable;  //Available is what we care about
         }
     }
+
     if ( mUSDStartAmount == "0.00" ) {
         mUSDStartAmount = USDBalance;
     }
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
+        sayGdaxAutoTrader("# Available: " + USDBalance,currCoin);
         if ( USDBalance.toDouble() < mMinUSDBuyAmount ) {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             //continue;
@@ -174,6 +176,15 @@ void gdaxAutoTrader::autoTradeCheck() {
                             // Required price move of +$0.125 - 12.5 cents! to make 12.5 cents (one quarter of 1% return)
                             //Changes like this occur CONSTANTLY
                             // Feelin pretty clever... hope that lasts....
+                        //# IfBuy { 0.20004 }
+                        //# AtPrice { 49.99 }
+                        //# For { 10 }
+                        //# MinProfit { $0.025 }
+                        //# Sell Total { $10.025 }
+                        //# Sell Target { $50.115 }
+                            // 12.5 cents.. imagine that... profit sucks though
+                        // By changing the minProfit percent, along with minUsdBuyAmount
+                        // User could control with precision. (TODO: add spinners & setters)
 
         //Determine buffer actual
         double highBuffer,lowBuffer,gap;
@@ -229,7 +240,6 @@ void gdaxAutoTrader::autoTradeCheck() {
             } else { belowLastSellThisCoin = true; }
         }
         //pass or fail, buy or quit
-        howMuchToSpend = "50.00";
         if ( belowHighest && belowHighBuffer && aboveLowest && aboveLowBuffer && belowLastBuyThisCoin && belowLastSellThisCoin ) {
                     //Determine Sell Price (from minProfitPercent)
                     double totalBuyAmount = howMuchToSpend.toDouble() / curBid.toDouble();
@@ -249,11 +259,16 @@ void gdaxAutoTrader::autoTradeCheck() {
                         continue;
                     }
                     //table: gdaxAutoTraderHistory
-                    //   -> id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, ts,
-                    //mParent->getGdaxHandler()->placeGdaxLimitBuy(currCoin+"-USD",QString().setNum(totalBuyAmount),curBid);
+                    //   -> id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, timePlaced, timeBought, timeSellPlaced, timeSold
+                        //insert buy into db with SELLTARGET (update when buyresponse comes in(status), and updateAgain when SOLD)
+                    int lastId=0;
+                    double pct = (mMinPercentProfit * 100.0);
+                    mParent->getDb()->insertGdaxAutoSpotTrade(currCoin,"BUY","placed",QString().setNum(totalBuyAmount),curBid,QString().setNum(totalBuyCost),QString().setNum(sellTarget),QString().setNum(sellTotal),QString().setNum(pct),QString().setNum(profNeeded), &lastId );
+                    sayGdaxAutoTrader("TradeId: " + QString().setNum(lastId),currCoin);
                     //PLACE Buy @ curBID (no fee)
-                        //insert buy into db with SELLTARGET (update when SOLD)
-                        //Update USDBalance ( -howMuchToSpend )
+                    mParent->getGdaxHandler()->placeGdaxAutoTraderLimitBuy(currCoin+"-USD",QString().setNum(totalBuyAmount),curBid,lastId);
+                    //Update USDBalance ( -howMuchToSpend )
+                    USDBalance = QString().setNum(USDBalance.toDouble() - totalBuyCost);
             sayGdaxAutoTrader("# Buy on " + currCoin,currCoin);
         } else {
             sayGdaxAutoTrader("# Passing on " + currCoin,currCoin);

@@ -471,6 +471,34 @@ bool bpDatabase::createGdaxPriceHistoryTable() {
     return retVal;
 }
 
+//table: gdaxAutoTraderHistory
+//   -> id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, timePlaced, timeBought, timeSellPlaced, timeSold
+bool bpDatabase::createGdaxTraderHistoryTable() {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: CREATE connection ok.");
+           QSqlQuery query;
+           query.prepare("CREATE TABLE gdaxTraderHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),type varchar(4),status varchar(16),"
+                         "amount varchar(512),buyPrice varchar(24),buyTotal varchar(24),sellTarget varchar(24), sellTotal varchar(24),minProfitPct varchar(8),"
+                         "minProfitUsd varchar(16), timePlaced TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,"
+                         "timeBought TIMESTAMP DEFAULT NULL, timeSellPlaced TIMESTAMP DEFAULT NULL, timeSold TIMESTAMP DEFAULT NULL );");
+           if(query.exec()) {
+              retVal = true;
+           } else {
+              say("createGdaxTraderHistoryTable() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
 
 bool bpDatabase::createCbSpotPriceHistoryTable() {
     bool retVal = false;
@@ -701,6 +729,41 @@ void bpDatabase::insertGdaxAccount( QString name, QString apiKey, QString apiSec
               say("insertGdaxAccount() Success");
            } else {
               say("insertGdaxAccount() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+//id, coin, type, status, amount, buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, timePlaced, timeBought, timeSellPlaced, timeSold
+void bpDatabase::insertGdaxAutoSpotTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd, int *insertId) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("INSERT INTO gdaxAutoTraderHistory (coin,type,status,amount,buyPrice,buyTotal, sellTarget, sellTotal, minProfitPct, minProfitUsd, "
+                     "timePlaced,timeBought,timeSellPlaced,timeSold) VALUES ('" +
+                     coin + "','" + type + "','" + status + "','" + amount + "','" + buyPrice + "','" + buyTotal + "','" +sellTarget+"','"+sellTotal+"','" +
+                     minProfitPct + "','" +minProfitUsd + "')");
+           query.prepare(q);
+           if(query.exec()) {
+              q = "select seq from sqlite_sequence where name='gdaxAutoTraderHistory'";
+              query.prepare(q);
+              if(query.exec()) {
+                  int idVal = query.record().indexOf("id");
+                  QString idResult = query.value(idVal).toString();
+                  idVal = idResult.toInt();
+                  insertId = &idVal;
+              }
+              say("insertgdaxAutoTraderHistory() Success");
+           } else {
+              say("insertgdaxAutoTraderHistory() error:  " + query.lastError().text());
            }
         }
         Db.close();
