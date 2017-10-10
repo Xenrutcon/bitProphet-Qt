@@ -162,7 +162,38 @@ void bpDatabase::getSpotPriceHistoryLast(QString coin,int maxResults, QList<QStr
                   y++;
                }
             } else {
-                say("No Coin Prices In History For ETH");
+                say("No Coin Prices In History For "+coin );
+            }
+        }
+        Db.close();
+    } //Db is gone
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::getGdaxPriceHistoryLast(QString coin,int maxResults, QList<QString> *priceList,QList<QString> *askList,QList<QString> *bidList) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+            QSqlQuery query;
+            query.prepare("select * from gdaxPriceHistory WHERE coin='"+ coin +"' AND id in (select id from gdaxPriceHistory WHERE coin='"+ coin +"' ORDER BY ts DESC LIMIT "+QString().setNum(maxResults)+") ORDER BY ts ASC "); //First(Past) to Last(current)
+            if (query.exec()) {
+                int y=0;
+               while (query.next()) {
+                  int pVal = query.record().indexOf("price");
+                  priceList->append(query.value(pVal).toString());
+                  int aVal = query.record().indexOf("ask");
+                  askList->append(query.value(aVal).toString());
+                  int bVal = query.record().indexOf("bid");
+                  bidList->append(query.value(bVal).toString());
+                  y++;
+               }
+            } else {
+                say("No Coin Prices In History For "+coin);
             }
         }
         Db.close();

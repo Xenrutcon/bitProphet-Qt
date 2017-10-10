@@ -49,7 +49,8 @@ SOURCES += \
     gdaxapirequest.cpp \
     gdaxapiresponse.cpp \
     gdaxwallet.cpp \
-    gdaxwallettable.cpp
+    gdaxwallettable.cpp \
+    gdaxautotrader.cpp
 
 HEADERS += \
         bpwindow.h \
@@ -76,7 +77,8 @@ HEADERS += \
     gdaxapirequest.h \
     gdaxapiresponse.h \
     gdaxwallet.h \
-    gdaxwallettable.h
+    gdaxwallettable.h \
+    gdaxautotrader.h
 
 FORMS += \
         bpwindow.ui \

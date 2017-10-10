@@ -50,10 +50,10 @@ public:
 
     void processResponse( gdaxApiResponse *resp );    
     bitProphet *mParent;
+    gdaxAccount *mAccount;
 private:    
     QString mPtrName;    
-    QList<QString> mProductIds;
-    gdaxAccount *mAccount;    
+    QList<QString> mProductIds;    
     void listGdaxAccounts();
     void listAccountProcessResponse(gdaxApiResponse *resp );
     void listCoinbaseAccountsAvailableToGdax();

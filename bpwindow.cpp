@@ -37,6 +37,10 @@ QTextEdit* bpWindow::getCoinbaseTabLog() { return ui->mCoinbaseTabLog; }
 QTextEdit* bpWindow::getAutoTraderBTCLog() { return ui->mAutoSpotBTCLog; }
 QTextEdit* bpWindow::getAutoTraderLTCLog() { return ui->mAutoSpotLTCLog; }
 QTextEdit* bpWindow::getAutoTraderETHLog() { return ui->mAutoSpotETHLog; }
+QTextEdit* bpWindow::getGdaxAutoTraderBTCLog() { return ui->mGdaxAutoBTCLog; }
+QTextEdit* bpWindow::getGdaxAutoTraderLTCLog() { return ui->mGdaxAutoLTCLog; }
+QTextEdit* bpWindow::getGdaxAutoTraderETHLog() { return ui->mGdaxAutoETHLog; }
+
 
 QTableWidget *bpWindow::getAccountTablePlacer() {
     return ui->cbAccountTablePlacer;
@@ -387,6 +391,11 @@ QCheckBox *bpWindow::getAutoRefreshCbBalanceEnabledCheckBox() {
     return ui->mAutoRefreshBalanceCheckBox;
 }
 
+QCheckBox *bpWindow::getGdaxAutoTradeEnabledCheckBox() {
+    return ui->mAutoGDAXTradeEnabledCheckBox;
+}
+
+//mAutoGDAXTradeEnabledCheckBox
 
 void bpWindow::killAccSetupWindow() {
     delete mCbSetupWin;
@@ -459,4 +468,12 @@ void bpWindow::on_mPlaceGdaxLimitSell_released() {
 
 void bpWindow::on_mCancelAllGdaxOrders_released() {
     mProphet->cancelAllGdaxOrders();
+}
+
+void bpWindow::on_mAutoGDAXTradeEnabledCheckBox_toggled(bool checked) {
+    if ( checked ) {
+        mProphet->enableGDAXTrader();
+    } else {
+        mProphet->disableGDAXTrader();
+    }
 }

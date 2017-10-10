@@ -1,10 +1,10 @@
 #include "bitprophet.h"
 
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(240000),
-    mAutoCheckSpotPrices(false), mAutoSpot(NULL), mAutoCheckSpotPricesInterval(20000),
+    mAutoCheckSpotPrices(false), mAutoSpot(NULL), mGdaxAutoTradeInstance(NULL), mAutoCheckSpotPricesInterval(20000),
     mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
     mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL),mAutoCheckGDAXPrices(true),
-    mAutoCheckGDAXPricesInterval(20000) {
+    mAutoCheckGDAXPricesInterval(20000),  mAutoGDAXTrade(false), mAutoGDAXTradeInterval(60000) {
     //fix stupid order warning....
         mParent = reinterpret_cast<bpWindow*>(parent);
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
@@ -278,6 +278,10 @@ coinbaseAccount *bitProphet::getHandlerAccount() {
     return mApiHandler->mAccount;
 }
 
+gdaxAccount *bitProphet::getGdaxHandlerAccount() {
+    return mGDAXApiHandler->mAccount;
+}
+
 cbApiHandler *bitProphet::getHandler() {
     return mApiHandler;
 }
@@ -389,15 +393,15 @@ void bitProphet::enableAutoSpotTrader() {
 }
 
 void bitProphet::disableGDAXTrader() {
-//    mAutoGDAXTrade = false;
-//    mAuto->deleteLater();
-//    mAutoSpot = NULL;
+    mAutoGDAXTrade = false;
+    mGdaxAutoTradeInstance->deleteLater();
+    mGdaxAutoTradeInstance = NULL;
 }
 
 void bitProphet::enableGDAXTrader() {
-//    mAutoSpotTrade = true;
-//    mAutoSpot = new cbAutoSpotTrader(this);
-//    QTimer::singleShot(mAutoSpotTradeInterval,mAutoSpot,SLOT(autoTradeCheck()));
+    mAutoGDAXTrade = true;
+    mGdaxAutoTradeInstance = new gdaxAutoTrader(this);
+    QTimer::singleShot(mAutoGDAXTradeInterval,mGdaxAutoTradeInstance,SLOT(autoTradeCheck()));
 }
 
 void bitProphet::enableAutoRefreshCbAccount() {

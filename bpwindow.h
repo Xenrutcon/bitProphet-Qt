@@ -24,11 +24,17 @@ class bpWindow : public QMainWindow {
 public:
     explicit bpWindow(QWidget *parent = 0);
     ~bpWindow();
+    ///////////////////////////////////
+    // TextEdits
     QTextEdit *getStatusOutput();
     QTextEdit *getCoinbaseTabLog();
-    QTextEdit* getAutoTraderBTCLog();
-    QTextEdit* getAutoTraderLTCLog();
-    QTextEdit* getAutoTraderETHLog();
+    QTextEdit *getAutoTraderBTCLog();
+    QTextEdit *getAutoTraderLTCLog();
+    QTextEdit *getAutoTraderETHLog();
+    QTextEdit *getGdaxAutoTraderBTCLog();
+    QTextEdit *getGdaxAutoTraderLTCLog();
+    QTextEdit *getGdaxAutoTraderETHLog();
+    /////////////////////////////////////
     coinbaseAccountSetupWindow *getAccSetupWindow();
     QComboBox* getAccountsCombo();
     QComboBox* getDepositFromPayMethodCombo();
@@ -88,8 +94,6 @@ public:
     QLabel *getGdaxEthPriceLabel();
     QLabel *getGdaxEthAskLabel();
     QLabel *getGdaxEthBidLabel();
-
-
     ///////////////////////////////////
     //Request Stats Labels
     QLabel *getCbStatRequestsLabel();
@@ -112,10 +116,13 @@ public:
     QFrame *getCbETHPricePlacer();
     QWidget *getChartsTab();
     ////////////////////////
-    // Checkboxes, etc
+    // Checkboxes
     QCheckBox *getAutoSpotTraderEnabledCheckBox();
     QCheckBox *getAutoRefreshGdaxBalanceEnabledCheckBox();
     QCheckBox *getAutoRefreshCbBalanceEnabledCheckBox();
+    QCheckBox *getGdaxAutoTradeEnabledCheckBox();
+    /////////////////////////////////////////////
+    // ComboBoxes
     QComboBox *getXferFromCbWalletComboBox();
     QComboBox *getXferToCbWalletComboBox();
     QComboBox *getXferFromCbWalletTargetComboBox();
@@ -141,6 +148,7 @@ private slots:
     void on_mPlaceGdaxLimitBuy_released();
     void on_mPlaceGdaxLimitSell_released();
     void on_mCancelAllGdaxOrders_released();
+    void on_mAutoGDAXTradeEnabledCheckBox_toggled(bool checked);
 };
 
 #endif // BPWINDOW_H

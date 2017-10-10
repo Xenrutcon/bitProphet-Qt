@@ -12,6 +12,7 @@ gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(N
         if ( defGdaxId != "0" ) {
             say("Found Default GDAX Account. [ " + defGdaxId +" ]");
             mParent->mParent->getAutoRefreshGdaxBalanceEnabledCheckBox()->setEnabled(true);
+            mParent->mParent->getGdaxAutoTradeEnabledCheckBox()->setEnabled(true);
             if ( !mParent->getDb()->hasTable("gdaxPriceHistory") ) {
                 mParent->getDb()->createGdaxPriceHistoryTable();
                 say("Created gdaxPriceHistory Table.");

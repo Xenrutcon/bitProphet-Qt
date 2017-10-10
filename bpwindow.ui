@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -700,22 +700,6 @@
      <attribute name="toolTip">
       <string>The Coinbase Exchange</string>
      </attribute>
-     <widget class="QCheckBox" name="mAutoGDAXTradeEnabledCheckBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>241</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Auto GDAX Trade (0.25% Fee (Alts 0.3%) )</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="mActiveAccountLabelGdax">
       <property name="geometry">
        <rect>
@@ -1255,6 +1239,79 @@
      <attribute name="title">
       <string>AutoGDAX</string>
      </attribute>
+     <widget class="QTextEdit" name="mGdaxAutoETHLog">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>30</y>
+        <width>201</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="acceptRichText">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="mGdaxAutoBTCLog">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>181</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="acceptRichText">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="mGdaxAutoLTCLog">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>30</y>
+        <width>201</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="acceptRichText">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="mAutoGDAXTradeEnabledCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>361</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Auto GDAX Trade (0.25% Fee (Alts 0.3%) TAKER ORDERS)</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="mGdaxDataTab">
      <attribute name="title">

@@ -13,6 +13,7 @@
 #include "bpsplinechart.h"
 #include "cbautospottrader.h"
 #include "gdaxapihandler.h"
+#include "gdaxautotrader.h"
 
 class bpWindow;
 class bpDatabase;
@@ -22,6 +23,7 @@ class cbApiResponse;
 class bpSplineChart;
 class cbAutoSpotTrader;
 class gdaxApiHandler;
+class gdaxAutoTrader;
 
 class bitProphet : public QObject {
     Q_OBJECT    
@@ -65,6 +67,7 @@ public:
     void setEthSpotBuyPrice(cbApiResponse*);
     void sellAutoBuyId(QString id, QString coin, QString total);
     coinbaseAccount *getHandlerAccount();
+    gdaxAccount *getGdaxHandlerAccount();
     cbApiHandler *getHandler();
     QString findCoinbaseFee(QString dollarAmount);
     void enableAutoRefreshCbAccount();
@@ -85,6 +88,7 @@ private:
     gdaxApiHandler *mGDAXApiHandler;
 public:
     cbAutoSpotTrader *mAutoSpot;
+    gdaxAutoTrader *mGdaxAutoTradeInstance;
 private:
 
 
