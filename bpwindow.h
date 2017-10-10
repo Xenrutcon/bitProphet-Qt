@@ -78,7 +78,18 @@ public:
     QLabel *getEthSpotBuyPriceLabel();
     QLabel *getBtcSpotSellPriceLabel();
     QLabel *getLtcSpotSellPriceLabel();
-    QLabel *getEthSpotSellPriceLabel();
+    QLabel *getEthSpotSellPriceLabel();    
+    QLabel *getGdaxBtcPriceLabel();
+    QLabel *getGdaxBtcAskLabel();
+    QLabel *getGdaxBtcBidLabel();
+    QLabel *getGdaxLtcPriceLabel();
+    QLabel *getGdaxLtcAskLabel();
+    QLabel *getGdaxLtcBidLabel();
+    QLabel *getGdaxEthPriceLabel();
+    QLabel *getGdaxEthAskLabel();
+    QLabel *getGdaxEthBidLabel();
+
+
     ///////////////////////////////////
     //Request Stats Labels
     QLabel *getCbStatRequestsLabel();
@@ -113,7 +124,8 @@ public:
     QComboBox *getPlaceGdaxLimitBuySourceComboBox();
     QComboBox *getPlaceGdaxLimitBuyTypeComboBox();
     QComboBox *getPlaceGdaxLimitSellTypeComboBox();
-    ///////////////////////////////////////////////
+    QComboBox *getGdaxAccountComboBox();
+    ////////////////////////////////////
 private:
     Ui::bpWindow *ui;
     bitProphet *mProphet;

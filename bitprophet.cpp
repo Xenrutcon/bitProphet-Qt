@@ -1,9 +1,11 @@
 #include "bitprophet.h"
 
 bitProphet::bitProphet(QObject *parent) : QObject(parent),  mAutoRefreshAccount(true),  mAutoRefreshAccountInterval(240000),
-    mAutoCheckSpotPrices(false), mAutoSpot(NULL), mAutoCheckSpotPricesInterval(60000),
+    mAutoCheckSpotPrices(false), mAutoSpot(NULL), mAutoCheckSpotPricesInterval(20000),
     mAutoSpotTrade(0), mAutoSpotTradeInterval(300000),
-    mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL) {
+    mAutoRefreshGdaxAccount(true), mAutoRefreshGdaxAccountInterval(245000), mDb(NULL), mApiHandler(NULL), mGDAXApiHandler(NULL),mAutoCheckGDAXPrices(true),
+    mAutoCheckGDAXPricesInterval(20000) {
+    //fix stupid order warning....
         mParent = reinterpret_cast<bpWindow*>(parent);
         mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
         // Startup

@@ -32,9 +32,11 @@ public:
     void createDatabase();
     bool createAccountsTable();
     bool createGdaxAccountsTable();
+    bool createGdaxPriceHistoryTable();
     bool createCbSpotPriceHistoryTable();
     bool createAutoSpotTradeHistoryTable();
     void addToCbSpotPriceHistory( QString coin, QString price );
+    void addToGdaxPriceHistory( QString coin, QString price,QString ask, QString bid );
     void insertAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount=0,  QString exchange="coinbase");
     void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount, QString passPhrase, QString exchange="GDAX");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);

@@ -3,25 +3,38 @@
 gdaxApiHandler::gdaxApiHandler(bitProphet *parent) : QObject(parent), mAccount(NULL),mWalletTableWidget(NULL) {
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mParent=parent;
+    mProductIds.append("BTC-USD");
+    mProductIds.append("LTC-USD");
+    mProductIds.append("ETH-USD");
     say("Created GDAX Api Handler.");    
     if ( mParent->getDb()->getGdaxAccountList().length() > 0 ) {
         QString defGdaxId = mParent->getDb()->getDefaultGdaxAccountId();
         if ( defGdaxId != "0" ) {
             say("Found Default GDAX Account. [ " + defGdaxId +" ]");
             mParent->mParent->getAutoRefreshGdaxBalanceEnabledCheckBox()->setEnabled(true);
+            if ( !mParent->getDb()->hasTable("gdaxPriceHistory") ) {
+                mParent->getDb()->createGdaxPriceHistoryTable();
+                say("Created gdaxPriceHistory Table.");
+            } else {
+                say("Found gdaxPriceHistory Table.");
+            }
             mAccount = new gdaxAccount(this);
             //Load Default Account
             mParent->getDb()->loadGdaxAccountById(mAccount,defGdaxId);
             //Load accounts tab dropdown with accounts
             QList<QString> daList= mParent->getDb()->getGdaxAccountList();
             for ( int c=0;c<daList.length();c++) {
-                //mParent->addGdaxAccountToGdaxComboBox(daList.at(c));
+                mParent->mParent->getGdaxAccountComboBox()->addItem(daList.at(c));
                 say("Gdax Account: " + daList.at(c));
             }
             //Check GDAX balances once
             listGdaxAccounts();
             //fetch our coinbase accounts and load them into combo boxes for transfers
             listCoinbaseAccountsAvailableToGdax();
+            //do 1 price check
+            for(int c=0;c<mProductIds.count();c++){
+                fetchGdaxPrice(mProductIds.at(c));
+            }
         } else {
             say("GDAX Api Handler Has No Default Account.");
             say("Use Setup Menu to add one.");
@@ -157,6 +170,18 @@ void gdaxApiHandler::cancelAllGdaxOrders() {
     req->sendRequest();
 }
 
+void gdaxApiHandler::fetchGdaxPrice(QString prodId) {
+    say("GDAX priceCheck");
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("GET");
+    req->setPath("/products/" + prodId + "/ticker");
+    req->setBody("");
+    req->setType("fetchGdaxPrices" + prodId);
+    req->sendRequest();
+    //if mAutoRefreshGdaxPrices, restart timer when response is received (not here)
+}
+
 QString gdaxApiHandler::getGdaxApiKey() {
     return mAccount->mApiKey;
 }
@@ -185,6 +210,12 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         }
     } else if (type == "listCoinbaseAccounts" ) {
         listCoinbaseAccountsProcessResponse(resp);
+    } else if ( type == "fetchGdaxPricesBTC-USD") {
+        fetchGdaxPriceProcessResponse(resp,"BTC-USD");
+    } else if ( type == "fetchGdaxPricesLTC-USD") {
+        fetchGdaxPriceProcessResponse(resp,"LTC-USD");
+    } else if ( type == "fetchGdaxPricesETH-USD") {
+        fetchGdaxPriceProcessResponse(resp,"ETH-USD");
     } else {
         say("Unknown Response Type: " + type);
     }
@@ -255,9 +286,100 @@ void gdaxApiHandler::listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp )
     }
 }
 
+void gdaxApiHandler::fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString productId) {
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    //price,bid,ask
+    say("<["+ productId + "]>");
+    //pretty it up
+    QString p,a,b;
+    if ( obj["price"].toString().indexOf(".",0) != -1 ) {
+        p = obj["price"].toString().mid(obj["price"].toString().indexOf(".",0)+1,2) ;
+        if ( p.length() == 1 ) { p+="0"; }
+        p = obj["price"].toString().mid(0,obj["price"].toString().indexOf(".",0)) + "." + p;
+    } else {
+        p = obj["price"].toString() + ".00";
+    }
+
+    if ( obj["ask"].toString().indexOf(".",0) != -1 ) {
+        a = obj["ask"].toString().mid(obj["ask"].toString().indexOf(".",0)+1,2);
+        if ( a.length() == 1 ) { a+="0"; }
+        a = obj["ask"].toString().mid(0,obj["ask"].toString().indexOf(".",0)) + "." + a;
+    } else {
+       a = obj["ask"].toString() + ".00";
+    }
+
+    if ( obj["bid"].toString().indexOf(".",0) != -1 ) {
+        b = obj["bid"].toString().mid(obj["bid"].toString().indexOf(".",0)+1,2);
+        if ( b.length() == 1 ) { b+="0"; }
+        b = obj["bid"].toString().mid(0,obj["bid"].toString().indexOf(".",0)) + "." + b;
+    } else {
+        b = obj["bid"].toString() + ".00";
+    }
+
+    say("Last: " + p );
+    say("Ask: " + a );
+    say("Bid: " + b );
+    //update price label text
+    if (productId == "BTC-USD" ){
+        mParent->mParent->getGdaxBtcPriceLabel()->setText( p );
+        mParent->mParent->getGdaxBtcAskLabel()->setText( a );
+        mParent->mParent->getGdaxBtcBidLabel()->setText( b );
+        if ( mParent->mAutoCheckGDAXPrices ) {
+            int timer= mParent->mAutoCheckGDAXPricesInterval;
+            QTimer::singleShot(timer, this, SLOT(fetchGdaxPriceSlotBtc()));
+        }
+        mParent->getDb()->addToGdaxPriceHistory("BTC",p,a,b);
+    } else if (productId == "ETH-USD" ){
+        mParent->mParent->getGdaxEthPriceLabel()->setText( p );
+        mParent->mParent->getGdaxEthAskLabel()->setText( a );
+        mParent->mParent->getGdaxEthBidLabel()->setText( b );
+        if ( mParent->mAutoCheckGDAXPrices ) {
+            int timer= mParent->mAutoCheckGDAXPricesInterval;
+            QTimer::singleShot(timer, this, SLOT(fetchGdaxPriceSlotEth()));
+        }
+        mParent->getDb()->addToGdaxPriceHistory("ETH",p,a,b);
+    } else if (productId == "LTC-USD" ){
+        mParent->mParent->getGdaxLtcPriceLabel()->setText( p );
+        mParent->mParent->getGdaxLtcAskLabel()->setText( a );
+        mParent->mParent->getGdaxLtcBidLabel()->setText( b );
+        if ( mParent->mAutoCheckGDAXPrices ) {
+            int timer= mParent->mAutoCheckGDAXPricesInterval;
+            QTimer::singleShot(timer, this, SLOT(fetchGdaxPriceSlotLtc()));
+        }
+        mParent->getDb()->addToGdaxPriceHistory("LTC",p,a,b);
+    }
+}
+
 /////////
 // Slots
 /////////
 void gdaxApiHandler::listGdaxAccountsSlot() {
     listGdaxAccounts();
+}
+
+//void gdaxApiHandler::fetchGdaxPriceSlot() {
+//    for(int c=0,t=1000;c<mProductIds.count();c++){
+//        if ( mProductIds.at(c)=="BTC-USD") {
+//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotBtc()));
+//        } else if ( mProductIds.at(c)=="LTC-USD") {
+//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotLtc()));
+//        } else if ( mProductIds.at(c)=="ETH-USD") {
+//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotEth()));
+//        }
+//        t+=1000;
+//    }
+//}
+
+void gdaxApiHandler::fetchGdaxPriceSlotBtc() {
+    fetchGdaxPrice("BTC-USD");
+}
+
+void gdaxApiHandler::fetchGdaxPriceSlotLtc() {
+    fetchGdaxPrice("LTC-USD");
+}
+
+void gdaxApiHandler::fetchGdaxPriceSlotEth() {
+    fetchGdaxPrice("ETH-USD");
 }

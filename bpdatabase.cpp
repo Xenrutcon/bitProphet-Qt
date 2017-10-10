@@ -416,6 +416,31 @@ bool bpDatabase::createGdaxAccountsTable() {
     return retVal;
 }
 
+bool bpDatabase::createGdaxPriceHistoryTable() {
+    bool retVal = false;
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           say("Database: CREATE connection ok.");
+           QSqlQuery query;
+           query.prepare("CREATE TABLE gdaxPriceHistory (id INTEGER PRIMARY KEY AUTOINCREMENT,coin varchar(8),price varchar(256),ask varchar(256),bid varchar(256),ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL );");
+           if(query.exec()) {
+              retVal = true;
+           } else {
+              say("createGdaxPriceHistoryTable() error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+
 bool bpDatabase::createCbSpotPriceHistoryTable() {
     bool retVal = false;
     {
@@ -430,7 +455,7 @@ bool bpDatabase::createCbSpotPriceHistoryTable() {
            if(query.exec()) {
               retVal = true;
            } else {
-              say("createAccountsTable() error:  " + query.lastError().text());
+              say("createCbSpotPriceHistoryTable() error:  " + query.lastError().text());
            }
         }
         Db.close();
@@ -667,6 +692,28 @@ void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
               //say("addToCbSpotPriceHistory() Success");
            } else {
               say("addToCbSpotPriceHistory() Error:  " + query.lastError().text());
+           }
+        }
+        Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+void bpDatabase::addToGdaxPriceHistory( QString coin, QString price,QString ask, QString bid ) {
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           query.prepare("INSERT INTO gdaxPriceHistory (coin, price,ask,bid) VALUES ('" + coin + "','" + price + "','" + ask + "','" + bid + "' )");
+           if(query.exec()) {
+              //say("addToCbSpotPriceHistory() Success");
+           } else {
+              say("addToGdaxPriceHistory() Error:  " + query.lastError().text());
            }
         }
         Db.close();

@@ -48,14 +48,10 @@ public:
     //GDAX Prices
     bool mAutoCheckGDAXPrices;
     int mAutoCheckGDAXPricesInterval;
-
-
-
-
     //Simple Trading (GDAX)
     bool mAutoGDAXTrade;
     int mAutoGDAXTradeInterval;
-    //////////////
+    ///////////////////////////
     // Other junk
     bpWindow *mParent;
     void setBtcSpotPrice(cbApiResponse*);

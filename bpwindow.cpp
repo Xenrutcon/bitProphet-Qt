@@ -152,6 +152,43 @@ QLabel *bpWindow::getGdaxStatDestroyedLabel() {
     return ui->mGdaxStatDestroyed;
 }
 
+QLabel *bpWindow::getGdaxBtcPriceLabel() {
+    return ui->mGdaxBtcPriceLabel;
+}
+
+QLabel *bpWindow::getGdaxBtcAskLabel() {
+    return ui->mGdaxBtcAskLabel;
+}
+
+QLabel *bpWindow::getGdaxBtcBidLabel() {
+    return ui->mGdaxBtcBidLabel;
+}
+
+QLabel *bpWindow::getGdaxLtcPriceLabel() {
+    return ui->mGdaxLtcPriceLabel;
+}
+
+QLabel *bpWindow::getGdaxLtcAskLabel() {
+    return ui->mGdaxLtcAskLabel;
+}
+
+QLabel *bpWindow::getGdaxLtcBidLabel() {
+    return ui->mGdaxLtcBidLabel;
+}
+
+QLabel *bpWindow::getGdaxEthPriceLabel() {
+    return ui->mGdaxEthPriceLabel;
+}
+
+QLabel *bpWindow::getGdaxEthAskLabel() {
+    return ui->mGdaxEthAskLabel;
+}
+
+QLabel *bpWindow::getGdaxEthBidLabel() {
+    return ui->mGdaxEthBidLabel;
+}
+
+
 
 QLineEdit *bpWindow::getBuySpotAmount() {
     return ui->mBuySpotAmount;
@@ -257,6 +294,11 @@ QComboBox* bpWindow::getPlaceGdaxLimitBuyTypeComboBox() {
 
 QComboBox* bpWindow::getPlaceGdaxLimitSellTypeComboBox() {
     return ui->mPlaceLimitSellType;
+}
+
+
+QComboBox* bpWindow::getGdaxAccountComboBox() {
+    return ui->mGdaxAccountComboBox;
 }
 
 QLineEdit* bpWindow::getDepositFromPayMethodAmount() {

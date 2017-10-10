@@ -2025,7 +2025,7 @@
     <property name="flat">
      <bool>true</bool>
     </property>
-    <widget class="QLabel" name="mBtcSpotPriceLabel_2">
+    <widget class="QLabel" name="mGdaxBtcPriceLabel">
      <property name="geometry">
       <rect>
        <x>44</x>
@@ -2038,7 +2038,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mLtcSpotSellPriceLabel_2">
+    <widget class="QLabel" name="mGdaxLtcAskLabel">
      <property name="geometry">
       <rect>
        <x>204</x>
@@ -2051,7 +2051,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mBtcSpotBuyPriceLabel_2">
+    <widget class="QLabel" name="mGdaxBtcBidLabel">
      <property name="geometry">
       <rect>
        <x>44</x>
@@ -2064,7 +2064,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mEthSpotPriceLabel_2">
+    <widget class="QLabel" name="mGdaxEthPriceLabel">
      <property name="geometry">
       <rect>
        <x>364</x>
@@ -2103,7 +2103,7 @@
       <string>ETH $</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mLtcSpotPriceLabel_2">
+    <widget class="QLabel" name="mGdaxLtcPriceLabel">
      <property name="geometry">
       <rect>
        <x>204</x>
@@ -2116,7 +2116,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mLtcSpotBuyPriceLabel_2">
+    <widget class="QLabel" name="mGdaxLtcBidLabel">
      <property name="geometry">
       <rect>
        <x>204</x>
@@ -2142,7 +2142,7 @@
       <string>Bid   $</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mEthSpotBuyPriceLabel_2">
+    <widget class="QLabel" name="mGdaxEthBidLabel">
      <property name="geometry">
       <rect>
        <x>364</x>
@@ -2194,7 +2194,7 @@
       <string>LTC $</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mBtcSpotSellPriceLabel_2">
+    <widget class="QLabel" name="mGdaxBtcAskLabel">
      <property name="geometry">
       <rect>
        <x>44</x>
@@ -2207,7 +2207,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="mEthSpotSellPriceLabel_2">
+    <widget class="QLabel" name="mGdaxEthAskLabel">
      <property name="geometry">
       <rect>
        <x>364</x>
