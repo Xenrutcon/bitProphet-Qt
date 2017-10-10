@@ -286,6 +286,10 @@ cbApiHandler *bitProphet::getHandler() {
     return mApiHandler;
 }
 
+gdaxApiHandler *bitProphet::getGdaxHandler() {
+    return mGDAXApiHandler;
+}
+
 QString bitProphet::findCoinbaseFee(QString dollarAmount) {
     //COINBASE SELL and BUY FEES
     //$1-$10 = $0.99

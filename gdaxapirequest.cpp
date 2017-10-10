@@ -105,8 +105,8 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         QJsonParseError error;
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();
-        if ( mType != "listGdaxAccounts" && mType != "listCoinbaseAccounts" && mType != "fetchGdaxPricesLTC-USD1" && mType != "fetchGdaxPricesBTC-USD1" &&
-             mType != "fetchGdaxPricesETH-USD1" ) {
+        if ( mType != "listGdaxAccounts" && mType != "listCoinbaseAccounts" && mType != "fetchGdaxPricesLTC-USD" && mType != "fetchGdaxPricesBTC-USD" &&
+             mType != "fetchGdaxPricesETH-USD" ) {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }

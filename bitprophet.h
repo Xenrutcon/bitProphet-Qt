@@ -69,6 +69,7 @@ public:
     coinbaseAccount *getHandlerAccount();
     gdaxAccount *getGdaxHandlerAccount();
     cbApiHandler *getHandler();
+    gdaxApiHandler *getGdaxHandler();
     QString findCoinbaseFee(QString dollarAmount);
     void enableAutoRefreshCbAccount();
     void disableAutoRefreshCbAccount();
