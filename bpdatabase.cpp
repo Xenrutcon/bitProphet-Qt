@@ -798,6 +798,92 @@ void bpDatabase::insertGdaxAutoTrade( QString coin, QString type, QString status
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
+void bpDatabase::getGdaxAutoBuysPlaced(QString coin,QList<QString> *buys) {
+    //This is really for status == "placed2" (once the placement is verified via response)
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("select orderId from gdaxAutoTraderHistory where coin='"+coin+"' AND status='placed2' AND type='BUY'");
+           query.prepare(q);
+           if(query.exec()) {
+               while ( query.next() )  {
+                   int idVal = query.record().indexOf("orderId");
+                   QString idResult = query.value(idVal).toString();
+                   buys->append(idResult);
+               }
+           } else {
+               say("getGdaxAutoBuysPlaced() error:  " + query.lastError().text());
+           }
+         }
+         Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+QString bpDatabase::getGdaxAutoTradeIdByOrderId(QString orderId) {
+    //This is really for status == "placed2" (once the placement is verified via response)
+    QString retVal("");
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("select id from gdaxAutoTraderHistory where orderId='"+orderId+"'");
+           query.prepare(q);
+           if(query.exec()) {
+               while ( query.next() )  {
+                   int idVal = query.record().indexOf("id");
+                   retVal = query.value(idVal).toString();
+               }
+           } else {
+               say("getGdaxAutoTradeIdByOrderId() error:  " + query.lastError().text());
+           }
+         }
+         Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+QString bpDatabase::getGdaxAutoTradeHistoryValueById(QString id,QString column) {
+    QString retVal("");
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("select "+column+" from gdaxAutoTraderHistory where id='"+id+"'");
+           query.prepare(q);
+           if(query.exec()) {
+               while ( query.next() )  {
+                   int idVal = query.record().indexOf(column);
+                   retVal = query.value(idVal).toString();
+               }
+           } else {
+               say("getGdaxAutoTradeValueById() error:  " + query.lastError().text());
+           }
+         }
+         Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+    return retVal;
+}
+
+
 void bpDatabase::addToCbSpotPriceHistory( QString coin, QString price ) {
     {
         QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");

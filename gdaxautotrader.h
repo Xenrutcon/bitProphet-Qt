@@ -41,6 +41,7 @@ private:
     bitProphet *mParent;
 private slots:
     void autoTradeCheck();
+    void checkForBuyFills();
 };
 
 #endif // GDAXAUTOTRADER_H

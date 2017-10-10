@@ -155,8 +155,8 @@ void  gdaxApiHandler::placeGdaxAutoTraderLimitBuy(QString prodId,QString size, Q
     say("Placing Limit Buy " + size + " of " + prodId + ".");
     mParent->setProphetState("FETCH");
     gdaxApiRequest* req = new gdaxApiRequest(this);
-    req->setMethod("POST");        //list accounts is a GET
-    req->setPath("/orders");  //the url path,etc..
+    req->setMethod("POST");
+    req->setPath("/orders");
     req->setBody("{"
                  "\"size\": " + size + ","
                  "\"price\": \"" + price + "\"," +
@@ -165,6 +165,36 @@ void  gdaxApiHandler::placeGdaxAutoTraderLimitBuy(QString prodId,QString size, Q
                  "}");
     req->setType("placeGdaxAutoTraderLimitBuy");
     req->mAutoTradeId = QString().setNum(autoTradeId);
+    req->sendRequest();
+}
+
+void  gdaxApiHandler::placeGdaxAutoTraderLimitSell(QString prodId,QString size, QString price, int autoTradeId) {
+    say("Placing Limit Sell " + size + " of " + prodId + " @ $" + price);
+    mParent->setProphetState("FETCH");
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("POST");
+    req->setPath("/orders");
+    req->setBody("{"
+                 "\"size\": " + size + ","
+                 "\"price\": \"" + price + "\"," +
+                 "\"product_id\": \"" + prodId + "\"," +
+                 "\"side\": \"sell\"" +
+                 "}");
+    req->setType("placeGdaxAutoTraderLimitSell");
+    req->mAutoTradeId = QString().setNum(autoTradeId);
+    req->sendRequest();
+}
+
+
+void  gdaxApiHandler::fetchGdaxFillsForOrderId(QString orderId) {
+    mParent->setProphetState("FETCH");
+    QString autoId = mParent->getDb()->getGdaxAutoTradeIdByOrderId(orderId);
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("GET");        //list accounts is a GET
+    req->setPath("/orders/" + orderId);  //the url path,etc..
+    req->setBody("");
+    req->setType("fetchGdaxFillsForOrderId");
+    req->mAutoTradeId = autoId;
     req->sendRequest();
 }
 
@@ -244,6 +274,8 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         fetchGdaxPriceProcessResponse(resp,"ETH-USD");
     } else if ( type== "placeGdaxAutoTraderLimitBuy" ) {
         placeGdaxAutoTraderLimitBuyProcessResponse(resp);
+    } else if ( type == "fetchGdaxFillsForOrderId" ) {
+        fetchGdaxFillsForOrderIdProcessResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
@@ -394,6 +426,39 @@ void gdaxApiHandler::placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse 
         mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","placed2"); //placed is sent, placed2 is confirmed successful placed.
     }
 
+}
+
+void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *resp) {
+    QString tradeId(resp->mAutoTradeId);
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    bool isSettled = obj["settled"].toBool();
+    if ( isSettled ) {
+        //If its not settled, ignore it (for now)
+        // if it is settled, change it to a sell and post it for sellTarget
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","posted");
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","type","SELL");
+        QString fees = obj["fill_fees"].toString();
+        QString feeMod = "0.0";
+        if ( fees.toDouble() > 0.0 ) { feeMod = fees; }
+        QString amount = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"amount");
+        QString sellPrice = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"sellTarget");
+        sellPrice = QString().setNum( sellPrice.toDouble() + feeMod.toDouble() );
+        if ( sellPrice.indexOf(".",0) != -1 ) {
+            //if it has a demical place
+            QString pre=sellPrice.mid(0,sellPrice.indexOf(".",0));
+            QString post= sellPrice.mid(sellPrice.indexOf(".",0)+1,2);
+            sellPrice = pre + "." + post;
+        }
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","sellTarget",sellPrice);
+        QString coin = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"coin");
+        //Now place it for sale @ sellPrice
+        placeGdaxAutoTraderLimitSell(coin+"-USD",amount,sellPrice,tradeId.toInt());
+        //HOLY FUCKSTICKS WE ARE DONE, LET LOOSE THE MONEY MACHINE
+        // its not really done, but I can let it run by itself now.
+        // time for a test run..... (gimme MONEY!)
+    }
 }
 
 /////////

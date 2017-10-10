@@ -47,8 +47,9 @@ public:
     void placeGdaxLimitBuy(QString prodId,QString size, QString price);
     void placeGdaxLimitSell(QString prodId,QString size, QString price);
     void placeGdaxAutoTraderLimitBuy(QString prodId,QString size, QString price,int autoTradeId);
+    void placeGdaxAutoTraderLimitSell(QString prodId,QString size, QString price, int autoTradeId);
     void cancelAllGdaxOrders();
-
+    void fetchGdaxFillsForOrderId(QString orderId);
     void processResponse( gdaxApiResponse *resp );    
     bitProphet *mParent;
     gdaxAccount *mAccount;
@@ -60,14 +61,16 @@ private:
     void listCoinbaseAccountsAvailableToGdax();
     void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );    
     void fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString productId);
+    void fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *resp);
     void placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse *resp);
     gdaxWalletTable *mWalletTableWidget;
     void fetchGdaxPrice(QString prodId);
 signals:
 
 public slots:    
+    void listGdaxAccountsSlot();
 private slots:
-    void listGdaxAccountsSlot();    
+
     void fetchGdaxPriceSlotBtc();
     void fetchGdaxPriceSlotLtc();
     void fetchGdaxPriceSlotEth();

@@ -406,6 +406,7 @@ void bitProphet::enableGDAXTrader() {
     mAutoGDAXTrade = true;
     mGdaxAutoTradeInstance = new gdaxAutoTrader(this);
     QTimer::singleShot(mAutoGDAXTradeInterval,mGdaxAutoTradeInstance,SLOT(autoTradeCheck()));
+    QTimer::singleShot(mAutoGDAXTradeInterval/2,mGdaxAutoTradeInstance,SLOT(checkForBuyFills()));
 }
 
 void bitProphet::enableAutoRefreshCbAccount() {

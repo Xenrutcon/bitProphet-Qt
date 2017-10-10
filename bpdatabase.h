@@ -42,12 +42,14 @@ public:
     void insertGdaxAccount( QString name, QString apiKey, QString apiSecret, bool defaultAccount, QString passPhrase, QString exchange="GDAX");
     void insertAutoSpotTrade( QString coin, QString type, QString boughtAt,QString soldAt,QString amount,QString status);
     void insertGdaxAutoTrade( QString coin, QString type, QString status, QString amount, QString buyPrice, QString buyTotal, QString sellTarget, QString sellTotal, QString minProfitPct, QString minProfitUsd);
-
     void updateAutoSpotTradeSoldAt( QString id, QString soldAt);
     void updateRowById( QString id, QString table, QString column, QString newValue );
     int getLastIdForTable(QString table);
     QList<QString> getAccountList();
     QList<QString> getGdaxAccountList();
+    void getGdaxAutoBuysPlaced(QString coin,QList<QString> *buys);
+    QString getGdaxAutoTradeIdByOrderId(QString orderId);
+    QString getGdaxAutoTradeHistoryValueById(QString id,QString column);
     void deleteAccount(QString id );
     void deleteGdaxAccount(QString id );
     QString getDefaultAccountId();

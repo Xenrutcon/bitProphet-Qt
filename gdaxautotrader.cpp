@@ -4,11 +4,11 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mParent = parent;
     //Sell Types
     mTradeTypes.append("LTC");
-    mTradeTypes.append("ETH");
+    //mTradeTypes.append("ETH");
 
     //Buy (with USD) Types
     mBuyTypes.append("LTC");
-    mBuyTypes.append("ETH");
+    //mBuyTypes.append("ETH");
 
     mBTCLog = mParent->mParent->getGdaxAutoTraderBTCLog();
     mLTCLog = mParent->mParent->getGdaxAutoTraderLTCLog();
@@ -61,6 +61,35 @@ void gdaxAutoTrader::sayGdaxAutoTrader(QString sayThis, QString whichBox) {
 ////////
 // Slots
 ////////
+
+void gdaxAutoTrader::checkForBuyFills() {
+    // status = 'placed' -> Ignore these, not yet verified by response from server, may not really exist
+    // status = 'placed2' -> These are VERIFIED and DO EXIST and MAY OR MAY NOT be partially or completely filled(bought)
+    // status = 'posted' -> This is in the process of placing an automatic SELL for this order, not yet verified by response from server, may not really exist
+    // status = 'posted2' -> These are SELLING, are VERIFIED and DO EXIST and MAY OR MAY NOT be partially or completely filled(sold);
+                //^when switching to posted or posted2 change type from BUY to SELL also....
+
+    //The tricks here all happen in the responseProcessor
+    //collect a list of all 'placed2' buys
+    //when unwrapping response, updateDb entry as needed with orderId
+
+    //get all 'placed2' status BUYs for each coin
+    for (int c=0;c<mBuyTypes.length();c++) {
+        QString currCoin = mBuyTypes.at(c);
+        sayGdaxAutoTrader("Checking Buys For Fills",currCoin);
+        //get all 'placed2' status BUYs
+        QList<QString> buyList;
+        buyList.clear();
+        mParent->getDb()->getGdaxAutoBuysPlaced(currCoin,&buyList);
+        sayGdaxAutoTrader("Buys: "+QString().setNum(buyList.count()),currCoin);
+        //send a /fills/order-id for each placed2 status buy
+        for(int o=0;o<buyList.count();o++){
+            mParent->getGdaxHandler()->fetchGdaxFillsForOrderId(buyList.at(o));
+        }
+    }
+    QTimer::singleShot(mParent->mAutoGDAXTradeInterval/2,this,SLOT(checkForBuyFills()));
+}
+
 void gdaxAutoTrader::autoTradeCheck() {
     if ( mParent->mAutoGDAXTrade == false ) { return; }
     //min LTC Buy is 0.01 LTC
@@ -279,6 +308,8 @@ void gdaxAutoTrader::autoTradeCheck() {
 //                    if ( currCoin == "LTC") { mLastBuyPriceLTC = curBid.toDouble(); }
 //                    if ( currCoin == "ETH") { mLastBuyPriceETH = curBid.toDouble(); }
                     mParent->getGdaxHandler()->placeGdaxAutoTraderLimitBuy(currCoin+"-USD",QString().setNum(totalBuyAmount),curBid,lastId);
+                    //Since we just made a buy, lets update our wallets too
+                    mParent->getGdaxHandler()->listGdaxAccountsSlot();
                     //Update USDBalance ( -howMuchToSpend )
                     USDBalance = QString().setNum(USDBalance.toDouble() - totalBuyCost);
             sayGdaxAutoTrader("# Buy on " + currCoin,currCoin);
