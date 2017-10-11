@@ -198,6 +198,18 @@ void  gdaxApiHandler::fetchGdaxFillsForOrderId(QString orderId) {
     req->sendRequest();
 }
 
+void  gdaxApiHandler::fetchGdaxSellFillsForOrderId(QString orderId) {
+    mParent->setProphetState("FETCH");
+    QString autoId = mParent->getDb()->getGdaxAutoTradeIdByOrderId(orderId);
+    gdaxApiRequest* req = new gdaxApiRequest(this);
+    req->setMethod("GET");
+    req->setPath("/orders/" + orderId);
+    req->setBody("");
+    req->setType("fetchGdaxSellFillsForOrderId");
+    req->mAutoTradeId = autoId;
+    req->sendRequest();
+}
+
 
 void  gdaxApiHandler::placeGdaxLimitSell(QString prodId,QString size, QString price) {
     say("Placing Limit Sell " + size + " of " + prodId + ".");
@@ -276,6 +288,8 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         placeGdaxAutoTraderLimitBuyProcessResponse(resp);
     } else if ( type == "fetchGdaxFillsForOrderId" ) {
         fetchGdaxFillsForOrderIdProcessResponse(resp);
+    } else if ( type == "fetchGdaxSellFillsForOrderId") {
+        fetchGdaxSellFillsForOrderIdProcessResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
@@ -428,6 +442,50 @@ void gdaxApiHandler::placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse 
 
 }
 
+void gdaxApiHandler::placeGdaxAutoTraderLimitSellProcessResponse(gdaxApiResponse *resp) {
+    QString tradeId(resp->mAutoTradeId);
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    QString orderId = obj["id"].toString();
+    if ( orderId.length() > 0 ) {
+        say("# Gdax Auto Sell orderId - "+orderId+" was placed!");
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","orderId",orderId);
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","posted2"); //posted is sell sent, posted2 is confirmed successful placed sell.
+    }
+}
+
+
+void gdaxApiHandler::fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse *resp) {
+    QString tradeId(resp->mAutoTradeId);
+    QString type = resp->getType();
+    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    bool isSettled = obj["settled"].toBool();
+    if ( isSettled ) {
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","SOLD");
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","type","SELL");
+        QString fees = obj["fill_fees"].toString();
+        QString feeMod = "0.0";
+        if ( fees.toDouble() > 0.0 ) { feeMod = fees; }
+        QString sellPrice = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"sellTarget");
+        QString sellTotal = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"sellTotal");
+        sellTotal = QString().setNum( sellTotal.toDouble() - feeMod.toDouble() );
+        if ( sellTotal.indexOf(".",0) != -1 ) {
+            //if it has a demical place
+            QString pre=sellTotal.mid(0,sellTotal.indexOf(".",0));
+            QString post= sellTotal.mid(sellTotal.indexOf(".",0)+1,2);
+            sellTotal = pre + "." + post;
+        }
+        mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","sellTotal",sellTotal);
+        //find the profit and send it back to coinbase in USD
+        QString buyTotal = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"buyTotal");
+        QString finalProfit = QString().setNum(sellTotal.toDouble() - buyTotal.toDouble());
+        say("# Gdax Auto Sell Final Profit -> $"+finalProfit );
+        xferFromGdaxToCoinbase( mParent->mParent->getXferToCbWalletComboBox()->currentData().toString(),finalProfit,"USD");
+    }
+}
+
 void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *resp) {
     QString tradeId(resp->mAutoTradeId);
     QString type = resp->getType();
@@ -458,8 +516,13 @@ void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *re
         //HOLY FUCKSTICKS WE ARE DONE, LET LOOSE THE MONEY MACHINE
         // its not really done, but I can let it run by itself now.
         // time for a test run..... (gimme MONEY!)
+        // it works. needs tweaks... it works... made a buck already. trading on 5.2 LTC @ 50 bux each today
+        // fluctuations between $50-$51 are pulling 10-20 cents each, with varying frequency.
+        // this is good, can be better.
     }
 }
+
+
 
 /////////
 // Slots
@@ -467,19 +530,6 @@ void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *re
 void gdaxApiHandler::listGdaxAccountsSlot() {
     listGdaxAccounts();
 }
-
-//void gdaxApiHandler::fetchGdaxPriceSlot() {
-//    for(int c=0,t=1000;c<mProductIds.count();c++){
-//        if ( mProductIds.at(c)=="BTC-USD") {
-//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotBtc()));
-//        } else if ( mProductIds.at(c)=="LTC-USD") {
-//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotLtc()));
-//        } else if ( mProductIds.at(c)=="ETH-USD") {
-//            QTimer::singleShot(t,this,SLOT(fetchGdaxPriceSlotEth()));
-//        }
-//        t+=1000;
-//    }
-//}
 
 void gdaxApiHandler::fetchGdaxPriceSlotBtc() {
     fetchGdaxPrice("BTC-USD");

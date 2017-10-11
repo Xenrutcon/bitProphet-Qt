@@ -826,6 +826,35 @@ void bpDatabase::getGdaxAutoBuysPlaced(QString coin,QList<QString> *buys) {
     QSqlDatabase::removeDatabase("qt_sql_default_connection");
 }
 
+void bpDatabase::getGdaxAutoSellsPosted(QString coin,QList<QString> *sells) {
+    //This is really for status == "placed2" (once the placement is verified via response)
+    {
+        QSqlDatabase Db = QSqlDatabase::addDatabase("QSQLITE");
+        Db.setDatabaseName("bitProphet.dat");
+        if (!Db.open()) {
+           say("Error: connecting to database failed!");
+        } else {
+           //say("Database: connection ok.");
+           QSqlQuery query;
+           QString q("select orderId from gdaxAutoTraderHistory where coin='"+coin+"' AND status='posted2' AND type='SELL'");
+           query.prepare(q);
+           if(query.exec()) {
+               while ( query.next() )  {
+                   int idVal = query.record().indexOf("orderId");
+                   QString idResult = query.value(idVal).toString();
+                   sells->append(idResult);
+               }
+           } else {
+               say("getGdaxAutoSellsPosted() error:  " + query.lastError().text());
+           }
+         }
+         Db.close();
+    }
+    QSqlDatabase::removeDatabase("bitProphet.dat");
+    QSqlDatabase::removeDatabase("qt_sql_default_connection");
+}
+
+
 QString bpDatabase::getGdaxAutoTradeIdByOrderId(QString orderId) {
     //This is really for status == "placed2" (once the placement is verified via response)
     QString retVal("");

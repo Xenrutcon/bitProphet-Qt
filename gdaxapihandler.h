@@ -50,6 +50,7 @@ public:
     void placeGdaxAutoTraderLimitSell(QString prodId,QString size, QString price, int autoTradeId);
     void cancelAllGdaxOrders();
     void fetchGdaxFillsForOrderId(QString orderId);
+    void fetchGdaxSellFillsForOrderId(QString orderId);
     void processResponse( gdaxApiResponse *resp );    
     bitProphet *mParent;
     gdaxAccount *mAccount;
@@ -62,7 +63,9 @@ private:
     void listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp );    
     void fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString productId);
     void fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *resp);
+    void fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse *resp);
     void placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse *resp);
+    void placeGdaxAutoTraderLimitSellProcessResponse(gdaxApiResponse *resp);
     gdaxWalletTable *mWalletTableWidget;
     void fetchGdaxPrice(QString prodId);
 signals:

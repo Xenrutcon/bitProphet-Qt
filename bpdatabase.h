@@ -48,6 +48,7 @@ public:
     QList<QString> getAccountList();
     QList<QString> getGdaxAccountList();
     void getGdaxAutoBuysPlaced(QString coin,QList<QString> *buys);
+    void getGdaxAutoSellsPosted(QString coin,QList<QString> *sells);
     QString getGdaxAutoTradeIdByOrderId(QString orderId);
     QString getGdaxAutoTradeHistoryValueById(QString id,QString column);
     void deleteAccount(QString id );

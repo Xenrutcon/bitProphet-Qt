@@ -42,6 +42,7 @@ private:
 private slots:
     void autoTradeCheck();
     void checkForBuyFills();
+    void checkForSellFills();
 };
 
 #endif // GDAXAUTOTRADER_H

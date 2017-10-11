@@ -88,6 +88,29 @@ void gdaxAutoTrader::checkForBuyFills() {
         }
     }
     QTimer::singleShot(mParent->mAutoGDAXTradeInterval/2,this,SLOT(checkForBuyFills()));
+    //chill 2 seconds, then scan the sells
+    QTimer::singleShot(2000,this,SLOT(checkForSellFills()));
+}
+
+void gdaxAutoTrader::checkForSellFills() {
+    // status = 'posted' -> This is in the process of placing an automatic SELL for this order, not yet verified by response from server, may not really exist
+    // status = 'posted2' -> These are SELLING, are VERIFIED and DO EXIST and MAY OR MAY NOT be partially or completely filled(sold);
+
+    //get all 'posted2' status SELLs for each coin
+    for (int c=0;c<mBuyTypes.length();c++) {
+        QString currCoin = mBuyTypes.at(c);
+        sayGdaxAutoTrader("Checking Sells For Fills",currCoin);
+        //get all 'posted2' status Sells
+        QList<QString> sellList;
+        sellList.clear();
+        mParent->getDb()->getGdaxAutoSellsPosted(currCoin,&sellList);
+        sayGdaxAutoTrader("Sells: "+QString().setNum(sellList.count()),currCoin);
+        //send a /fills/order-id for each placed2 status buy
+        for(int o=0;o<sellList.count();o++){
+            mParent->getGdaxHandler()->fetchGdaxSellFillsForOrderId(sellList.at(o));
+        }
+    }
+
 }
 
 void gdaxAutoTrader::autoTradeCheck() {
@@ -126,7 +149,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble());
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() - 0.20 );
         } else {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             break;
