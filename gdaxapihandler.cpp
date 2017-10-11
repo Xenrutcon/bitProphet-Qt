@@ -286,6 +286,8 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         fetchGdaxPriceProcessResponse(resp,"ETH-USD");
     } else if ( type== "placeGdaxAutoTraderLimitBuy" ) {
         placeGdaxAutoTraderLimitBuyProcessResponse(resp);
+    } else if ( type== "placeGdaxAutoTraderLimitSell" ) {
+        placeGdaxAutoTraderLimitSellProcessResponse(resp);
     } else if ( type == "fetchGdaxFillsForOrderId" ) {
         fetchGdaxFillsForOrderIdProcessResponse(resp);
     } else if ( type == "fetchGdaxSellFillsForOrderId") {
@@ -482,7 +484,14 @@ void gdaxApiHandler::fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse
         QString buyTotal = mParent->getDb()->getGdaxAutoTradeHistoryValueById(tradeId,"buyTotal");
         QString finalProfit = QString().setNum(sellTotal.toDouble() - buyTotal.toDouble());
         say("# Gdax Auto Sell Final Profit -> $"+finalProfit );
-        xferFromGdaxToCoinbase( mParent->mParent->getXferToCbWalletComboBox()->currentData().toString(),finalProfit,"USD");
+        QComboBox *scanCurs = mParent->mParent->getXferToCbWalletComboBox();
+        QString toAccId;
+        for (int c=0;c<scanCurs->count();c++) {
+            if ( scanCurs->itemText(c) == "USD" ) {
+                toAccId = scanCurs->itemData(c).toString();
+            }
+        }
+        xferFromGdaxToCoinbase( toAccId,finalProfit,"USD");
     }
 }
 

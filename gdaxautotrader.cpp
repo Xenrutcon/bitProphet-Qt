@@ -17,7 +17,7 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);
     mUSDStartAmount = "0.00";
-    mMinUSDBuyAmount = 20.00;
+    mMinUSDBuyAmount = 50.00;
     mMinPercentProfit = 0.0025; //in DECIMAL
     mLastBuyPriceBTC = "0.00";mLastBuyPriceLTC = "0.00";mLastBuyPriceETH = "0.00";
     mLastSellPriceBTC = "0.00";mLastSellPriceLTC = "0.00";mLastSellPriceETH = "0.00";
