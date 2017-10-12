@@ -539,9 +539,9 @@ void gdaxApiHandler::xferFromGdaxToCoinbaseProcessResponse(gdaxApiResponse *resp
     QString type = resp->getType();
 //    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
-    QString amount = obj["amount"];
-    QString currency = obj["currency"];
-    say("# Xfer Amount: "+amount+" ("+obj[currency]+")");
+    QString amount = obj["amount"].toString();
+    QString currency = obj["currency"].toString();
+    say("# Xfer Amount: "+amount+" ("+currency+")");
 }
 
 void gdaxApiHandler::process404(gdaxApiResponse *resp) {
