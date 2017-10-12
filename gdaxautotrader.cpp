@@ -149,7 +149,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() - 0.20 );
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
         } else {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             break;
