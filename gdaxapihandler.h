@@ -52,6 +52,7 @@ public:
     void fetchGdaxFillsForOrderId(QString orderId);
     void fetchGdaxSellFillsForOrderId(QString orderId);
     void processResponse( gdaxApiResponse *resp );    
+    void process404(gdaxApiResponse *resp);
     bitProphet *mParent;
     gdaxAccount *mAccount;
 private:    
@@ -66,6 +67,7 @@ private:
     void fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse *resp);
     void placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse *resp);
     void placeGdaxAutoTraderLimitSellProcessResponse(gdaxApiResponse *resp);
+    void xferFromGdaxToCoinbaseProcessResponse(gdaxApiResponse *resp);
     gdaxWalletTable *mWalletTableWidget;
     void fetchGdaxPrice(QString prodId);
 signals:

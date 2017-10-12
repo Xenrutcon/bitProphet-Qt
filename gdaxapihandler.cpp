@@ -72,7 +72,7 @@ void gdaxApiHandler::listGdaxAccounts() {
     // method: GET
     // requestPath: /accounts
     // body: EMPTY
-    say("Fetching GDAX Accounts (GDAX Wallet List)");
+//    say("Fetching GDAX Accounts (GDAX Wallet List)");
     mParent->setProphetState("FETCH");
 
     gdaxApiRequest* req = new gdaxApiRequest(this);
@@ -239,7 +239,7 @@ void gdaxApiHandler::cancelAllGdaxOrders() {
 }
 
 void gdaxApiHandler::fetchGdaxPrice(QString prodId) {
-    say("GDAX priceCheck");
+//    say("GDAX priceCheck");
     mParent->setProphetState("FETCH");
     gdaxApiRequest* req = new gdaxApiRequest(this);
     req->setMethod("GET");
@@ -268,7 +268,7 @@ QString gdaxApiHandler::getGdaxPassPhrase() {
 
 void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
     QString type = resp->getType();
-    say("Processing Response Type: " + type);
+//    say("Processing Response Type: " + type);
     if (type == "listGdaxAccounts" ) {
         say("Got Gdax Wallets...");
         listAccountProcessResponse(resp);
@@ -292,11 +292,13 @@ void gdaxApiHandler::processResponse( gdaxApiResponse *resp ) {
         fetchGdaxFillsForOrderIdProcessResponse(resp);
     } else if ( type == "fetchGdaxSellFillsForOrderId") {
         fetchGdaxSellFillsForOrderIdProcessResponse(resp);
+    } else if ( type == "xferFromGdaxToCoinbase") {
+        xferFromGdaxToCoinbaseProcessResponse(resp);
     } else {
         say("Unknown Response Type: " + type);
     }
     mParent->mParent->getGdaxStatProcessedLabel()->setText(QString().setNum(mParent->mParent->getGdaxStatProcessedLabel()->text().toInt() + 1));
-    say("Done Processing Response Type: " + type);
+//    say("Done Processing Response Type: " + type);
 }
 
 void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
@@ -307,9 +309,9 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
         mAccount->clearWallets();
     }
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonArray arr = *resp->getResponseArray();
-    say("Items: " + QString().setNum(arr.count()) );
+//    say("Items: " + QString().setNum(arr.count()) );
     QComboBox *xferFromTarget = mParent->mParent->getXferFromCbWalletTargetComboBox();
     QComboBox *xferToSource = mParent->mParent->getXferToCbWalletSourceComboBox();
     QComboBox *placeLimitBuySource = mParent->mParent->getPlaceGdaxLimitBuySourceComboBox();
@@ -341,20 +343,20 @@ void gdaxApiHandler::listAccountProcessResponse(gdaxApiResponse *resp ) {
         mWalletTableWidget->deleteLater();
     }
     mWalletTableWidget = new gdaxWalletTable(mAccount,this);
-    say("Processed " + QString().setNum(mAccount->getWalletCount()) + " Wallets.");
+//    say("Processed " + QString().setNum(mAccount->getWalletCount()) + " Wallets.");
 }
 
 void gdaxApiHandler::listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp ) {
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonArray arr = *resp->getResponseArray();
-    say("Items: " + QString().setNum(arr.count()) );
+//    say("Items: " + QString().setNum(arr.count()) );
     if ( arr.count() > 0 ) {
         mParent->mParent->getXferFromCbWalletButton()->setEnabled(true);
         mParent->mParent->getXferToCbWalletButton()->setEnabled(true);
     }
     for(int w=0;w<arr.count();w++) {
-        say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) );
+//        say("id: " + arr.at(w).toObject()["id"].toString().mid(0,8) );
         QComboBox *xferFrom = mParent->mParent->getXferFromCbWalletComboBox();
         QComboBox *xferTo = mParent->mParent->getXferToCbWalletComboBox();
         xferFrom->addItem(arr.at(w).toObject()["currency"].toString() + " [" + arr.at(w).toObject()["id"].toString().mid(0,8) + "]",QVariant(arr.at(w).toObject()["id"].toString()));
@@ -364,10 +366,10 @@ void gdaxApiHandler::listCoinbaseAccountsProcessResponse(gdaxApiResponse *resp )
 
 void gdaxApiHandler::fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString productId) {
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
     //price,bid,ask
-    say("<["+ productId + "]>");
+//    say("<["+ productId + "]>");
     //pretty it up
     QString p,a,b;
     if ( obj["price"].toString().indexOf(".",0) != -1 ) {
@@ -394,9 +396,9 @@ void gdaxApiHandler::fetchGdaxPriceProcessResponse(gdaxApiResponse *resp,QString
         b = obj["bid"].toString() + ".00";
     }
 
-    say("Last: " + p );
-    say("Ask: " + a );
-    say("Bid: " + b );
+//    say("Last: " + p );
+//    say("Ask: " + a );
+//    say("Bid: " + b );
     //update price label text
     if (productId == "BTC-USD" ){
         mParent->mParent->getGdaxBtcPriceLabel()->setText( p );
@@ -433,7 +435,7 @@ void gdaxApiHandler::placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse 
     //if successful, update gdaxTraderHistory entry
     //if failed, remove gdaxTraderHistor entry
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
     QString orderId = obj["id"].toString();
     if ( orderId.length() > 0 ) {
@@ -447,7 +449,7 @@ void gdaxApiHandler::placeGdaxAutoTraderLimitBuyProcessResponse(gdaxApiResponse 
 void gdaxApiHandler::placeGdaxAutoTraderLimitSellProcessResponse(gdaxApiResponse *resp) {
     QString tradeId(resp->mAutoTradeId);
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
     QString orderId = obj["id"].toString();
     if ( orderId.length() > 0 ) {
@@ -461,7 +463,7 @@ void gdaxApiHandler::placeGdaxAutoTraderLimitSellProcessResponse(gdaxApiResponse
 void gdaxApiHandler::fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse *resp) {
     QString tradeId(resp->mAutoTradeId);
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
     bool isSettled = obj["settled"].toBool();
     if ( isSettled ) {
@@ -487,8 +489,10 @@ void gdaxApiHandler::fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse
         QComboBox *scanCurs = mParent->mParent->getXferToCbWalletComboBox();
         QString toAccId;
         for (int c=0;c<scanCurs->count();c++) {
-            if ( scanCurs->itemText(c) == "USD" ) {
+            if ( scanCurs->itemText(c).mid(0,3) == "USD" ) {
                 toAccId = scanCurs->itemData(c).toString();
+            } else {
+                say("ScanCurs:" + scanCurs->itemText(c).mid(0,3) );
             }
         }
         xferFromGdaxToCoinbase( toAccId,finalProfit,"USD");
@@ -498,7 +502,7 @@ void gdaxApiHandler::fetchGdaxSellFillsForOrderIdProcessResponse(gdaxApiResponse
 void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *resp) {
     QString tradeId(resp->mAutoTradeId);
     QString type = resp->getType();
-    say("Processing Response >>> " + type);
+//    say("Processing Response >>> " + type);
     QJsonObject obj = *resp->getResponseContent();
     bool isSettled = obj["settled"].toBool();
     if ( isSettled ) {
@@ -531,7 +535,31 @@ void gdaxApiHandler::fetchGdaxFillsForOrderIdProcessResponse(gdaxApiResponse *re
     }
 }
 
+void gdaxApiHandler::xferFromGdaxToCoinbaseProcessResponse(gdaxApiResponse *resp) {
+    QString type = resp->getType();
+//    say("Processing Response >>> " + type);
+    QJsonObject obj = *resp->getResponseContent();
+    QString amount = obj["amount"];
+    QString currency = obj["currency"];
+    say("# Xfer Amount: "+amount+" ("+obj[currency]+")");
+}
 
+void gdaxApiHandler::process404(gdaxApiResponse *resp) {
+    QString type = resp->getType();
+    if ( type == "fetchGdaxSellFillsForOrderId") {
+        QString tradeId(resp->mAutoTradeId);
+        QJsonObject obj = *resp->getResponseContent();
+        if(obj["message"] == "NotFound") {
+            //we checked on an order and got notfound, means we cancelled it.
+            if ( tradeId.toInt() > 0 ) {
+                mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","CANCELLED");
+                say("# Order Number " + tradeId + " was cancelled, updating orderDb (NotFound)");
+            }
+        }
+    } else {
+        say("Process404 doesnt know about >>>> " + type);
+    }
+}
 
 /////////
 // Slots

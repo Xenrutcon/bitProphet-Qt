@@ -4,7 +4,7 @@
 gdaxApiRequest::gdaxApiRequest(gdaxApiHandler *parent) : QObject(parent), mResponse(NULL),mNetAccMan(NULL), mAutoTradeId("") {
     mPtrName = QString("0x%1").arg((quintptr)this, QT_POINTER_SIZE * 2, 16, QChar('0'));
     mParent = parent;
-    say("GDax Api Request Created.");
+//    say("GDax Api Request Created.");
     QDateTime current(QDateTime::currentDateTime());
     uint timestamp = current.toTime_t();
     QString ts = QVariant(timestamp).toString();
@@ -106,7 +106,7 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         QByteArray unparsed = reply->readAll();
         reply->deleteLater();
         if ( mType != "listGdaxAccounts" && mType != "listCoinbaseAccounts" && mType != "fetchGdaxPricesLTC-USD" && mType != "fetchGdaxPricesBTC-USD" &&
-             mType != "fetchGdaxPricesETH-USD" ) {
+             mType != "fetchGdaxPricesETH-USD" && mType != "fetchGdaxFillsForOrderId" && mType != "fetchGdaxSellFillsForOrderId") {
             //If its not a known type, print unparsed because we are probably creating it.
             mParent->say ("unparsed --- " + unparsed);
         }        
@@ -114,9 +114,7 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         //say("JSon error? >>> " + error.errorString());
         //say("Data: " + QString(jsonData.toJson().toStdString().c_str()));
         QJsonArray jsonArr = jsonData.array();
-        //say ("Array SIZE >>>>>>>>>>>>> " + QString().setNum(jsonArr.count()));
         QJsonObject jsonObj = jsonData.object();
-        //COMING SOON..response parsing.
         mResponse = new gdaxApiResponse(this,&jsonObj,&jsonArr);
         mResponse->setType(mType);
         if ( mAutoTradeId != "" ) { mResponse->mAutoTradeId = mAutoTradeId; }
@@ -124,7 +122,18 @@ void gdaxApiRequest::requestFinished(QNetworkReply *reply) {
         mParent->mParent->setProphetState("IDLE");
         mNetAccMan->deleteLater();
         mResponse->deleteLater();
-        mResponse = NULL;
+        mResponse = NULL;        
+    } else if ( statusCode == 404 ) {
+        QJsonParseError error;
+        QByteArray unparsed = reply->readAll();
+        reply->deleteLater();
+        QJsonDocument jsonData = QJsonDocument::fromJson(unparsed,&error);
+        QJsonArray jsonArr = jsonData.array();
+        QJsonObject jsonObj = jsonData.object();
+        mResponse = new gdaxApiResponse(this,&jsonObj,&jsonArr);
+        mResponse->setType(mType);
+        if ( mAutoTradeId != "" ) { mResponse->mAutoTradeId = mAutoTradeId; }
+        mParent->process404(mResponse);
     } else {
         mParent->say("Bad Response, Aborted Request!");
         mParent->say("Response Status: " + QString().setNum(statusCode));
