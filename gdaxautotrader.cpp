@@ -3,12 +3,13 @@
 gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mParent = parent;
     //Sell Types
-    mTradeTypes.append("LTC");
     mTradeTypes.append("BTC");
+    mTradeTypes.append("LTC");
 
     //Buy (with USD) Types
-    mBuyTypes.append("LTC");
     mBuyTypes.append("BTC");
+    mBuyTypes.append("LTC");
+
 
     mBTCLog = mParent->mParent->getGdaxAutoTraderBTCLog();
     mLTCLog = mParent->mParent->getGdaxAutoTraderLTCLog();
@@ -17,7 +18,7 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);
     mUSDStartAmount = "0.00";
-    mMinUSDBuyAmount = 200.00;
+    mMinUSDBuyAmount = 100.00;
     mMinPercentProfit = 0.0025; //in DECIMAL
     mLastBuyPriceBTC = "0.00";mLastBuyPriceLTC = "0.00";mLastBuyPriceETH = "0.00";
     mLastSellPriceBTC = "0.00";mLastSellPriceLTC = "0.00";mLastSellPriceETH = "0.00";
@@ -133,7 +134,7 @@ void gdaxAutoTrader::autoTradeCheck() {
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
         sayGdaxAutoTrader("# Available: " + USDBalance,currCoin);
-        if ( USDBalance.toDouble() < mMinUSDBuyAmount ) {
+        if ( USDBalance.toDouble() < mMinUSDBuyAmount &&  USDBalance.toDouble() < 15.35 ) {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             continue;
         }
@@ -150,6 +151,8 @@ void gdaxAutoTrader::autoTradeCheck() {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
+        } else if ( USDBalance.toDouble() >= 15.35 ) {
+            howMuchToSpend = "15.00";
         } else {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             break;
@@ -249,7 +252,12 @@ void gdaxAutoTrader::autoTradeCheck() {
         //Determine buffer actual
         double highBuffer,lowBuffer,gap;
         gap = highPrice.toDouble() - lowPrice.toDouble();
-        highBuffer = highPrice.toDouble() - (gap * 0.20);
+        //These percentages are critical
+        //They need to be configurable in the GUI but for now I am experimenting with them
+        // Value Log Over time:
+        // .20 (20%) led to $10 = 2 cents profit, $100 = 30cents profit, $200 = 60 cents profit (moderately quick turnaround)
+        // .10 (10%) ... led to same profit range per value... and allowed it to buy during a surge at the first quick drop (and sell was immediate) (looks good)
+        highBuffer = highPrice.toDouble() - (gap * 0.10);
         lowBuffer = lowPrice.toDouble() + (gap * 0.05);
         sayGdaxAutoTrader("# HighBuffer: " + QString().setNum(highBuffer),currCoin);
         sayGdaxAutoTrader("# LowBuffer :" + QString().setNum(lowBuffer),currCoin);

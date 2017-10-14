@@ -553,7 +553,17 @@ void gdaxApiHandler::process404(gdaxApiResponse *resp) {
             //we checked on an order and got notfound, means we cancelled it.
             if ( tradeId.toInt() > 0 ) {
                 mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","CANCELLED");
-                say("# Order Number " + tradeId + " was cancelled, updating orderDb (NotFound)");
+                say("# Sell Order Number " + tradeId + " was cancelled, updating orderDb (NotFound)");
+            }
+        }
+    } else if (type == "fetchGdaxFillsForOrderId") {
+        QString tradeId(resp->mAutoTradeId);
+        QJsonObject obj = *resp->getResponseContent();
+        if(obj["message"] == "NotFound") {
+            //we checked on an order and got notfound, means we cancelled it.
+            if ( tradeId.toInt() > 0 ) {
+                mParent->getDb()->updateRowById(tradeId,"gdaxAutoTraderHistory","status","CANCELLED");
+                say("# Buy Order Number " + tradeId + " was cancelled, updating orderDb (NotFound)");
             }
         }
     } else {
