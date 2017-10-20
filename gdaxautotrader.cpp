@@ -257,7 +257,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         // Value Log Over time:
         // .20 (20%) led to $10 = 2 cents profit, $100 = 30cents profit, $200 = 60 cents profit (moderately quick turnaround)
         // .10 (10%) ... led to same profit range per value... and allowed it to buy during a surge at the first quick drop (and sell was immediate) (looks good)
-        highBuffer = highPrice.toDouble() - (gap * 0.10);
+        highBuffer = highPrice.toDouble() - (gap * 0.15);
         lowBuffer = lowPrice.toDouble() + (gap * 0.05);
         sayGdaxAutoTrader("# HighBuffer: " + QString().setNum(highBuffer),currCoin);
         sayGdaxAutoTrader("# LowBuffer :" + QString().setNum(lowBuffer),currCoin);
