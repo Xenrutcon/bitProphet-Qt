@@ -1,6 +1,6 @@
 # bitProphet-Qt
 bitProphet-Qt primary purpose is prediction of BitCoin Prices in the near future</br>
-</br>
+More Stuff at bottom of page but first PICTURES!</br>
 <img src="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphetGDAXtab.png"></br>
 </br>
 <img src="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphet-Usage-Screen1.png"></br>
@@ -19,13 +19,12 @@ bitProphet-Qt primary purpose is prediction of BitCoin Prices in the near future
 </br>
 <a href="https://raw.githubusercontent.com/Mrc0de/bitProphet-Qt/master/bitProphet_ReleaseOne.zip">bitProphet_ReleaseOne.zip Ready-To-Run (Win64)</a></br>
 
-This is the Fee breakdown for COINBASE (Spot Price/Market Price)  </br> Buy/Sells, https://support.coinbase.com/customer/en/portal/articles/2109597
-</br> This is the fee breakdown for GDAX : https://docs.gdax.com/#fees
+This is the Fee breakdown for COINBASE (Spot Price/Market Price)  </br> 
+Buy/Sells, https://support.coinbase.com/customer/en/portal/articles/2109597</br>
+This is the fee breakdown for GDAX : https://docs.gdax.com/#fees </br>
 </br> GDAX is 0.25% with refund based on liquidity taker
 </br> GDAX has NO FEE for liquidity maker orders. THIS MATTERS.
-</br> Coinbase is a flat 1.49% if your funds are already in your USD Wallet (coinbase account) OR if you buy via ACH(bank).
-</br> If you use Credit/debit its a 3.9% fee lol
-</br> Coinbase is a convenience buy for MOST users, with high ass rates and bad prices (averages)
-</br> GDAX is for big traders who pay tiny fees (max 0.25%, thats (amount * 0.0025) ) and see the REAL market values/prices
-</br> The 'AutoSpot' Trader, will be next, and it will trade using the coinbase way... 1.49% fees buy/selling to/from USD Wallet @ Spot Prices (average, middle ground, grey area)
-</br> bitProphets neural network will use gdax though
+
+</br> 
+# DO NOT USE auto SPOT trader (high fees, buying from coinbase, insane price gouge)
+# ONLY USE GDAX AUTO TRADER (no fees! MORE PROFITS! ACTUAL MARKET VALUES! )
