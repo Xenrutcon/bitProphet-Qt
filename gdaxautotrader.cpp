@@ -18,8 +18,8 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);
     mUSDStartAmount = "0.00";
-    mMinUSDBuyAmount = 100.00;
-    mMinPercentProfit = 0.0025; //in DECIMAL
+    mMinUSDBuyAmount = 5.00;
+    mMinPercentProfit = 0.004; //in DECIMAL
     mLastBuyPriceBTC = "0.00";mLastBuyPriceLTC = "0.00";mLastBuyPriceETH = "0.00";
     mLastSellPriceBTC = "0.00";mLastSellPriceLTC = "0.00";mLastSellPriceETH = "0.00";
     mLastBuyTimeBTC = "0";mLastBuyTimeLTC = "0";mLastBuyTimeETH = "0";
@@ -134,61 +134,13 @@ void gdaxAutoTrader::autoTradeCheck() {
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
         sayGdaxAutoTrader("# Available: " + USDBalance,currCoin);
-        if ( USDBalance.toDouble() < mMinUSDBuyAmount &&  USDBalance.toDouble() < 15.35 ) {
-            sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
-            continue;
-        }
-        QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.20 > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
-        } else if ( USDBalance.toDouble() * 0.25 > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.25);
-        } else if ( USDBalance.toDouble() * 0.40 > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.40);
-        } else if ( USDBalance.toDouble() * 0.50 > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
-        } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);
-        } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
-        } else if ( USDBalance.toDouble() >= 15.35 ) {
-            howMuchToSpend = "15.00";
-        } else {
-            sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
-            break;
-        }
-        //shave off more than .00
-        if ( howMuchToSpend.indexOf(".",0) != -1 ) {
-            //it has at least one deci
-            QString pre=howMuchToSpend.mid(0,howMuchToSpend.indexOf(".",0));
-            QString post= howMuchToSpend.mid(howMuchToSpend.indexOf(".",0)+1,2);
-            howMuchToSpend = pre + "." + post;
-        }
-
-        sayGdaxAutoTrader("# Allocated $" + howMuchToSpend +" For " + currCoin,currCoin);
-        sayGdaxAutoTrader("#################",currCoin);
-        sayGdaxAutoTrader("# Analyzing Price History",currCoin);
-        sayGdaxAutoTrader("# Coin: " + currCoin,currCoin);
+        //collect historical ranges from db (20s interval = 3 per minute, 180 per hour)
         QList<QString> lastPriceRange;
         QList<QString> bidRange;
         QList<QString> askRange;
         QString curPrice("0.00");
         QString curAsk("0.00");
         QString curBid("0.00");
-        if (currCoin == "BTC") {
-            curPrice = mParent->mParent->getGdaxBtcPriceLabel()->text();
-            curAsk = mParent->mParent->getGdaxBtcAskLabel()->text();
-            curBid = mParent->mParent->getGdaxBtcBidLabel()->text();
-        } else if (currCoin == "LTC") {
-            curPrice = mParent->mParent->getGdaxLtcPriceLabel()->text();
-            curAsk = mParent->mParent->getGdaxLtcAskLabel()->text();
-            curBid = mParent->mParent->getGdaxLtcBidLabel()->text();
-        } else if (currCoin == "ETH") {
-            curPrice = mParent->mParent->getGdaxEthPriceLabel()->text();
-            curAsk = mParent->mParent->getGdaxEthAskLabel()->text();
-            curBid = mParent->mParent->getGdaxEthBidLabel()->text();
-        }
-        //collect historical ranges from db (20s interval = 3 per minute, 180 per hour)
         mParent->getDb()->getGdaxPriceHistoryLast(currCoin,180*hourRange,&lastPriceRange,&bidRange,&askRange);
         sayGdaxAutoTrader("# Price: $" + curPrice,currCoin );
         sayGdaxAutoTrader("# Ask: $" + curAsk,currCoin );
@@ -209,6 +161,58 @@ void gdaxAutoTrader::autoTradeCheck() {
         sayGdaxAutoTrader("# Low Bid: $" + lowBid,currCoin);
         sayGdaxAutoTrader("# High: $" + highPrice,currCoin);
         sayGdaxAutoTrader("# Low: $" + lowPrice,currCoin);
+        if (currCoin == "BTC") {
+            curPrice = mParent->mParent->getGdaxBtcPriceLabel()->text();
+            curAsk = mParent->mParent->getGdaxBtcAskLabel()->text();
+            curBid = mParent->mParent->getGdaxBtcBidLabel()->text();
+        } else if (currCoin == "LTC") {
+            curPrice = mParent->mParent->getGdaxLtcPriceLabel()->text();
+            curAsk = mParent->mParent->getGdaxLtcAskLabel()->text();
+            curBid = mParent->mParent->getGdaxLtcBidLabel()->text();
+        } else if (currCoin == "ETH") {
+            curPrice = mParent->mParent->getGdaxEthPriceLabel()->text();
+            curAsk = mParent->mParent->getGdaxEthAskLabel()->text();
+            curBid = mParent->mParent->getGdaxEthBidLabel()->text();
+        }
+        if ( USDBalance.toDouble() < mMinUSDBuyAmount  ) {
+            sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
+            continue;
+        }
+        QString howMuchToSpend("0.00");
+        if ( USDBalance.toDouble() * 0.10 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.10) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.10);
+        } else if ( USDBalance.toDouble() * 0.20 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.20) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
+        } else if ( USDBalance.toDouble() * 0.30 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.30) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.30);
+        } else if ( USDBalance.toDouble() * 0.40 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.40) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.40);
+        } else if ( USDBalance.toDouble() * 0.50 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.50) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
+        } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.75) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);        
+        } else if ( USDBalance.toDouble() * 0.90 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.90) * curBid.toDouble()) > 0.01 ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.90);
+        } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
+        } else {
+            sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
+            break;
+        }
+        //shave off more than .00
+        if ( howMuchToSpend.indexOf(".",0) != -1 ) {
+            //it has at least one deci
+            QString pre=howMuchToSpend.mid(0,howMuchToSpend.indexOf(".",0));
+            QString post= howMuchToSpend.mid(howMuchToSpend.indexOf(".",0)+1,2);
+            howMuchToSpend = pre + "." + post;
+        }
+
+        sayGdaxAutoTrader("# Allocated $" + howMuchToSpend +" For " + currCoin,currCoin);
+        sayGdaxAutoTrader("#################",currCoin);
+        sayGdaxAutoTrader("# Analyzing Price History",currCoin);
+        sayGdaxAutoTrader("# Coin: " + currCoin,currCoin);
+
+
 
         /* Theory (hi/low buffer creation)
          * # High: $50.30
@@ -257,7 +261,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         // Value Log Over time:
         // .20 (20%) led to $10 = 2 cents profit, $100 = 30cents profit, $200 = 60 cents profit (moderately quick turnaround)
         // .10 (10%) ... led to same profit range per value... and allowed it to buy during a surge at the first quick drop (and sell was immediate) (looks good)
-        highBuffer = highPrice.toDouble() - (gap * 0.15);
+        highBuffer = highPrice.toDouble() - (gap * 0.20);
         lowBuffer = lowPrice.toDouble() + (gap * 0.05);
         sayGdaxAutoTrader("# HighBuffer: " + QString().setNum(highBuffer),currCoin);
         sayGdaxAutoTrader("# LowBuffer :" + QString().setNum(lowBuffer),currCoin);

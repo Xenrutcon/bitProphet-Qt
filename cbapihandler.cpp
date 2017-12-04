@@ -9,7 +9,7 @@ cbApiHandler::cbApiHandler(QObject *parent) : QObject(parent),mAccount(NULL), mW
         QString defCbId = mParentProphet->getDb()->getDefaultAccountId();
         if ( defCbId != "0" ) {
             say("Found Default Account. [" + defCbId +"]");
-            mParentProphet->mParent->getAutoSpotTraderEnabledCheckBox()->setEnabled(true);
+//            mParentProphet->mParent->getAutoSpotTraderEnabledCheckBox()->setEnabled(true);
             mParentProphet->mParent->getAutoRefreshCbBalanceEnabledCheckBox()->setEnabled(true);
             mAccount = new coinbaseAccount(this);
             //Load Default Account

@@ -34,9 +34,9 @@ QTextEdit * bpWindow::getStatusOutput() {
 
 QTextEdit* bpWindow::getCoinbaseTabLog() { return ui->mCoinbaseTabLog; }
 
-QTextEdit* bpWindow::getAutoTraderBTCLog() { return ui->mAutoSpotBTCLog; }
-QTextEdit* bpWindow::getAutoTraderLTCLog() { return ui->mAutoSpotLTCLog; }
-QTextEdit* bpWindow::getAutoTraderETHLog() { return ui->mAutoSpotETHLog; }
+//QTextEdit* bpWindow::getAutoTraderBTCLog() { return ui->mAutoSpotBTCLog; }
+//QTextEdit* bpWindow::getAutoTraderLTCLog() { return ui->mAutoSpotLTCLog; }
+//QTextEdit* bpWindow::getAutoTraderETHLog() { return ui->mAutoSpotETHLog; }
 QTextEdit* bpWindow::getGdaxAutoTraderBTCLog() { return ui->mGdaxAutoBTCLog; }
 QTextEdit* bpWindow::getGdaxAutoTraderLTCLog() { return ui->mGdaxAutoLTCLog; }
 QTextEdit* bpWindow::getGdaxAutoTraderETHLog() { return ui->mGdaxAutoETHLog; }
@@ -379,9 +379,9 @@ QPushButton *bpWindow::getXferToCbWalletButton() {
     return ui->mGdaxTransferTo;
 }
 
-QCheckBox *bpWindow::getAutoSpotTraderEnabledCheckBox() {
-    return ui->mAutoSpotTradeEnabledCheckBox;
-}
+//QCheckBox *bpWindow::getAutoSpotTraderEnabledCheckBox() {
+//    return ui->mAutoSpotTradeEnabledCheckBox;
+//}
 
 QCheckBox *bpWindow::getAutoRefreshGdaxBalanceEnabledCheckBox() {
     return ui->mAutoRefreshGdaxBalanceCheckBox;

@@ -6,9 +6,9 @@ cbAutoSpotTrader::cbAutoSpotTrader(bitProphet *parent) : QObject(parent), mParen
     mTradeTypes.append("BTC");
     mBuyTypes.append("LTC");
     //mBuyTypes.append("ETH");
-    mBTCLog = mParent->mParent->getAutoTraderBTCLog();
-    mLTCLog = mParent->mParent->getAutoTraderLTCLog();
-    mETHLog = mParent->mParent->getAutoTraderETHLog();
+//    mBTCLog = mParent->mParent->getAutoTraderBTCLog();
+//    mLTCLog = mParent->mParent->getAutoTraderLTCLog();
+//    mETHLog = mParent->mParent->getAutoTraderETHLog();
     mBTCLog->document()->setMaximumBlockCount(256);
     mLTCLog->document()->setMaximumBlockCount(256);
     mETHLog->document()->setMaximumBlockCount(256);

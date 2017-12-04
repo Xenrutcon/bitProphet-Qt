@@ -18,6 +18,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -27,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="mStatusTab">
      <attribute name="title">
@@ -609,87 +612,6 @@
       </property>
       <property name="acceptRichText">
        <bool>false</bool>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="mCbAutoSpotTab">
-     <attribute name="title">
-      <string>AutoSpot</string>
-     </attribute>
-     <attribute name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Simple Automated Spot Price Trading Interface&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </attribute>
-     <widget class="QTextEdit" name="mAutoSpotBTCLog">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>80</y>
-        <width>181</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="acceptRichText">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="mAutoSpotLTCLog">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>80</y>
-        <width>201</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="acceptRichText">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="mAutoSpotETHLog">
-      <property name="geometry">
-       <rect>
-        <x>410</x>
-        <y>80</y>
-        <width>201</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="acceptRichText">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="mAutoSpotTradeEnabledCheckBox">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>161</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Auto Spot Trade (High Fees)</string>
       </property>
      </widget>
     </widget>
