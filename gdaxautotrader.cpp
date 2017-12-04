@@ -142,9 +142,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         QString curAsk("0.00");
         QString curBid("0.00");
         mParent->getDb()->getGdaxPriceHistoryLast(currCoin,180*hourRange,&lastPriceRange,&bidRange,&askRange);
-        sayGdaxAutoTrader("# Price: $" + curPrice,currCoin );
-        sayGdaxAutoTrader("# Ask: $" + curAsk,currCoin );
-        sayGdaxAutoTrader("# Bid: $" + curBid,currCoin );
+
 
         //find highest, find lowest in range
         sayGdaxAutoTrader("#################",currCoin);
@@ -174,6 +172,9 @@ void gdaxAutoTrader::autoTradeCheck() {
             curAsk = mParent->mParent->getGdaxEthAskLabel()->text();
             curBid = mParent->mParent->getGdaxEthBidLabel()->text();
         }
+        sayGdaxAutoTrader("# Price: $" + curPrice,currCoin );
+        sayGdaxAutoTrader("# Ask: $" + curAsk,currCoin );
+        sayGdaxAutoTrader("# Bid: $" + curBid,currCoin );
         if ( USDBalance.toDouble() < mMinUSDBuyAmount  ) {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             continue;
