@@ -77,12 +77,12 @@ void gdaxAutoTrader::checkForBuyFills() {
     //get all 'placed2' status BUYs for each coin
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
-        sayGdaxAutoTrader("Checking Buys For Fills",currCoin);
+        sayGdaxAutoTrader("Checking "+currCoin+" Buys For Fills",currCoin);
         //get all 'placed2' status BUYs
         QList<QString> buyList;
         buyList.clear();
         mParent->getDb()->getGdaxAutoBuysPlaced(currCoin,&buyList);
-        sayGdaxAutoTrader("Buys: "+QString().setNum(buyList.count()),currCoin);
+        sayGdaxAutoTrader(currCoin+" Buys: "+QString().setNum(buyList.count()),currCoin);
         //send a /fills/order-id for each placed2 status buy
         for(int o=0;o<buyList.count();o++){
             mParent->getGdaxHandler()->fetchGdaxFillsForOrderId(buyList.at(o));
@@ -100,12 +100,12 @@ void gdaxAutoTrader::checkForSellFills() {
     //get all 'posted2' status SELLs for each coin
     for (int c=0;c<mBuyTypes.length();c++) {
         QString currCoin = mBuyTypes.at(c);
-        sayGdaxAutoTrader("Checking Sells For Fills",currCoin);
+        sayGdaxAutoTrader("Checking "+currCoin+" Sells For Fills",currCoin);
         //get all 'posted2' status Sells
         QList<QString> sellList;
         sellList.clear();
         mParent->getDb()->getGdaxAutoSellsPosted(currCoin,&sellList);
-        sayGdaxAutoTrader("Sells: "+QString().setNum(sellList.count()),currCoin);
+        sayGdaxAutoTrader(currCoin+" Sells: "+QString().setNum(sellList.count()),currCoin);
         //send a /fills/order-id for each placed2 status buy
         for(int o=0;o<sellList.count();o++){
             mParent->getGdaxHandler()->fetchGdaxSellFillsForOrderId(sellList.at(o));
@@ -119,7 +119,7 @@ void gdaxAutoTrader::autoTradeCheck() {
     //min LTC Buy is 0.01 LTC
     //min BTC Buy is 0.01 BTC
     //min ETH Buy is 0.01 ETH
-    int hourRange = 12;
+    int hourRange = 4;
     QString USDBalance("0.00");
     //Dont forget to check mUSDStartAmount
     for ( int a=0;a<mParent->getGdaxHandlerAccount()->getWalletCount();a++ ) {
@@ -195,7 +195,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         } else if ( USDBalance.toDouble() * 0.90 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.90) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.90);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
-            howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
+            howMuchToSpend = QString().setNum(USDBalance.toDouble() );
         } else {
             sayGdaxAutoTrader("# Available $USD too low (< $"+QString().setNum(mMinUSDBuyAmount)+")",currCoin);
             break;
@@ -262,7 +262,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         // Value Log Over time:
         // .20 (20%) led to $10 = 2 cents profit, $100 = 30cents profit, $200 = 60 cents profit (moderately quick turnaround)
         // .10 (10%) ... led to same profit range per value... and allowed it to buy during a surge at the first quick drop (and sell was immediate) (looks good)
-        highBuffer = highPrice.toDouble() - (gap * 0.20);
+        highBuffer = highPrice.toDouble() - (gap * 0.10);
         lowBuffer = lowPrice.toDouble() + (gap * 0.05);
         sayGdaxAutoTrader("# HighBuffer: " + QString().setNum(highBuffer),currCoin);
         sayGdaxAutoTrader("# LowBuffer :" + QString().setNum(lowBuffer),currCoin);
