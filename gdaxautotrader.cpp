@@ -180,19 +180,19 @@ void gdaxAutoTrader::autoTradeCheck() {
             continue;
         }
         QString howMuchToSpend("0.00");
-        if ( USDBalance.toDouble() * 0.10 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.10) * curBid.toDouble()) > 0.01 ) {
+        if ( USDBalance.toDouble() * 0.10 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.10) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.10);
-        } else if ( USDBalance.toDouble() * 0.20 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.20) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.20 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.20) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.20);
-        } else if ( USDBalance.toDouble() * 0.30 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.30) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.30 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.30) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.30);
-        } else if ( USDBalance.toDouble() * 0.40 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.40) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.40 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.40) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.40);
-        } else if ( USDBalance.toDouble() * 0.50 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.50) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.50 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.50) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.50);
-        } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.75) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.75 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.75) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.75);        
-        } else if ( USDBalance.toDouble() * 0.90 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.90) * curBid.toDouble()) > 0.01 ) {
+        } else if ( USDBalance.toDouble() * 0.90 > mMinUSDBuyAmount && ((USDBalance.toDouble() * 0.90) / curBid.toDouble()) > 0.01 ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() * 0.90);
         } else if ( USDBalance.toDouble() > mMinUSDBuyAmount ) {
             howMuchToSpend = QString().setNum(USDBalance.toDouble() - (USDBalance.toDouble() * 0.0035) );
@@ -207,7 +207,7 @@ void gdaxAutoTrader::autoTradeCheck() {
             QString post= howMuchToSpend.mid(howMuchToSpend.indexOf(".",0)+1,2);
             howMuchToSpend = pre + "." + post;
         }
-
+        sayGdaxAutoTrader("Can Buy " + QString().setNum(howMuchToSpend.toDouble() / curBid.toDouble()) + " Of " + currCoin + " for $" + howMuchToSpend,currCoin );
         sayGdaxAutoTrader("# Allocated $" + howMuchToSpend +" For " + currCoin,currCoin);
         sayGdaxAutoTrader("#################",currCoin);
         sayGdaxAutoTrader("# Analyzing Price History",currCoin);
