@@ -119,7 +119,7 @@ void gdaxAutoTrader::autoTradeCheck() {
     //min LTC Buy is 0.01 LTC
     //min BTC Buy is 0.01 BTC
     //min ETH Buy is 0.01 ETH
-    int hourRange = 4;
+    int hourRange = 8;
     QString USDBalance("0.00");
     //Dont forget to check mUSDStartAmount
     for ( int a=0;a<mParent->getGdaxHandlerAccount()->getWalletCount();a++ ) {
@@ -262,7 +262,7 @@ void gdaxAutoTrader::autoTradeCheck() {
         // Value Log Over time:
         // .20 (20%) led to $10 = 2 cents profit, $100 = 30cents profit, $200 = 60 cents profit (moderately quick turnaround)
         // .10 (10%) ... led to same profit range per value... and allowed it to buy during a surge at the first quick drop (and sell was immediate) (looks good)
-        highBuffer = highPrice.toDouble() - (gap * 0.10);
+        highBuffer = highPrice.toDouble() - (gap * 0.15);
         lowBuffer = lowPrice.toDouble() + (gap * 0.05);
         sayGdaxAutoTrader("# HighBuffer: " + QString().setNum(highBuffer),currCoin);
         sayGdaxAutoTrader("# LowBuffer :" + QString().setNum(lowBuffer),currCoin);
