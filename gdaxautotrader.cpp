@@ -19,7 +19,7 @@ gdaxAutoTrader::gdaxAutoTrader(bitProphet *parent) : QObject(parent) {
     mETHLog->document()->setMaximumBlockCount(256);
     mUSDStartAmount = "0.00";
     mMinUSDBuyAmount = 5.00;
-    mMinPercentProfit = 0.004; //in DECIMAL
+    mMinPercentProfit = 0.01; //in DECIMAL
     mLastBuyPriceBTC = "0.00";mLastBuyPriceLTC = "0.00";mLastBuyPriceETH = "0.00";
     mLastSellPriceBTC = "0.00";mLastSellPriceLTC = "0.00";mLastSellPriceETH = "0.00";
     mLastBuyTimeBTC = "0";mLastBuyTimeLTC = "0";mLastBuyTimeETH = "0";
@@ -119,7 +119,7 @@ void gdaxAutoTrader::autoTradeCheck() {
     //min LTC Buy is 0.01 LTC
     //min BTC Buy is 0.01 BTC
     //min ETH Buy is 0.01 ETH
-    int hourRange = 8;
+    int hourRange = 4;
     QString USDBalance("0.00");
     //Dont forget to check mUSDStartAmount
     for ( int a=0;a<mParent->getGdaxHandlerAccount()->getWalletCount();a++ ) {
