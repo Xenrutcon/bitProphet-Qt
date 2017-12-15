@@ -119,7 +119,7 @@ void gdaxAutoTrader::autoTradeCheck() {
     //min LTC Buy is 0.01 LTC
     //min BTC Buy is 0.01 BTC
     //min ETH Buy is 0.01 ETH
-    int hourRange = 4;
+    int hourRange = 8;
     QString USDBalance("0.00");
     //Dont forget to check mUSDStartAmount
     for ( int a=0;a<mParent->getGdaxHandlerAccount()->getWalletCount();a++ ) {
